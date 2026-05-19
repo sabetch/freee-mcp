@@ -30,7 +30,8 @@
     "Quotations": "quotations",
     "Fixed assets": "fixed-assets",
     "General ledgers": "general-ledgers",
-    "Account groups": "account-groups"
+    "Account groups": "account-groups",
+    "User matchers": "user-matchers"
   },
   "hr-api": {
     "ログインユーザー": "login-user",
@@ -65,7 +66,8 @@
   "invoice-api": {
     "Invoices": "invoices",
     "Quotations": "quotations",
-    "DeliverySlips": "delivery-slips"
+    "DeliverySlips": "delivery-slips",
+    "Receipts": "receipts"
   },
   "pm-api": {
     "Users": "users",
@@ -81,6 +83,8 @@
     "master": "master",
     "sales_orders": "sales-orders",
     "deliveries": "deliveries",
-    "sales": "sales"
+    "sales": "sales",
+    "cost_budgets": "cost-budgets",
+    "other_costs": "other-costs"
   }
 }
