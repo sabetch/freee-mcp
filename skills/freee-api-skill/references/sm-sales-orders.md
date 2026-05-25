@@ -31,7 +31,7 @@
 
 操作: 受注登録
 
-説明: 概要 新しい受注を登録します。 顧客からの注文情報を登録し、納品・請求・入金の予定情報を管理できます。 定義 必須項目 sales_order_date : 受注日 customer_id : 顧客の取引先ID billing_partner_id : 請求先の取引先ID collecting_partner_id : 入金元の取引先ID lines : 明細リスト 任意項目 sales_order_subject : 受注タイトル customer_order_no : 顧客注文No. deliveries_on : 納品予定日 accepts_on : 検収予定日 bills_on : 請求予定日 collects_on : 入金予定日 business_id : 案件ID delivery_template_id : 納品書テンプレートID ※指定しない場合はデフォルトのテンプレートが適用されます。 invoice_template_id : 請求書テンプレートID ※指定しない場合はデフォルトのテンプレートが適用されます。
+説明: 概要 新しい受注を登録します。 顧客からの注文情報を登録し、納品・請求・入金の予定情報を管理できます。 定義 必須項目 sales_order_date : 受注日 customer_id : 顧客の取引先ID billing_partner_id : 請求先の取引先ID collecting_partner_id : 入金元の取引先ID lines : 明細リスト 任意項目 quotation_id : 見積ID（見積に紐づける場合） sales_order_subject : 受注タイトル customer_order_no : 顧客注文No. deliveries_on : 納品予定日 accepts_on : 検収予定日 bills_on : 請求予定日 collects_on : 入金予定日 business_id : 案件ID delivery_template_id : 納品書テンプレートID ※指定しない場合はデフォルトのテンプレートが適用されます。 invoice_template_id : 請求書テンプレートID ※指定しない場合はデフォルトのテンプレートが適用され...
 
 ### レスポンス (201)
 
