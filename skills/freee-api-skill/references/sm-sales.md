@@ -10,7 +10,7 @@
 
 操作: 売上一覧
 
-説明: 概要 売上の一覧を取得します。 登録されている売上情報を一覧形式で取得できます。 各種フィルタ条件を指定することで、特定の条件に合致する売上のみを取得することが可能です。 定義 start_registered_date : 売上登録日(絞り込み開始) end_registered_date : 売上登録日(絞り込み終了) start_revenue_recognition_date : 売上日(絞り込み開始) end_revenue_recognition_date : 売上日(絞り込み終了) charge_employee_ids : 社内担当者の従業員ID(複数指定可) customer_ids : 顧客の取引先ID(複数指定可) billing_status : 請求書送付ステータス collection_status : 入金ステータス canceled : 取消状態(デフォルト:false) `limit`と`offset`パラメータを使用してページネーションが可能です。 デフォルトでは20件ずつ取得され、最大100件まで一度に取得できます。
+説明: 概要 売上の一覧を取得します。 登録されている売上情報を一覧形式で取得できます。 各種フィルタ条件を指定することで、特定の条件に合致する売上のみを取得することが可能です。 定義 start_registered_date : 売上登録日(絞り込み開始) end_registered_date : 売上登録日(絞り込み終了) start_last_updated_date : 売上更新日(絞り込み開始) end_last_updated_date : 売上更新日(絞り込み終了) start_revenue_recognition_date : 売上日(絞り込み開始) end_revenue_recognition_date : 売上日(絞り込み終了) charge_employee_ids : 社内担当者の従業員ID(複数指定可) customer_ids : 顧客の取引先ID(複数指定可) business_ids : 案件ID(複数指定可) sales_no : 売上No. billing_status : 請求書送付ステータス collection_status : 入金ステータス...
 
 ### パラメータ
 
@@ -62,6 +62,20 @@
 操作: 売上更新
 
 説明: 概要 指定されたIDの売上を更新します。 売上の基本情報、請求・入金情報などを部分的に更新できます。 送信したフィールドのみが更新され、送信しなかったフィールドは変更されません。 定義 更新可能項目 subject : 売上タイトル revenue_recognition_date : 売上日 customer_order_no : 顧客注文No. customer_id : 顧客の取引先ID billing_partner_id : 請求先の取引先ID bills_on : 請求日 invoice_template_id : 請求書テンプレートID invoice_subject : 請求書件名 invoice_note : 請求書の備考欄に掲載する内容 collecting_partner_id : 入金元の取引先ID collection_method_type : 入金方法 collects_on : 入金期日 charge_employee_id : 社内担当者の従業員ID reporting_section_id : 担当部門ID internal_memo : 社内メモ ...
+
+### パラメータ
+
+| 名前 | 位置 | 必須 | 型 | 説明 |
+|------|------|------|-----|------|
+| id | path | はい | string | 売上ID |
+
+### レスポンス (200)
+
+### POST /sales/{id}/cancellation
+
+操作: 売上取消
+
+説明: 概要 指定されたIDの売上を取消します。
 
 ### パラメータ
 
