@@ -92,7 +92,7 @@
     },
     "/unit_costs": {
       "get": {
-        "summary": "単価マスタの取得",
+        "summary": "従業員単価マスタの取得",
         "description": "従業員の単価マスタを返します。",
         "parameters": [
           {
@@ -257,6 +257,42 @@
       "post": {
         "summary": "工数登録",
         "description": "工数を登録することが出来ます。",
+        "hasJsonBody": true
+      }
+    },
+    "/workloads/{id}": {
+      "delete": {
+        "summary": "工数削除",
+        "description": "指定した工数を削除します。",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "description": "工数ID"
+          },
+          {
+            "name": "company_id",
+            "in": "query",
+            "type": "integer",
+            "required": true,
+            "description": "事業所ID"
+          }
+        ]
+      },
+      "patch": {
+        "summary": "工数編集",
+        "description": "指定した工数の情報を更新します。リクエストに含まれていないフィールドは更新されません。memo と workload_tags は null（または空）で削除できます。",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "description": "工数ID"
+          }
+        ],
         "hasJsonBody": true
       }
     },
