@@ -27,6 +27,7 @@
 | end_expiration_date | query | いいえ | string(date) | 有効期限の終了日 |
 | limit | query | いいえ | integer | 取得レコードの件数 (デフォルト: 20, 最小: 1, 最大: 100) |
 | offset | query | いいえ | integer | 取得レコードのオフセット (デフォルト: 0) |
+| sales_management_origin | query | いいえ | boolean | freee販売から作成された帳票データを含める。trueを指定する場合はfreee販売から作成された帳票へのアクセス権限が必要です。 |
 
 ### レスポンス (200)
 
@@ -58,6 +59,8 @@ The request has succeeded.
     - company_contact_name (任意): string - 自社担当者 (デフォルト: 表示ユーザー名)
     - email_url_file_downloaded_at (任意): string(string) - URL共有で送付された送付先のメールのダウンロード時刻 (パターン: ^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}(:[0-9]{2})?$)
     - email_url_file_downloaded_status (任意): string - URL共有で送付された送付先のメールのダウンロードステータス (選択肢: downloaded, undownloaded)
+    - report_url (必須): string(uri) - 帳票詳細ページのURL
+    - sales_management_origin (任意): boolean - freee販売から作成された帳票かどうか
 
 ### POST /quotations
 
@@ -202,6 +205,7 @@ The request has succeeded and a new resource has been created as a result.
   - company_description (任意): string - 自社情報
   - template (任意): object - 帳票テンプレート情報（帳票テンプレート作成の際に設定できる項目です。）
   - lines (必須): array[object] - 見積書の明細行
+  - report_url (必須): string(uri) - 帳票詳細ページのURL
 
 ### GET /quotations/templates
 
@@ -301,6 +305,8 @@ The request has succeeded.
   - lines (必須): array[object] - 見積書の明細行
   - email_url_file_downloaded_at (任意): string(string) - URL共有で送付された送付先のメールのダウンロード時刻 (パターン: ^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}(:[0-9]{2})?$)
   - email_url_file_downloaded_status (任意): string - URL共有で送付された送付先のメールのダウンロードステータス (選択肢: downloaded, undownloaded)
+  - report_url (必須): string(uri) - 帳票詳細ページのURL
+  - sales_management_origin (任意): boolean - freee販売から作成された帳票かどうか
 
 ### PUT /quotations/{id}
 
@@ -451,6 +457,61 @@ The request has succeeded.
   - company_description (任意): string - 自社情報
   - template (任意): object - 帳票テンプレート情報（帳票テンプレート作成の際に設定できる項目です。）
   - lines (必須): array[object] - 見積書の明細行
+  - report_url (必須): string(uri) - 帳票詳細ページのURL
+
+### PUT /quotations/{id}/cancel
+
+操作: 見積書の取消
+
+
+説明: 指定された見積書を取消状態にします。
+
+### パラメータ
+
+| 名前 | 位置 | 必須 | 型 | 説明 |
+|------|------|------|-----|------|
+| id | path | はい | integer | 見積書ID |
+
+### リクエストボディ
+
+(必須)
+
+- company_id (必須): integer(int64) - 事業所ID (最小: 1, 最大: 9223372036854775000)
+
+### レスポンス (200)
+
+The request has succeeded.
+
+- quotation (必須): object
+  - id (必須): integer(int64) - 見積書ID (最小: 1, 最大: 9223372036854775000)
+  - cancel_status (必須): string - 取消状態（canceled: 取消済み、uncanceled: 取消されていない） (選択肢: canceled, uncanceled)
+
+### PUT /quotations/{id}/uncancel
+
+操作: 取消された見積書の復元
+
+
+説明: 指定された取消済み見積書を復元します。
+
+### パラメータ
+
+| 名前 | 位置 | 必須 | 型 | 説明 |
+|------|------|------|-----|------|
+| id | path | はい | integer | 見積書ID |
+
+### リクエストボディ
+
+(必須)
+
+- company_id (必須): integer(int64) - 事業所ID (最小: 1, 最大: 9223372036854775000)
+
+### レスポンス (200)
+
+The request has succeeded.
+
+- quotation (必須): object
+  - id (必須): integer(int64) - 見積書ID (最小: 1, 最大: 9223372036854775000)
+  - cancel_status (必須): string - 取消状態（canceled: 取消済み、uncanceled: 取消されていない） (選択肢: canceled, uncanceled)
 
 
 
