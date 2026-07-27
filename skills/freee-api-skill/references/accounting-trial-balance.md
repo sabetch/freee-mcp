@@ -17,7 +17,7 @@
 | 名前 | 位置 | 必須 | 型 | 説明 |
 |------|------|------|-----|------|
 | company_id | query | はい | integer(int64) | 事業所ID |
-| fiscal_year | query | いいえ | integer(int64) | 会計年度 |
+| fiscal_year | query | いいえ | integer(int64) | 会計年度（年度の開始日の年）。会計年度の作成後に期間を変更した場合などに、指定した年と実際に集計対象となる会計年度がずれることがあります。意図した期間が集計されない場合は、fiscal_year ではなく start_date・end_date で期間を指定してください。 |
 | start_month | query | いいえ | integer(int64) | 発生月で絞込：開始会計月(1-12)。指定されない場合、現在の会計年度の期首月が指定されます。 |
 | end_month | query | いいえ | integer(int64) | 発生月で絞込：終了会計月(1-12)(会計年度が10月始まりでstart_monthが11なら11, 12, 1, ... 9のいずれかを指定する)。指定されない場合、現在の会計年度の期末月が指定されます。 |
 | start_date | query | いいえ | string | 発生日で絞込：開始日(yyyy-mm-dd) |
@@ -77,7 +77,7 @@
 | 名前 | 位置 | 必須 | 型 | 説明 |
 |------|------|------|-----|------|
 | company_id | query | はい | integer(int64) | 事業所ID |
-| fiscal_year | query | いいえ | integer(int64) | 会計年度 |
+| fiscal_year | query | いいえ | integer(int64) | 会計年度（年度の開始日の年）。会計年度の作成後に期間を変更した場合などに、指定した年と実際に集計対象となる会計年度がずれることがあります。意図した期間が集計されない場合は、fiscal_year ではなく start_date・end_date で期間を指定してください。 |
 | start_month | query | いいえ | integer(int64) | 発生月で絞込：開始会計月(1-12)。指定されない場合、現在の会計年度の期首月が指定されます。 |
 | end_month | query | いいえ | integer(int64) | 発生月で絞込：終了会計月(1-12)(会計年度が10月始まりでstart_monthが11なら11, 12, 1, ... 9のいずれかを指定する)。指定されない場合、現在の会計年度の期末月が指定されます。 |
 | start_date | query | いいえ | string | 発生日で絞込：開始日(yyyy-mm-dd) |
@@ -136,7 +136,7 @@
 | 名前 | 位置 | 必須 | 型 | 説明 |
 |------|------|------|-----|------|
 | company_id | query | はい | integer(int64) | 事業所ID |
-| fiscal_year | query | いいえ | integer(int64) | 会計年度 |
+| fiscal_year | query | いいえ | integer(int64) | 会計年度（年度の開始日の年）。会計年度の作成後に期間を変更した場合などに、指定した年と実際に集計対象となる会計年度がずれることがあります。意図した期間が集計されない場合は、fiscal_year ではなく start_date・end_date で期間を指定してください。 |
 | start_month | query | いいえ | integer(int64) | 発生月で絞込：開始会計月(1-12)。指定されない場合、現在の会計年度の期首月が指定されます。 |
 | end_month | query | いいえ | integer(int64) | 発生月で絞込：終了会計月(1-12)(会計年度が10月始まりでstart_monthが11なら11, 12, 1, ... 9のいずれかを指定する)。指定されない場合、現在の会計年度の期末月が指定されます。 |
 | start_date | query | いいえ | string | 発生日で絞込：開始日(yyyy-mm-dd) |
@@ -195,7 +195,7 @@
 | 名前 | 位置 | 必須 | 型 | 説明 |
 |------|------|------|-----|------|
 | company_id | query | はい | integer(int64) | 事業所ID |
-| fiscal_year | query | いいえ | integer(int64) | 会計年度 |
+| fiscal_year | query | いいえ | integer(int64) | 会計年度（年度の開始日の年）。会計年度の作成後に期間を変更した場合などに、指定した年と実際に集計対象となる会計年度がずれることがあります。意図した期間が集計されない場合は、fiscal_year ではなく start_date・end_date で期間を指定してください。 |
 | start_month | query | いいえ | integer(int64) | 発生月で絞込：開始会計月(1-12)。指定されない場合、現在の会計年度の期首月が指定されます。 |
 | end_month | query | いいえ | integer(int64) | 発生月で絞込：終了会計月(1-12)(会計年度が10月始まりでstart_monthが11なら11, 12, 1, ... 9のいずれかを指定する)。指定されない場合、現在の会計年度の期末月が指定されます。 |
 | start_date | query | いいえ | string | 発生日で絞込：開始日(yyyy-mm-dd) |
@@ -256,7 +256,7 @@
 | 名前 | 位置 | 必須 | 型 | 説明 |
 |------|------|------|-----|------|
 | company_id | query | はい | integer(int64) | 事業所ID |
-| fiscal_year | query | いいえ | integer(int64) | 会計年度 |
+| fiscal_year | query | いいえ | integer(int64) | 会計年度（年度の開始日の年）。会計年度の作成後に期間を変更した場合などに、指定した年と実際に集計対象となる会計年度がずれることがあります。意図した期間が集計されない場合は、fiscal_year ではなく start_date・end_date で期間を指定してください。 |
 | start_month | query | いいえ | integer(int64) | 発生月で絞込：開始会計月(1-12)。指定されない場合、現在の会計年度の期首月が指定されます。 |
 | end_month | query | いいえ | integer(int64) | 発生月で絞込：終了会計月(1-12)(会計年度が10月始まりでstart_monthが11なら11, 12, 1, ... 9のいずれかを指定する)。指定されない場合、現在の会計年度の期末月が指定されます。 |
 | start_date | query | いいえ | string | 発生日で絞込：開始日(yyyy-mm-dd) |
@@ -317,7 +317,7 @@
 | 名前 | 位置 | 必須 | 型 | 説明 |
 |------|------|------|-----|------|
 | company_id | query | はい | integer(int64) | 事業所ID |
-| fiscal_year | query | いいえ | integer(int64) | 会計年度 |
+| fiscal_year | query | いいえ | integer(int64) | 会計年度（年度の開始日の年）。会計年度の作成後に期間を変更した場合などに、指定した年と実際に集計対象となる会計年度がずれることがあります。意図した期間が集計されない場合は、fiscal_year ではなく start_date・end_date で期間を指定してください。 |
 | start_month | query | いいえ | integer(int64) | 発生月で絞込：開始会計月(1-12)。指定されない場合、現在の会計年度の期首月が指定されます。 |
 | end_month | query | いいえ | integer(int64) | 発生月で絞込：終了会計月(1-12)(会計年度が10月始まりでstart_monthが11なら11, 12, 1, ... 9のいずれかを指定する)。指定されない場合、現在の会計年度の期末月が指定されます。 |
 | start_date | query | いいえ | string | 発生日で絞込：開始日(yyyy-mm-dd) |
@@ -378,8 +378,8 @@
 | 名前 | 位置 | 必須 | 型 | 説明 |
 |------|------|------|-----|------|
 | company_id | query | はい | integer(int64) | 事業所ID |
-| section_ids | query | はい | string | 出力する部門の指定（半角数字のidを半角カンマ区切りスペースなしで指定してください。0を指定すると、未選択の部門で比較できます。） |
-| fiscal_year | query | いいえ | integer(int64) | 会計年度 |
+| section_ids | query | はい | string | 出力する部門の指定（半角数字のidを半角カンマ区切りスペースなしで指定してください。指定できる部門数は1〜5つです。0を指定すると、未選択の部門で比較できます。） |
+| fiscal_year | query | いいえ | integer(int64) | 会計年度（年度の開始日の年）。会計年度の作成後に期間を変更した場合などに、指定した年と実際に集計対象となる会計年度がずれることがあります。意図した期間が集計されない場合は、fiscal_year ではなく start_date・end_date で期間を指定してください。 |
 | start_month | query | いいえ | integer(int64) | 発生月で絞込：開始会計月(1-12)。指定されない場合、現在の会計年度の期首月が指定されます。 |
 | end_month | query | いいえ | integer(int64) | 発生月で絞込：終了会計月(1-12)(会計年度が10月始まりでstart_monthが11なら11, 12, 1, ... 9のいずれかを指定する)。指定されない場合、現在の会計年度の期末月が指定されます。 |
 | start_date | query | いいえ | string | 発生日で絞込：開始日(yyyy-mm-dd) |
@@ -439,8 +439,8 @@
 | 名前 | 位置 | 必須 | 型 | 説明 |
 |------|------|------|-----|------|
 | company_id | query | はい | integer(int64) | 事業所ID |
-| segment_1_tag_ids | query | はい | string | 出力するセグメント１タグIDの指定（半角数字のidを半角カンマ区切りスペースなしで指定してください。0を指定すると、未選択のセグメントで比較できます） |
-| fiscal_year | query | いいえ | integer(int64) | 会計年度 |
+| segment_1_tag_ids | query | はい | string | 出力するセグメント１タグIDの指定（半角数字のidを半角カンマ区切りスペースなしで指定してください。指定できるセグメント数は1〜5つです。0を指定すると、未選択のセグメントで比較できます） |
+| fiscal_year | query | いいえ | integer(int64) | 会計年度（年度の開始日の年）。会計年度の作成後に期間を変更した場合などに、指定した年と実際に集計対象となる会計年度がずれることがあります。意図した期間が集計されない場合は、fiscal_year ではなく start_date・end_date で期間を指定してください。 |
 | start_month | query | いいえ | integer(int64) | 発生月で絞込：開始会計月(1-12)。指定されない場合、現在の会計年度の期首月が指定されます。 |
 | end_month | query | いいえ | integer(int64) | 発生月で絞込：終了会計月(1-12)(会計年度が10月始まりでstart_monthが11なら11, 12, 1, ... 9のいずれかを指定する)。指定されない場合、現在の会計年度の期末月が指定されます。 |
 | start_date | query | いいえ | string | 発生日で絞込：開始日(yyyy-mm-dd) |
@@ -502,8 +502,8 @@
 | 名前 | 位置 | 必須 | 型 | 説明 |
 |------|------|------|-----|------|
 | company_id | query | はい | integer(int64) | 事業所ID |
-| segment_2_tag_ids | query | はい | string | 出力するセグメント２タグIDの指定（半角数字のidを半角カンマ区切りスペースなしで指定してください。0を指定すると、未選択のセグメントで比較できます） |
-| fiscal_year | query | いいえ | integer(int64) | 会計年度 |
+| segment_2_tag_ids | query | はい | string | 出力するセグメント２タグIDの指定（半角数字のidを半角カンマ区切りスペースなしで指定してください。指定できるセグメント数は1〜5つです。0を指定すると、未選択のセグメントで比較できます） |
+| fiscal_year | query | いいえ | integer(int64) | 会計年度（年度の開始日の年）。会計年度の作成後に期間を変更した場合などに、指定した年と実際に集計対象となる会計年度がずれることがあります。意図した期間が集計されない場合は、fiscal_year ではなく start_date・end_date で期間を指定してください。 |
 | start_month | query | いいえ | integer(int64) | 発生月で絞込：開始会計月(1-12)。指定されない場合、現在の会計年度の期首月が指定されます。 |
 | end_month | query | いいえ | integer(int64) | 発生月で絞込：終了会計月(1-12)(会計年度が10月始まりでstart_monthが11なら11, 12, 1, ... 9のいずれかを指定する)。指定されない場合、現在の会計年度の期末月が指定されます。 |
 | start_date | query | いいえ | string | 発生日で絞込：開始日(yyyy-mm-dd) |
@@ -565,8 +565,8 @@
 | 名前 | 位置 | 必須 | 型 | 説明 |
 |------|------|------|-----|------|
 | company_id | query | はい | integer(int64) | 事業所ID |
-| segment_3_tag_ids | query | はい | string | 出力するセグメント３タグIDの指定（半角数字のidを半角カンマ区切りスペースなしで指定してください。0を指定すると、未選択のセグメントで比較できます） |
-| fiscal_year | query | いいえ | integer(int64) | 会計年度 |
+| segment_3_tag_ids | query | はい | string | 出力するセグメント３タグIDの指定（半角数字のidを半角カンマ区切りスペースなしで指定してください。指定できるセグメント数は1〜5つです。0を指定すると、未選択のセグメントで比較できます） |
+| fiscal_year | query | いいえ | integer(int64) | 会計年度（年度の開始日の年）。会計年度の作成後に期間を変更した場合などに、指定した年と実際に集計対象となる会計年度がずれることがあります。意図した期間が集計されない場合は、fiscal_year ではなく start_date・end_date で期間を指定してください。 |
 | start_month | query | いいえ | integer(int64) | 発生月で絞込：開始会計月(1-12)。指定されない場合、現在の会計年度の期首月が指定されます。 |
 | end_month | query | いいえ | integer(int64) | 発生月で絞込：終了会計月(1-12)(会計年度が10月始まりでstart_monthが11なら11, 12, 1, ... 9のいずれかを指定する)。指定されない場合、現在の会計年度の期末月が指定されます。 |
 | start_date | query | いいえ | string | 発生日で絞込：開始日(yyyy-mm-dd) |
@@ -628,7 +628,7 @@
 | 名前 | 位置 | 必須 | 型 | 説明 |
 |------|------|------|-----|------|
 | company_id | query | はい | integer(int64) | 事業所ID |
-| fiscal_year | query | いいえ | integer(int64) | 会計年度 |
+| fiscal_year | query | いいえ | integer(int64) | 会計年度（年度の開始日の年）。会計年度の作成後に期間を変更した場合などに、指定した年と実際に集計対象となる会計年度がずれることがあります。意図した期間が集計されない場合は、fiscal_year ではなく start_date・end_date で期間を指定してください。 |
 | start_month | query | いいえ | integer(int64) | 発生月で絞込：開始会計月(1-12)。指定されない場合、現在の会計年度の期首月が指定されます。 |
 | end_month | query | いいえ | integer(int64) | 発生月で絞込：終了会計月(1-12)(会計年度が10月始まりでstart_monthが11なら11, 12, 1, ... 9のいずれかを指定する)。指定されない場合、現在の会計年度の期末月が指定されます。 |
 | start_date | query | いいえ | string | 発生日で絞込：開始日(yyyy-mm-dd) |
@@ -689,7 +689,7 @@
 | 名前 | 位置 | 必須 | 型 | 説明 |
 |------|------|------|-----|------|
 | company_id | query | はい | integer(int64) | 事業所ID |
-| fiscal_year | query | いいえ | integer(int64) | 会計年度 |
+| fiscal_year | query | いいえ | integer(int64) | 会計年度（年度の開始日の年）。会計年度の作成後に期間を変更した場合などに、指定した年と実際に集計対象となる会計年度がずれることがあります。意図した期間が集計されない場合は、fiscal_year ではなく start_date・end_date で期間を指定してください。 |
 | start_month | query | いいえ | integer(int64) | 発生月で絞込：開始会計月(1-12)。指定されない場合、現在の会計年度の期首月が指定されます。 |
 | end_month | query | いいえ | integer(int64) | 発生月で絞込：終了会計月(1-12)(会計年度が10月始まりでstart_monthが11なら11, 12, 1, ... 9のいずれかを指定する)。指定されない場合、現在の会計年度の期末月が指定されます。 |
 | start_date | query | いいえ | string | 発生日で絞込：開始日(yyyy-mm-dd) |
@@ -750,7 +750,7 @@
 | 名前 | 位置 | 必須 | 型 | 説明 |
 |------|------|------|-----|------|
 | company_id | query | はい | integer(int64) | 事業所ID |
-| fiscal_year | query | いいえ | integer(int64) | 会計年度 |
+| fiscal_year | query | いいえ | integer(int64) | 会計年度（年度の開始日の年）。会計年度の作成後に期間を変更した場合などに、指定した年と実際に集計対象となる会計年度がずれることがあります。意図した期間が集計されない場合は、fiscal_year ではなく start_date・end_date で期間を指定してください。 |
 | start_month | query | いいえ | integer(int64) | 発生月で絞込：開始会計月(1-12)。指定されない場合、現在の会計年度の期首月が指定されます。 |
 | end_month | query | いいえ | integer(int64) | 発生月で絞込：終了会計月(1-12)(会計年度が10月始まりでstart_monthが11なら11, 12, 1, ... 9のいずれかを指定する)。指定されない場合、現在の会計年度の期末月が指定されます。 |
 | start_date | query | いいえ | string | 発生日で絞込：開始日(yyyy-mm-dd) |
@@ -811,8 +811,8 @@
 | 名前 | 位置 | 必須 | 型 | 説明 |
 |------|------|------|-----|------|
 | company_id | query | はい | integer(int64) | 事業所ID |
-| section_ids | query | はい | string | 出力する部門の指定（半角数字のidを半角カンマ区切りスペースなしで指定してください。0を指定すると、未選択の部門で比較できます） |
-| fiscal_year | query | いいえ | integer(int64) | 会計年度 |
+| section_ids | query | はい | string | 出力する部門の指定（半角数字のidを半角カンマ区切りスペースなしで指定してください。指定できる部門数は1〜5つです。0を指定すると、未選択の部門で比較できます） |
+| fiscal_year | query | いいえ | integer(int64) | 会計年度（年度の開始日の年）。会計年度の作成後に期間を変更した場合などに、指定した年と実際に集計対象となる会計年度がずれることがあります。意図した期間が集計されない場合は、fiscal_year ではなく start_date・end_date で期間を指定してください。 |
 | start_month | query | いいえ | integer(int64) | 発生月で絞込：開始会計月(1-12)。指定されない場合、現在の会計年度の期首月が指定されます。 |
 | end_month | query | いいえ | integer(int64) | 発生月で絞込：終了会計月(1-12)(会計年度が10月始まりでstart_monthが11なら11, 12, 1, ... 9のいずれかを指定する)。指定されない場合、現在の会計年度の期末月が指定されます。 |
 | start_date | query | いいえ | string | 発生日で絞込：開始日(yyyy-mm-dd) |
@@ -872,8 +872,8 @@
 | 名前 | 位置 | 必須 | 型 | 説明 |
 |------|------|------|-----|------|
 | company_id | query | はい | integer(int64) | 事業所ID |
-| segment_1_tag_ids | query | はい | string | 出力するセグメント１タグIDの指定（半角数字のidを半角カンマ区切りスペースなしで指定してください。0を指定すると、未選択のセグメントで比較できます） |
-| fiscal_year | query | いいえ | integer(int64) | 会計年度 |
+| segment_1_tag_ids | query | はい | string | 出力するセグメント１タグIDの指定（半角数字のidを半角カンマ区切りスペースなしで指定してください。指定できるセグメント数は1〜5つです。0を指定すると、未選択のセグメントで比較できます） |
+| fiscal_year | query | いいえ | integer(int64) | 会計年度（年度の開始日の年）。会計年度の作成後に期間を変更した場合などに、指定した年と実際に集計対象となる会計年度がずれることがあります。意図した期間が集計されない場合は、fiscal_year ではなく start_date・end_date で期間を指定してください。 |
 | start_month | query | いいえ | integer(int64) | 発生月で絞込：開始会計月(1-12)。指定されない場合、現在の会計年度の期首月が指定されます。 |
 | end_month | query | いいえ | integer(int64) | 発生月で絞込：終了会計月(1-12)(会計年度が10月始まりでstart_monthが11なら11, 12, 1, ... 9のいずれかを指定する)。指定されない場合、現在の会計年度の期末月が指定されます。 |
 | start_date | query | いいえ | string | 発生日で絞込：開始日(yyyy-mm-dd) |
@@ -935,8 +935,8 @@
 | 名前 | 位置 | 必須 | 型 | 説明 |
 |------|------|------|-----|------|
 | company_id | query | はい | integer(int64) | 事業所ID |
-| segment_2_tag_ids | query | はい | string | 出力するセグメント２タグIDの指定（半角数字のidを半角カンマ区切りスペースなしで指定してください。0を指定すると、未選択のセグメントで比較できます） |
-| fiscal_year | query | いいえ | integer(int64) | 会計年度 |
+| segment_2_tag_ids | query | はい | string | 出力するセグメント２タグIDの指定（半角数字のidを半角カンマ区切りスペースなしで指定してください。指定できるセグメント数は1〜5つです。0を指定すると、未選択のセグメントで比較できます） |
+| fiscal_year | query | いいえ | integer(int64) | 会計年度（年度の開始日の年）。会計年度の作成後に期間を変更した場合などに、指定した年と実際に集計対象となる会計年度がずれることがあります。意図した期間が集計されない場合は、fiscal_year ではなく start_date・end_date で期間を指定してください。 |
 | start_month | query | いいえ | integer(int64) | 発生月で絞込：開始会計月(1-12)。指定されない場合、現在の会計年度の期首月が指定されます。 |
 | end_month | query | いいえ | integer(int64) | 発生月で絞込：終了会計月(1-12)(会計年度が10月始まりでstart_monthが11なら11, 12, 1, ... 9のいずれかを指定する)。指定されない場合、現在の会計年度の期末月が指定されます。 |
 | start_date | query | いいえ | string | 発生日で絞込：開始日(yyyy-mm-dd) |
@@ -998,8 +998,8 @@
 | 名前 | 位置 | 必須 | 型 | 説明 |
 |------|------|------|-----|------|
 | company_id | query | はい | integer(int64) | 事業所ID |
-| segment_3_tag_ids | query | はい | string | 出力するセグメント３タグIDの指定（半角数字のidを半角カンマ区切りスペースなしで指定してください。0を指定すると、未選択のセグメントで比較できます） |
-| fiscal_year | query | いいえ | integer(int64) | 会計年度 |
+| segment_3_tag_ids | query | はい | string | 出力するセグメント３タグIDの指定（半角数字のidを半角カンマ区切りスペースなしで指定してください。指定できるセグメント数は1〜5つです。0を指定すると、未選択のセグメントで比較できます） |
+| fiscal_year | query | いいえ | integer(int64) | 会計年度（年度の開始日の年）。会計年度の作成後に期間を変更した場合などに、指定した年と実際に集計対象となる会計年度がずれることがあります。意図した期間が集計されない場合は、fiscal_year ではなく start_date・end_date で期間を指定してください。 |
 | start_month | query | いいえ | integer(int64) | 発生月で絞込：開始会計月(1-12)。指定されない場合、現在の会計年度の期首月が指定されます。 |
 | end_month | query | いいえ | integer(int64) | 発生月で絞込：終了会計月(1-12)(会計年度が10月始まりでstart_monthが11なら11, 12, 1, ... 9のいずれかを指定する)。指定されない場合、現在の会計年度の期末月が指定されます。 |
 | start_date | query | いいえ | string | 発生日で絞込：開始日(yyyy-mm-dd) |

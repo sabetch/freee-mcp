@@ -744,7 +744,7 @@
       },
       "post": {
         "summary": "取引（収入・支出）の作成",
-        "description": "<h2 id=\"\">概要</h2>\n<p>指定した事業所の取引（収入・支出）を作成する</p>\n<h2 id=\"_2\">定義</h2>\n<ul>\n<li>\n<p>issue_date : 発生日</p>\n</li>\n<li>\n<p>due_date : 支払期日</p>\n</li>\n<li>\n<p>amount : 金額</p>\n</li>\n<li>\n<p>due_amount : 支払残額</p>\n</li>\n<li>\n<p>type</p>\n<ul>\n<li>income : 収入</li>\n<li>expense : 支出</li>\n</ul>\n</li>\n<li>\n<p>ref_number : 管理番号</p>\n</li>\n<li>\n<p>details : 取引の明細行(最大40行)</p>\n</li>\n<li>\n<p>payments : 取引の支払行</p>\n</li>\n<li>\n<p>receipt_ids : ファイルボックス（証憑ファイル）ID</p>\n</li>\n<li>\n<p>from_walletable_type</p>\n<ul>\n<li>bank_account : 銀行口座</li>\n<li>credit_card : クレジットカード</li>\n<li>wallet : 現金</li>\n<li>private_account_item : プライベート資金（法人の場合は役員借入金もしくは役員借入金、個人の場合は事業主貸もしくは事業主借）</li>\n</ul>\n</li>\n</ul>\n<h2 id=\"_3\">注意点</h2>\n<ul>\n    <li><p>本APIでは+更新行(renews)の操作ができません。取引（収入・支出）の+更新の作成APIをご利用ください。</p></li>\n    <li><p>セグメントタグ情報は法人アドバンスプラン（および旧法人プロフェッショナルプラン）以上で利用可能です。利用可能なセグメントの数は、法人アドバンスプラン（および旧法人プロフェッショナルプラン）の場合は1つ、法人エンタープライズプランの場合は3つです。</p></li>\n    <li>\n        <p>partner_codeを利用するには、事業所の設定から取引先コードの利用を有効にする必要があります。またpartner_codeとpartner_idは同時に指定することはできません。</p></li>\n    <li>\n        <p>account_item_codeを利用するには、事業所の設定から勘定科目コードの利用を有効にする必要があります。またaccount_item_codeとaccount_item_idは同時に指定することはできません。</p></li>\n    <li>\n        <p>item_codeを利用するには、事業所の設定から品目コードの利用を有効にする必要があります。またitem_codeとitem_idは同時に指定することはできません。</p></li>\n    <li>\n        <p>section_codeを利用するには、事業所の設定から部門コードの利用を有効にする必要があります。またsection_codeとsection_idは同時に指定することはできません。</p></li>\n    <li>\n        <p>segment_1_tag_codeを利用するには、事業所の設定からセグメントタグコードの利用を有効にする必要があります。またsegment_1_tag_codeとsegment_1_tag_idは同時に指定することはできません。</p></li>\n    <li>\n        <p>segment_2_tag_codeを利用するには、事業所の設定からセグメントタグコードの利用を有効にする必要があります。またsegment_2_tag_codeとsegment_2_tag_idは同時に指定することはできません。</p></li>\n    <li>\n        <p>segment_3_tag_codeを利用するには、事業所の設定からセグメントタグコードの利用を有効にする必要があります。またsegment_3_tag_codeとsegment_3_tag_idは同時に指定することはできません。</p></li>\n    <li>\n        <p>本APIでは取引の明細行(details)は、最大40行までになります。</p>\n    </li>\n</ul>\n",
+        "description": "<h2 id=\"\">概要</h2>\n<p>指定した事業所の取引（収入・支出）を作成する</p>\n<h2 id=\"_2\">定義</h2>\n<ul>\n<li>\n<p>issue_date : 発生日</p>\n</li>\n<li>\n<p>due_date : 支払期日</p>\n</li>\n<li>\n<p>amount : 金額</p>\n</li>\n<li>\n<p>due_amount : 支払残額</p>\n</li>\n<li>\n<p>type</p>\n<ul>\n<li>income : 収入</li>\n<li>expense : 支出</li>\n</ul>\n</li>\n<li>\n<p>ref_number : 管理番号</p>\n</li>\n<li>\n<p>details : 取引の明細行(最大100行)</p>\n</li>\n<li>\n<p>payments : 取引の支払行</p>\n</li>\n<li>\n<p>receipt_ids : ファイルボックス（証憑ファイル）ID</p>\n</li>\n<li>\n<p>from_walletable_type</p>\n<ul>\n<li>bank_account : 銀行口座</li>\n<li>credit_card : クレジットカード</li>\n<li>wallet : 現金</li>\n<li>private_account_item : プライベート資金（法人の場合は役員借入金もしくは役員借入金、個人の場合は事業主貸もしくは事業主借）</li>\n</ul>\n</li>\n</ul>\n<h2 id=\"_3\">注意点</h2>\n<ul>\n    <li><p>本APIでは+更新行(renews)の操作ができません。取引（収入・支出）の+更新の作成APIをご利用ください。</p></li>\n    <li><p>セグメントタグ情報は法人アドバンスプラン（および旧法人プロフェッショナルプラン）以上で利用可能です。利用可能なセグメントの数は、法人アドバンスプラン（および旧法人プロフェッショナルプラン）の場合は1つ、法人エンタープライズプランの場合は3つです。</p></li>\n    <li>\n        <p>partner_codeを利用するには、事業所の設定から取引先コードの利用を有効にする必要があります。またpartner_codeとpartner_idは同時に指定することはできません。</p></li>\n    <li>\n        <p>account_item_codeを利用するには、事業所の設定から勘定科目コードの利用を有効にする必要があります。またaccount_item_codeとaccount_item_idは同時に指定することはできません。</p></li>\n    <li>\n        <p>item_codeを利用するには、事業所の設定から品目コードの利用を有効にする必要があります。またitem_codeとitem_idは同時に指定することはできません。</p></li>\n    <li>\n        <p>section_codeを利用するには、事業所の設定から部門コードの利用を有効にする必要があります。またsection_codeとsection_idは同時に指定することはできません。</p></li>\n    <li>\n        <p>segment_1_tag_codeを利用するには、事業所の設定からセグメントタグコードの利用を有効にする必要があります。またsegment_1_tag_codeとsegment_1_tag_idは同時に指定することはできません。</p></li>\n    <li>\n        <p>segment_2_tag_codeを利用するには、事業所の設定からセグメントタグコードの利用を有効にする必要があります。またsegment_2_tag_codeとsegment_2_tag_idは同時に指定することはできません。</p></li>\n    <li>\n        <p>segment_3_tag_codeを利用するには、事業所の設定からセグメントタグコードの利用を有効にする必要があります。またsegment_3_tag_codeとsegment_3_tag_idは同時に指定することはできません。</p></li>\n    <li>\n        <p>本APIでは取引の明細行(details)は、最大100行までになります。</p>\n    </li>\n</ul>\n",
         "hasJsonBody": true
       }
     },
@@ -776,7 +776,7 @@
       },
       "put": {
         "summary": "取引（収入・支出）の更新",
-        "description": "<h2 id=\"\">概要</h2>\n<p>指定した事業所の取引（収入・支出）を更新する</p>\n<h2 id=\"_2\">定義</h2>\n<ul>\n<li>\n<p>issue_date : 発生日</p>\n</li>\n<li>\n<p>due_date : 支払期日</p>\n</li>\n<li>\n<p>amount : 金額</p>\n</li>\n<li>\n<p>due_amount : 支払残額</p>\n</li>\n<li>\n<p>type</p>\n<ul>\n<li>income : 収入</li>\n<li>expense : 支出</li>\n</ul>\n</li>\n<li>\n<p>details : 取引の明細行(最大40行)</p>\n</li>\n<li>\n<p>renews : 取引の+更新行</p>\n</li>\n<li>\n<p>payments : 取引の支払行</p>\n</li>\n<li>\n<p>from_walletable_type</p>\n<ul>\n<li>bank_account : 銀行口座</li>\n<li>credit_card : クレジットカード</li>\n<li>wallet : 現金</li>\n<li>private_account_item : プライベート資金（法人の場合は役員借入金もしくは役員借入金、個人の場合は事業主貸もしくは事業主借）</li>\n</ul>\n</li>\n<li>\n<p>receipt_ids : ファイルボックス（証憑ファイル）ID</p>\n</li>\n</ul>\n<h2 id=\"_3\">注意点</h2>\n<ul>\n    <li><p>本APIでは支払行(payments)の操作ができません。取引（収入・支出）の支払行の作成・更新・削除APIをご利用ください。</p></li>\n    <li><p>本APIでは+更新行(renews)の操作ができません。取引（収入・支出）の+更新の作成・更新・削除APIをご利用ください。</p></li>\n    <li><p>本APIでは収入／支出の切替えができません。既存の取引を削除後、再度作成してください。</p></li>\n    <li><p>本APIで取引を更新すると、消費税の計算方法は必ず内税方式が選択されます。</p></li>\n    <li><p>セグメントタグ情報は法人アドバンスプラン（および旧法人プロフェッショナルプラン）以上で利用可能です。利用可能なセグメントの数は、法人アドバンスプラン（および旧法人プロフェッショナルプラン）の場合は1つ、法人エンタープライズプランの場合は3つです。</p></li>\n    <li><p>partner_codeを利用するには、事業所の設定から取引先コードの利用を有効にする必要があります。またpartner_codeとpartner_idは同時に指定することはできません。</p></li>\n    <li><p>freee請求書から登録された取引は品目・部門・メモタグ・セグメント1、2、3のみ更新可能です。</p></li>\n    <li>\n        <p>本APIでは取引の明細行(details)は、最大40行までになります。</p>\n    </li>\n</ul>",
+        "description": "<h2 id=\"\">概要</h2>\n<p>指定した事業所の取引（収入・支出）を更新する</p>\n<h2 id=\"_2\">定義</h2>\n<ul>\n<li>\n<p>issue_date : 発生日</p>\n</li>\n<li>\n<p>due_date : 支払期日</p>\n</li>\n<li>\n<p>amount : 金額</p>\n</li>\n<li>\n<p>due_amount : 支払残額</p>\n</li>\n<li>\n<p>type</p>\n<ul>\n<li>income : 収入</li>\n<li>expense : 支出</li>\n</ul>\n</li>\n<li>\n<p>details : 取引の明細行(最大100行)</p>\n</li>\n<li>\n<p>renews : 取引の+更新行</p>\n</li>\n<li>\n<p>payments : 取引の支払行</p>\n</li>\n<li>\n<p>from_walletable_type</p>\n<ul>\n<li>bank_account : 銀行口座</li>\n<li>credit_card : クレジットカード</li>\n<li>wallet : 現金</li>\n<li>private_account_item : プライベート資金（法人の場合は役員借入金もしくは役員借入金、個人の場合は事業主貸もしくは事業主借）</li>\n</ul>\n</li>\n<li>\n<p>receipt_ids : ファイルボックス（証憑ファイル）ID</p>\n</li>\n</ul>\n<h2 id=\"_3\">注意点</h2>\n<ul>\n    <li><p>本APIでは支払行(payments)の操作ができません。取引（収入・支出）の支払行の作成・更新・削除APIをご利用ください。</p></li>\n    <li><p>本APIでは+更新行(renews)の操作ができません。取引（収入・支出）の+更新の作成・更新・削除APIをご利用ください。</p></li>\n    <li><p>本APIでは収入／支出の切替えができません。既存の取引を削除後、再度作成してください。</p></li>\n    <li><p>本APIで取引を更新すると、消費税の計算方法は必ず内税方式が選択されます。</p></li>\n    <li><p>セグメントタグ情報は法人アドバンスプラン（および旧法人プロフェッショナルプラン）以上で利用可能です。利用可能なセグメントの数は、法人アドバンスプラン（および旧法人プロフェッショナルプラン）の場合は1つ、法人エンタープライズプランの場合は3つです。</p></li>\n    <li><p>partner_codeを利用するには、事業所の設定から取引先コードの利用を有効にする必要があります。またpartner_codeとpartner_idは同時に指定することはできません。</p></li>\n    <li><p>freee請求書から登録された取引は品目・部門・メモタグ・セグメント1、2、3のみ更新可能です。</p></li>\n    <li>\n        <p>本APIでは取引の明細行(details)は、最大100行までになります。</p>\n    </li>\n</ul>",
         "parameters": [
           {
             "name": "id",
@@ -944,7 +944,7 @@
     "/api/1/manual_journals": {
       "get": {
         "summary": "振替伝票一覧の取得",
-        "description": "\n<h2 id=\"\">概要</h2>\n\n<p>指定した事業所の振替伝票一覧を取得する</p>\n\n<h2 id=\"_2\">定義</h2>\n\n<ul>\n<li>\n<p>issue_date : 発生日</p>\n</li>\n\n<li>\n<p>adjustment : 決算整理仕訳フラグ（true: 決算整理仕訳, false: 日常仕訳）</p>\n</li>\n\n<li>\n<p>txn_number : 仕訳番号</p>\n</li>\n\n<li>\n<p>details : 振替伝票の貸借行</p>\n</li>\n\n<li>\n<p>entry_side : 貸借区分</p>\n\n<ul>\n<li>credit : 貸方</li>\n\n<li>debit : 借方</li>\n</ul>\n</li>\n\n<li>\n<p>amount : 金額</p>\n</li>\n</ul>\n\n<h2 id=\"_3\">注意点</h2>\n\n<ul>\n<li>振替伝票は売掛・買掛レポートには反映されません。債権・債務データの登録は取引(Deals)をお使いください。</li>\n<li>事業所の仕訳番号形式が有効な場合のみ、レスポンスで仕訳番号(txn_number)を返します。</li>\n<li>セグメントタグ情報は法人アドバンスプラン（および旧法人プロフェッショナルプラン）以上で利用可能です。利用可能なセグメントの数は、法人アドバンスプラン（および旧法人プロフェッショナルプラン）の場合は1つ、法人エンタープライズプランの場合は3つです。</li>\n<li>partner_codeを利用するには、事業所の設定から取引先コードの利用を有効にする必要があります。またpartner_codeとpartner_idは同時に指定することはできません。</li></ul>",
+        "description": "\n<h2 id=\"\">概要</h2>\n\n<p>指定した事業所の振替伝票一覧を取得する</p>\n\n<h2 id=\"_2\">定義</h2>\n\n<ul>\n<li>\n<p>issue_date : 発生日</p>\n</li>\n\n<li>\n<p>adjustment : 決算整理仕訳フラグ（true: 決算整理仕訳, false: 日常仕訳）</p>\n</li>\n\n<li>\n<p>txn_number : 仕訳番号</p>\n</li>\n\n<li>\n<p>ref_number : 管理番号</p>\n</li>\n\n<li>\n<p>details : 振替伝票の貸借行</p>\n</li>\n\n<li>\n<p>entry_side : 貸借区分</p>\n\n<ul>\n<li>credit : 貸方</li>\n\n<li>debit : 借方</li>\n</ul>\n</li>\n\n<li>\n<p>amount : 金額</p>\n</li>\n</ul>\n\n<h2 id=\"_3\">注意点</h2>\n\n<ul>\n<li>振替伝票は売掛・買掛レポートには反映されません。債権・債務データの登録は取引(Deals)をお使いください。</li>\n<li>事業所の仕訳番号形式が有効な場合のみ、レスポンスで仕訳番号(txn_number)を返します。</li>\n<li>セグメントタグ情報は法人アドバンスプラン（および旧法人プロフェッショナルプラン）以上で利用可能です。利用可能なセグメントの数は、法人アドバンスプラン（および旧法人プロフェッショナルプラン）の場合は1つ、法人エンタープライズプランの場合は3つです。</li>\n<li>partner_codeを利用するには、事業所の設定から取引先コードの利用を有効にする必要があります。またpartner_codeとpartner_idは同時に指定することはできません。</li></ul>",
         "parameters": [
           {
             "name": "company_id",
@@ -1056,6 +1056,12 @@
             "description": "仕訳番号で絞込（事業所の仕訳番号形式が有効な場合のみ）"
           },
           {
+            "name": "ref_number",
+            "in": "query",
+            "type": "string",
+            "description": "管理番号で絞込（前方一致）"
+          },
+          {
             "name": "offset",
             "in": "query",
             "type": "integer",
@@ -1071,7 +1077,7 @@
       },
       "post": {
         "summary": "振替伝票の作成",
-        "description": "\n<h2 id=\"\">概要</h2>\n\n<p>指定した事業所の振替伝票を作成する</p>\n\n<h2 id=\"_2\">定義</h2>\n\n<ul>\n<li>\n<p>issue_date : 発生日</p>\n</li>\n\n<li>\n<p>adjustment : 決算整理仕訳フラグ（true: 決算整理仕訳, false: 日常仕訳）</p>\n</li>\n\n<li>\n<p>txn_number : 仕訳番号</p>\n</li>\n\n<li>\n<p>details : 振替伝票の貸借行</p>\n</li>\n\n<li>\n<p>entry_side : 貸借区分</p>\n\n<ul>\n<li>credit : 貸方</li>\n\n<li>debit : 借方</li>\n</ul>\n</li>\n\n<li>\n<p>amount : 金額</p>\n</li>\n</ul>\n\n<h2 id=\"_3\">注意点</h2>\n\n<ul>\n<li>振替伝票は売掛・買掛レポートには反映されません。債権・債務データの登録は取引(Deals)をお使いください。</li>\n<li>事業所の仕訳番号形式が有効な場合のみ、レスポンスで仕訳番号(txn_number)を返します。</li>\n<li>貸借合わせて100行まで仕訳行を登録できます。</li>\n<li>セグメントタグ情報は法人アドバンスプラン（および旧法人プロフェッショナルプラン）以上で利用可能です。利用可能なセグメントの数は、法人アドバンスプラン（および旧法人プロフェッショナルプラン）の場合は1つ、法人エンタープライズプランの場合は3つです。</li>\n<li>partner_codeを利用するには、事業所の設定から取引先コードの利用を有効にする必要があります。またpartner_codeとpartner_idは同時に指定することはできません。</li></ul>\n\n",
+        "description": "\n<h2 id=\"\">概要</h2>\n\n<p>指定した事業所の振替伝票を作成する</p>\n\n<h2 id=\"_2\">定義</h2>\n\n<ul>\n<li>\n<p>issue_date : 発生日</p>\n</li>\n\n<li>\n<p>adjustment : 決算整理仕訳フラグ（true: 決算整理仕訳, false: 日常仕訳）</p>\n</li>\n\n<li>\n<p>txn_number : 仕訳番号</p>\n</li>\n\n<li>\n<p>ref_number : 管理番号</p>\n</li>\n\n<li>\n<p>details : 振替伝票の貸借行</p>\n</li>\n\n<li>\n<p>entry_side : 貸借区分</p>\n\n<ul>\n<li>credit : 貸方</li>\n\n<li>debit : 借方</li>\n</ul>\n</li>\n\n<li>\n<p>amount : 金額</p>\n</li>\n</ul>\n\n<h2 id=\"_3\">注意点</h2>\n\n<ul>\n<li>振替伝票は売掛・買掛レポートには反映されません。債権・債務データの登録は取引(Deals)をお使いください。</li>\n<li>事業所の仕訳番号形式が有効な場合のみ、レスポンスで仕訳番号(txn_number)を返します。</li>\n<li>貸借合わせて100行まで仕訳行を登録できます。</li>\n<li>セグメントタグ情報は法人アドバンスプラン（および旧法人プロフェッショナルプラン）以上で利用可能です。利用可能なセグメントの数は、法人アドバンスプラン（および旧法人プロフェッショナルプラン）の場合は1つ、法人エンタープライズプランの場合は3つです。</li>\n<li>partner_codeを利用するには、事業所の設定から取引先コードの利用を有効にする必要があります。またpartner_codeとpartner_idは同時に指定することはできません。</li></ul>\n\n",
         "hasJsonBody": true
       }
     },
@@ -1097,7 +1103,7 @@
       },
       "put": {
         "summary": "振替伝票の更新",
-        "description": "\n<h2 id=\"\">概要</h2>\n\n<p>指定した事業所の振替伝票を更新する</p>\n\n<h2 id=\"_2\">定義</h2>\n\n<ul>\n<li>\n<p>issue_date : 発生日</p>\n</li>\n\n<li>\n<p>adjustment : 決算整理仕訳フラグ（true: 決算整理仕訳, false: 日常仕訳）</p>\n</li>\n\n<li>\n<p>txn_number : 仕訳番号</p>\n</li>\n\n<li>\n<p>details : 振替伝票の貸借行</p>\n</li>\n\n<li>\n<p>entry_side : 貸借区分</p>\n\n<ul>\n<li>credit : 貸方</li>\n\n<li>debit : 借方</li>\n</ul>\n</li>\n\n<li>\n<p>amount : 金額</p>\n</li>\n</ul>\n\n<h2 id=\"_3\">注意点</h2>\n\n<ul>\n<li>振替伝票は売掛・買掛レポートには反映されません。債権・債務データの登録は取引(Deals)をお使いください。</li>\n\n<li>事業所の仕訳番号形式が有効な場合のみ、レスポンスで仕訳番号(txn_number)を返します。</li>\n<li>貸借合わせて100行まで仕訳行を登録できます。</li>\n\n<li>detailsに含まれない既存の貸借行は削除されます。更新後も残したい行は、必ず貸借行IDを指定してdetailsに含めてください。</li>\n\n<li>detailsに含まれる貸借行IDの指定がある行は、更新行として扱われ更新されます。</li>\n\n<li>detailsに含まれる貸借行IDの指定がない行は、新規行として扱われ追加されます。</li>\n<li>セグメントタグ情報は法人アドバンスプラン（および旧法人プロフェッショナルプラン）以上で利用可能です。利用可能なセグメントの数は、法人アドバンプスラン（および旧法人プロフェッショナルプラン）の場合は1つ、法人エンタープライズプランの場合は3つです。</li>\n<li>partner_codeを利用するには、事業所の設定から取引先コードの利用を有効にする必要があります。またpartner_codeとpartner_idは同時に指定することはできません。</li></ul>\n\n",
+        "description": "\n<h2 id=\"\">概要</h2>\n\n<p>指定した事業所の振替伝票を更新する</p>\n\n<h2 id=\"_2\">定義</h2>\n\n<ul>\n<li>\n<p>issue_date : 発生日</p>\n</li>\n\n<li>\n<p>adjustment : 決算整理仕訳フラグ（true: 決算整理仕訳, false: 日常仕訳）</p>\n</li>\n\n<li>\n<p>txn_number : 仕訳番号</p>\n</li>\n\n<li>\n<p>ref_number : 管理番号</p>\n</li>\n\n<li>\n<p>details : 振替伝票の貸借行</p>\n</li>\n\n<li>\n<p>entry_side : 貸借区分</p>\n\n<ul>\n<li>credit : 貸方</li>\n\n<li>debit : 借方</li>\n</ul>\n</li>\n\n<li>\n<p>amount : 金額</p>\n</li>\n</ul>\n\n<h2 id=\"_3\">注意点</h2>\n\n<ul>\n<li>振替伝票は売掛・買掛レポートには反映されません。債権・債務データの登録は取引(Deals)をお使いください。</li>\n\n<li>事業所の仕訳番号形式が有効な場合のみ、レスポンスで仕訳番号(txn_number)を返します。</li>\n<li>貸借合わせて100行まで仕訳行を登録できます。</li>\n\n<li>detailsに含まれない既存の貸借行は削除されます。更新後も残したい行は、必ず貸借行IDを指定してdetailsに含めてください。</li>\n\n<li>detailsに含まれる貸借行IDの指定がある行は、更新行として扱われ更新されます。</li>\n\n<li>detailsに含まれる貸借行IDの指定がない行は、新規行として扱われ追加されます。</li>\n<li>セグメントタグ情報は法人アドバンスプラン（および旧法人プロフェッショナルプラン）以上で利用可能です。利用可能なセグメントの数は、法人アドバンプスラン（および旧法人プロフェッショナルプラン）の場合は1つ、法人エンタープライズプランの場合は3つです。</li>\n<li>partner_codeを利用するには、事業所の設定から取引先コードの利用を有効にする必要があります。またpartner_codeとpartner_idは同時に指定することはできません。</li></ul>\n\n",
         "parameters": [
           {
             "name": "id",
@@ -1402,7 +1408,7 @@
             "name": "display_category",
             "in": "query",
             "type": "string",
-            "description": "税区分の表示カテゴリ（ tax_5: 5%表示の税区分、 tax_8: 8%表示の税区分、 tax_r8: 軽減税率8%表示の税区分、 tax_10: 10%表示の税区分、 tax_5_e80: インボイス経過措置5%表示80%控除の税区分、 tax_5_e50: インボイス経過措置5%表示50%控除の税区分、 tax_8_e80: インボイス経過措置8%表示80%控除の税区分、 tax_8_e50: インボイス経過措置8%表示50%控除の税区分、 tax_r8_e80: インボイス経過措置軽減税率8%表示80%控除の税区分、 tax_r8_e50: インボイス経過措置軽減税率8%表示50%控除の税区分、 tax_10_e80: インボイス経過措置10%表示80%控除の税区分、 tax_10_e50: インボイス経過措置10%表示50%控除の税区分）"
+            "description": "税区分の表示カテゴリ（ tax_5: 5%表示の税区分、 tax_8: 8%表示の税区分、 tax_r8: 軽減税率8%表示の税区分、 tax_10: 10%表示の税区分、 tax_5_e80: インボイス経過措置5%表示80%控除の税区分、 tax_5_e70: インボイス経過措置5%表示70%控除の税区分、 tax_5_e50: インボイス経過措置5%表示50%控除の税区分、 tax_5_e30: インボイス経過措置5%表示30%控除の税区分、 tax_8_e80: インボイス経過措置8%表示80%控除の税区分、 tax_8_e70: インボイス経過措置8%表示70%控除の税区分、 tax_8_e50: インボイス経過措置8%表示50%控除の税区分、 tax_8_e30: インボイス経過措置8%表示30%控除の税区分、 tax_r8_e80: インボイス経過措置軽減税率8%表示80%控除の税区分、 tax_r8_e70: インボイス経過措置軽減税率8%表示70%控除の税区分、 tax_r8_e50: インボイス経過措置軽減税率8%表示50%控除の税区分、 tax_r8_e30: インボイス経過措置軽減税率8%表示30%控除の税区分、 tax_10_e80: インボイス経過措置10%表示80%控除の税区分、 tax_10_e70: インボイス経過措置10%表示70%控除の税区分、 tax_10_e50: インボイス経過措置10%表示50%控除の税区分、 tax_10_e30: インボイス経過措置10%表示30%控除の税区分）"
           },
           {
             "name": "available",
@@ -1915,7 +1921,7 @@
             "name": "fiscal_year",
             "in": "query",
             "type": "integer",
-            "description": "会計年度"
+            "description": "会計年度（年度の開始日の年）。会計年度の作成後に期間を変更した場合などに、指定した年と実際に集計対象となる会計年度がずれることがあります。意図した期間が集計されない場合は、fiscal_year ではなく start_date・end_date で期間を指定してください。"
           },
           {
             "name": "start_month",
@@ -2008,7 +2014,7 @@
             "name": "fiscal_year",
             "in": "query",
             "type": "integer",
-            "description": "会計年度"
+            "description": "会計年度（年度の開始日の年）。会計年度の作成後に期間を変更した場合などに、指定した年と実際に集計対象となる会計年度がずれることがあります。意図した期間が集計されない場合は、fiscal_year ではなく start_date・end_date で期間を指定してください。"
           },
           {
             "name": "start_month",
@@ -2101,7 +2107,7 @@
             "name": "fiscal_year",
             "in": "query",
             "type": "integer",
-            "description": "会計年度"
+            "description": "会計年度（年度の開始日の年）。会計年度の作成後に期間を変更した場合などに、指定した年と実際に集計対象となる会計年度がずれることがあります。意図した期間が集計されない場合は、fiscal_year ではなく start_date・end_date で期間を指定してください。"
           },
           {
             "name": "start_month",
@@ -2194,7 +2200,7 @@
             "name": "fiscal_year",
             "in": "query",
             "type": "integer",
-            "description": "会計年度"
+            "description": "会計年度（年度の開始日の年）。会計年度の作成後に期間を変更した場合などに、指定した年と実際に集計対象となる会計年度がずれることがあります。意図した期間が集計されない場合は、fiscal_year ではなく start_date・end_date で期間を指定してください。"
           },
           {
             "name": "start_month",
@@ -2293,7 +2299,7 @@
             "name": "fiscal_year",
             "in": "query",
             "type": "integer",
-            "description": "会計年度"
+            "description": "会計年度（年度の開始日の年）。会計年度の作成後に期間を変更した場合などに、指定した年と実際に集計対象となる会計年度がずれることがあります。意図した期間が集計されない場合は、fiscal_year ではなく start_date・end_date で期間を指定してください。"
           },
           {
             "name": "start_month",
@@ -2392,7 +2398,7 @@
             "name": "fiscal_year",
             "in": "query",
             "type": "integer",
-            "description": "会計年度"
+            "description": "会計年度（年度の開始日の年）。会計年度の作成後に期間を変更した場合などに、指定した年と実際に集計対象となる会計年度がずれることがあります。意図した期間が集計されない場合は、fiscal_year ではなく start_date・end_date で期間を指定してください。"
           },
           {
             "name": "start_month",
@@ -2492,13 +2498,13 @@
             "in": "query",
             "type": "string",
             "required": true,
-            "description": "出力する部門の指定（半角数字のidを半角カンマ区切りスペースなしで指定してください。0を指定すると、未選択の部門で比較できます。）"
+            "description": "出力する部門の指定（半角数字のidを半角カンマ区切りスペースなしで指定してください。指定できる部門数は1〜5つです。0を指定すると、未選択の部門で比較できます。）"
           },
           {
             "name": "fiscal_year",
             "in": "query",
             "type": "integer",
-            "description": "会計年度"
+            "description": "会計年度（年度の開始日の年）。会計年度の作成後に期間を変更した場合などに、指定した年と実際に集計対象となる会計年度がずれることがあります。意図した期間が集計されない場合は、fiscal_year ではなく start_date・end_date で期間を指定してください。"
           },
           {
             "name": "start_month",
@@ -2592,13 +2598,13 @@
             "in": "query",
             "type": "string",
             "required": true,
-            "description": "出力するセグメント１タグIDの指定（半角数字のidを半角カンマ区切りスペースなしで指定してください。0を指定すると、未選択のセグメントで比較できます）"
+            "description": "出力するセグメント１タグIDの指定（半角数字のidを半角カンマ区切りスペースなしで指定してください。指定できるセグメント数は1〜5つです。0を指定すると、未選択のセグメントで比較できます）"
           },
           {
             "name": "fiscal_year",
             "in": "query",
             "type": "integer",
-            "description": "会計年度"
+            "description": "会計年度（年度の開始日の年）。会計年度の作成後に期間を変更した場合などに、指定した年と実際に集計対象となる会計年度がずれることがあります。意図した期間が集計されない場合は、fiscal_year ではなく start_date・end_date で期間を指定してください。"
           },
           {
             "name": "start_month",
@@ -2698,13 +2704,13 @@
             "in": "query",
             "type": "string",
             "required": true,
-            "description": "出力するセグメント２タグIDの指定（半角数字のidを半角カンマ区切りスペースなしで指定してください。0を指定すると、未選択のセグメントで比較できます）"
+            "description": "出力するセグメント２タグIDの指定（半角数字のidを半角カンマ区切りスペースなしで指定してください。指定できるセグメント数は1〜5つです。0を指定すると、未選択のセグメントで比較できます）"
           },
           {
             "name": "fiscal_year",
             "in": "query",
             "type": "integer",
-            "description": "会計年度"
+            "description": "会計年度（年度の開始日の年）。会計年度の作成後に期間を変更した場合などに、指定した年と実際に集計対象となる会計年度がずれることがあります。意図した期間が集計されない場合は、fiscal_year ではなく start_date・end_date で期間を指定してください。"
           },
           {
             "name": "start_month",
@@ -2804,13 +2810,13 @@
             "in": "query",
             "type": "string",
             "required": true,
-            "description": "出力するセグメント３タグIDの指定（半角数字のidを半角カンマ区切りスペースなしで指定してください。0を指定すると、未選択のセグメントで比較できます）"
+            "description": "出力するセグメント３タグIDの指定（半角数字のidを半角カンマ区切りスペースなしで指定してください。指定できるセグメント数は1〜5つです。0を指定すると、未選択のセグメントで比較できます）"
           },
           {
             "name": "fiscal_year",
             "in": "query",
             "type": "integer",
-            "description": "会計年度"
+            "description": "会計年度（年度の開始日の年）。会計年度の作成後に期間を変更した場合などに、指定した年と実際に集計対象となる会計年度がずれることがあります。意図した期間が集計されない場合は、fiscal_year ではなく start_date・end_date で期間を指定してください。"
           },
           {
             "name": "start_month",
@@ -2909,7 +2915,7 @@
             "name": "fiscal_year",
             "in": "query",
             "type": "integer",
-            "description": "会計年度"
+            "description": "会計年度（年度の開始日の年）。会計年度の作成後に期間を変更した場合などに、指定した年と実際に集計対象となる会計年度がずれることがあります。意図した期間が集計されない場合は、fiscal_year ではなく start_date・end_date で期間を指定してください。"
           },
           {
             "name": "start_month",
@@ -3008,7 +3014,7 @@
             "name": "fiscal_year",
             "in": "query",
             "type": "integer",
-            "description": "会計年度"
+            "description": "会計年度（年度の開始日の年）。会計年度の作成後に期間を変更した場合などに、指定した年と実際に集計対象となる会計年度がずれることがあります。意図した期間が集計されない場合は、fiscal_year ではなく start_date・end_date で期間を指定してください。"
           },
           {
             "name": "start_month",
@@ -3107,7 +3113,7 @@
             "name": "fiscal_year",
             "in": "query",
             "type": "integer",
-            "description": "会計年度"
+            "description": "会計年度（年度の開始日の年）。会計年度の作成後に期間を変更した場合などに、指定した年と実際に集計対象となる会計年度がずれることがあります。意図した期間が集計されない場合は、fiscal_year ではなく start_date・end_date で期間を指定してください。"
           },
           {
             "name": "start_month",
@@ -3207,13 +3213,13 @@
             "in": "query",
             "type": "string",
             "required": true,
-            "description": "出力する部門の指定（半角数字のidを半角カンマ区切りスペースなしで指定してください。0を指定すると、未選択の部門で比較できます）"
+            "description": "出力する部門の指定（半角数字のidを半角カンマ区切りスペースなしで指定してください。指定できる部門数は1〜5つです。0を指定すると、未選択の部門で比較できます）"
           },
           {
             "name": "fiscal_year",
             "in": "query",
             "type": "integer",
-            "description": "会計年度"
+            "description": "会計年度（年度の開始日の年）。会計年度の作成後に期間を変更した場合などに、指定した年と実際に集計対象となる会計年度がずれることがあります。意図した期間が集計されない場合は、fiscal_year ではなく start_date・end_date で期間を指定してください。"
           },
           {
             "name": "start_month",
@@ -3307,13 +3313,13 @@
             "in": "query",
             "type": "string",
             "required": true,
-            "description": "出力するセグメント１タグIDの指定（半角数字のidを半角カンマ区切りスペースなしで指定してください。0を指定すると、未選択のセグメントで比較できます）"
+            "description": "出力するセグメント１タグIDの指定（半角数字のidを半角カンマ区切りスペースなしで指定してください。指定できるセグメント数は1〜5つです。0を指定すると、未選択のセグメントで比較できます）"
           },
           {
             "name": "fiscal_year",
             "in": "query",
             "type": "integer",
-            "description": "会計年度"
+            "description": "会計年度（年度の開始日の年）。会計年度の作成後に期間を変更した場合などに、指定した年と実際に集計対象となる会計年度がずれることがあります。意図した期間が集計されない場合は、fiscal_year ではなく start_date・end_date で期間を指定してください。"
           },
           {
             "name": "start_month",
@@ -3413,13 +3419,13 @@
             "in": "query",
             "type": "string",
             "required": true,
-            "description": "出力するセグメント２タグIDの指定（半角数字のidを半角カンマ区切りスペースなしで指定してください。0を指定すると、未選択のセグメントで比較できます）"
+            "description": "出力するセグメント２タグIDの指定（半角数字のidを半角カンマ区切りスペースなしで指定してください。指定できるセグメント数は1〜5つです。0を指定すると、未選択のセグメントで比較できます）"
           },
           {
             "name": "fiscal_year",
             "in": "query",
             "type": "integer",
-            "description": "会計年度"
+            "description": "会計年度（年度の開始日の年）。会計年度の作成後に期間を変更した場合などに、指定した年と実際に集計対象となる会計年度がずれることがあります。意図した期間が集計されない場合は、fiscal_year ではなく start_date・end_date で期間を指定してください。"
           },
           {
             "name": "start_month",
@@ -3519,13 +3525,13 @@
             "in": "query",
             "type": "string",
             "required": true,
-            "description": "出力するセグメント３タグIDの指定（半角数字のidを半角カンマ区切りスペースなしで指定してください。0を指定すると、未選択のセグメントで比較できます）"
+            "description": "出力するセグメント３タグIDの指定（半角数字のidを半角カンマ区切りスペースなしで指定してください。指定できるセグメント数は1〜5つです。0を指定すると、未選択のセグメントで比較できます）"
           },
           {
             "name": "fiscal_year",
             "in": "query",
             "type": "integer",
-            "description": "会計年度"
+            "description": "会計年度（年度の開始日の年）。会計年度の作成後に期間を変更した場合などに、指定した年と実際に集計対象となる会計年度がずれることがあります。意図した期間が集計されない場合は、fiscal_year ではなく start_date・end_date で期間を指定してください。"
           },
           {
             "name": "start_month",
@@ -4259,6 +4265,30 @@
             "description": "請求書番号で絞込"
           },
           {
+            "name": "section_id",
+            "in": "query",
+            "type": "integer",
+            "description": "部門IDで絞込"
+          },
+          {
+            "name": "partner_name",
+            "in": "query",
+            "type": "string",
+            "description": "取引先名で絞込"
+          },
+          {
+            "name": "approval_flow_route_id",
+            "in": "query",
+            "type": "integer",
+            "description": "申請経路IDで絞込（`/api/1/approval_flow_routes` のレスポンス id と同じ値）"
+          },
+          {
+            "name": "observing",
+            "in": "query",
+            "type": "string",
+            "description": "'共有された申請の絞り込み (ignore_observing: 共有された申請を含めない, only_observing: 共有された申請のみ)'\n"
+          },
+          {
             "name": "offset",
             "in": "query",
             "type": "integer",
@@ -4735,7 +4765,7 @@
     "/api/1/fixed_assets": {
       "get": {
         "summary": "固定資産一覧の取得",
-        "description": "<h2 id=\"\">概要</h2>\n<p>指定した事業所の固定資産一覧を取得する</p>\n\n<h2 id=\"\">定義</h2>\n<ul>\n  <li>このAPIは法人エンタープライズに加入している事業所のみが利用できます。</li>\n  <li><p>target_date : 表示したい会計期間の開始年月日。開始年月日以外を指定した場合は、その日付が含まれる会計期間が対象となります。</p></li>\n  <li><p>depreciation_amount : 本年分の償却費合計</p></li>\n  <li><p>depreciation_method : 償却方法</p></li>\n  <li><p>depreciation_account_item_id : 減価償却に使う勘定科目</p></li>\n  <li><p>acquisition_cost : 取得価額</p></li>\n  <li><p>opening_balance : 期首残高</p></li>\n  <li><p>undepreciated_balance : 未償却残高。土地などの償却しない固定資産はnullが返ります。</p></li>\n  <li><p>opening_accumulated_depreciation : 期首減価償却累計額</p></li>\n  <li><p>closing_accumulated_depreciation : 期末減価償却累計額</p></li>\n</ul>\n<h2 id=\"\">注意点</h2>\n<ul>\n  <li><p>up_to_dateがfalseの場合、残高の集計が完了していません。最新の集計結果を確認したい場合は、時間を空けて再度取得する必要があります。</p></li>\n</ul>",
+        "description": "<h2 id=\"\">概要</h2>\n<p>指定した事業所の固定資産一覧を取得する</p>\n\n<h2 id=\"\">定義</h2>\n<ul>\n  <li>このAPIは法人エンタープライズに加入している事業所のみが利用できます。</li>\n  <li><p>target_date : 表示したい会計期間の開始年月日。開始年月日以外を指定した場合は、その日付が含まれる会計期間が対象となります。</p></li>\n  <li><p>depreciation_amount : 本年分の償却費合計</p></li>\n  <li><p>depreciation_method : 償却方法</p></li>\n  <li><p>depreciation_account_item_id : 減価償却に使う勘定科目</p></li>\n  <li><p>acquisition_cost : 取得価額</p></li>\n  <li><p>opening_balance : 期首残高</p></li>\n  <li><p>undepreciated_balance : 未償却残高。土地などの償却しない固定資産はnullが返ります。</p></li>\n  <li><p>opening_accumulated_depreciation : 期首減価償却累計額</p></li>\n  <li><p>closing_accumulated_depreciation : 期末減価償却累計額</p></li>\n</ul>\n<h2 id=\"\">注意点</h2>\n<ul>\n  <li><p>up_to_dateがfalseの場合、残高の集計が完了していません。最新の集計結果を確認したい場合は、時間を空けて再度取得する必要があります。</p></li>\n  <li><p>このAPIはfreee会計の固定資産台帳を取得します。freee固定資産で登録した固定資産は取得できませんのでご注意ください。<a href=\"https://docs.google.com/presentation/d/1LDrOH1d8FJeCA_qTJuIXwcou1kh00dCLR_X8nacPb98/edit?usp=sharing\">freee固定資産の詳細はこちらをご覧ください。</a></p></li>\n</ul>",
         "parameters": [
           {
             "name": "company_id",
@@ -4771,6 +4801,200 @@
         "summary": "決算書表示名の作成",
         "description": "\n<h2 id=\"_1\">概要</h2>\n<p>指定した事業所の決算書表示名を作成する</p>",
         "hasJsonBody": true
+      }
+    },
+    "/api/1/user_matchers": {
+      "get": {
+        "summary": "自動登録ルール一覧の取得",
+        "description": "\n<h2 id=\"\">概要</h2>\n\n<p>指定した事業所の自動登録ルール一覧を取得する</p>",
+        "parameters": [
+          {
+            "name": "company_id",
+            "in": "query",
+            "type": "integer",
+            "required": true,
+            "description": "事業所ID"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer",
+            "description": "取得レコードの件数 (デフォルト: 30, 最大: 100)"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "integer",
+            "description": "取得レコードのオフセット (デフォルト: 0)。offsetはlimitの倍数である必要があります。"
+          },
+          {
+            "name": "walletable",
+            "in": "query",
+            "type": "string",
+            "description": "口座名で絞込"
+          },
+          {
+            "name": "description",
+            "in": "query",
+            "type": "string",
+            "description": "説明文で絞込"
+          },
+          {
+            "name": "active",
+            "in": "query",
+            "type": "string",
+            "description": "有効/無効/全てで絞込 (有効: active, 無効: inactive, 全て: all)"
+          },
+          {
+            "name": "act",
+            "in": "query",
+            "type": "integer",
+            "description": "登録タイプで絞込\n* 0: 取引を推測する(manual_standard)\n* 1: 取引を登録する(auto_standard)\n* 2: 振替を推測する(manual_transfer)\n* 3: 振替を登録する(auto_transfer)\n* 4: 無視する取引を登録する(auto_ignore)\n* 5: 取引テンプレートを推測する(manual_template)\n* 6: 未決済取引の消込を推測する(manual_scrub)\n* 7: 未決済取引の消込を登録する(auto_scrub)\n* 8: 一括振込ファイル消込を推測する(manual_output_zengin_scrub)\n* 9: 一括振込ファイル消込を登録する(auto_output_zengin_scrub)\n* 10: 無視する取引を推測する(manual_ignore)\n* 11: プライベート取引を推測する(manual_private)\n* 12: プライベート取引を登録する(auto_private)\n"
+          },
+          {
+            "name": "created_by",
+            "in": "query",
+            "type": "integer",
+            "description": "作成経由で絞込\n* 0: ユーザーが作成(user)\n* 1: freeeが作成(freee)\n"
+          },
+          {
+            "name": "min_amount",
+            "in": "query",
+            "type": "integer",
+            "description": "最小金額で絞込"
+          },
+          {
+            "name": "max_amount",
+            "in": "query",
+            "type": "integer",
+            "description": "最大金額で絞込"
+          },
+          {
+            "name": "min_priority",
+            "in": "query",
+            "type": "integer",
+            "description": "最小優先度で絞込"
+          },
+          {
+            "name": "max_priority",
+            "in": "query",
+            "type": "integer",
+            "description": "最大優先度で絞込"
+          },
+          {
+            "name": "min_corrected_wallet_txn_count",
+            "in": "query",
+            "type": "integer",
+            "description": "最小正答件数で絞込"
+          },
+          {
+            "name": "max_corrected_wallet_txn_count",
+            "in": "query",
+            "type": "integer",
+            "description": "最大正答件数で絞込"
+          },
+          {
+            "name": "min_corrected_wallet_txn_count_percentage",
+            "in": "query",
+            "type": "integer",
+            "description": "最小正答率で絞込"
+          },
+          {
+            "name": "max_corrected_wallet_txn_count_percentage",
+            "in": "query",
+            "type": "integer",
+            "description": "最大正答率で絞込"
+          },
+          {
+            "name": "card_label_id",
+            "in": "query",
+            "type": "integer",
+            "description": "カードラベルIDで絞込"
+          },
+          {
+            "name": "entry_side_str",
+            "in": "query",
+            "type": "string",
+            "description": "入金/出金で絞込 (入金: income, 出金: expense)"
+          }
+        ]
+      },
+      "post": {
+        "summary": "自動登録ルールの作成",
+        "description": "\n<h2 id=\"\">概要</h2>\n\n<p>指定した事業所の自動登録ルールを作成する</p>",
+        "parameters": [
+          {
+            "name": "company_id",
+            "in": "query",
+            "type": "integer",
+            "required": true,
+            "description": "事業所ID"
+          }
+        ],
+        "hasJsonBody": true
+      }
+    },
+    "/api/1/user_matchers/{id}": {
+      "get": {
+        "summary": "自動登録ルールの取得",
+        "description": "\n<h2 id=\"\">概要</h2>\n\n<p>指定した事業所の自動登録ルールを取得する</p>",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "description": "自動登録ルールID"
+          },
+          {
+            "name": "company_id",
+            "in": "query",
+            "type": "integer",
+            "required": true,
+            "description": "事業所ID"
+          }
+        ]
+      },
+      "put": {
+        "summary": "自動登録ルールの更新",
+        "description": "\n<h2 id=\"\">概要</h2>\n\n<p>指定した事業所の自動登録ルールを更新する</p>",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "description": "自動登録ルールID"
+          },
+          {
+            "name": "company_id",
+            "in": "query",
+            "type": "integer",
+            "required": true,
+            "description": "事業所ID"
+          }
+        ],
+        "hasJsonBody": true
+      },
+      "delete": {
+        "summary": "自動登録ルールの削除",
+        "description": "\n<h2 id=\"\">概要</h2>\n\n<p>指定した事業所の自動登録ルールを削除する</p>\n\n<p>このAPIでは以下のact(登録タイプ)の自動登録ルールは削除できません: 5(manual_template), 6(manual_scrub), 7(auto_scrub), 8(manual_output_zengin_scrub), 9(auto_output_zengin_scrub)</p>",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "description": "自動登録ルールID"
+          },
+          {
+            "name": "company_id",
+            "in": "query",
+            "type": "integer",
+            "required": true,
+            "description": "事業所ID"
+          }
+        ]
       }
     }
   }
