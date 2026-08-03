@@ -36,6 +36,7 @@
     - vat (任意): integer(int64) - 消費税額（指定しない場合は自動で計算されます） 例: `80` (最小: -9223372036854776000, 最大: 9223372036854776000)
     - item_id (任意): integer(int64) - 品目ID 例: `1` (最小: 1)
     - section_id (任意): integer(int64) - 部門ID 例: `1` (最小: 1)
+    - partner_id (任意): integer(int64) - 取引先ID 例: `1` (最小: 0)
     - tag_ids (任意): array[integer] - メモタグID 例: `[1,2,3]`
     - segment_1_tag_id (任意): integer(int64) - セグメント１タグID 例: `1` (最小: 1)
     - segment_2_tag_id (任意): integer(int64) - セグメント２タグID 例: `1` (最小: 1)
@@ -92,6 +93,7 @@
     - vat (任意): integer(int64) - 消費税額（指定しない場合は自動で計算されます） 例: `80` (最小: -9223372036854776000, 最大: 9223372036854776000)
     - item_id (任意): integer(int64) - 品目ID 例: `1` (最小: 1)
     - section_id (任意): integer(int64) - 部門ID 例: `1` (最小: 1)
+    - partner_id (任意): integer(int64) - 取引先ID 例: `1` (最小: 0)
     - tag_ids (任意): array[integer] - メモタグID 例: `[1,2,3]`
     - segment_1_tag_id (任意): integer(int64) - セグメント１タグID 例: `1` (最小: 1)
     - segment_2_tag_id (任意): integer(int64) - セグメント２タグID 例: `1` (最小: 1)
