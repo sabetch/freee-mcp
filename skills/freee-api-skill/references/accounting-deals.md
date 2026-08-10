@@ -59,7 +59,7 @@
 
 操作: 取引（収入・支出）の作成
 
-説明: 概要 指定した事業所の取引（収入・支出）を作成する 定義 issue_date : 発生日 due_date : 支払期日 amount : 金額 due_amount : 支払残額 type income : 収入 expense : 支出 ref_number : 管理番号 details : 取引の明細行(最大40行) payments : 取引の支払行 receipt_ids : ファイルボックス（証憑ファイル）ID from_walletable_type bank_account : 銀行口座 credit_card : クレジットカード wallet : 現金 private_account_item : プライベート資金（法人の場合は役員借入金もしくは役員借入金、個人の場合は事業主貸もしくは事業主借） 注意点 本APIでは+更新行(renews)の操作ができません。取引（収入・支出）の+更新の作成APIをご利用ください。 セグメントタグ情報は法人アドバンスプラン（および旧法人プロフェッショナルプラン）以上で利用可能です。利用可能なセグメントの数は、法人アドバンスプラン（...
+説明: 概要 指定した事業所の取引（収入・支出）を作成する 定義 issue_date : 発生日 due_date : 支払期日 amount : 金額 due_amount : 支払残額 type income : 収入 expense : 支出 ref_number : 管理番号 details : 取引の明細行(最大100行) payments : 取引の支払行 receipt_ids : ファイルボックス（証憑ファイル）ID from_walletable_type bank_account : 銀行口座 credit_card : クレジットカード wallet : 現金 private_account_item : プライベート資金（法人の場合は役員借入金もしくは役員借入金、個人の場合は事業主貸もしくは事業主借） 注意点 本APIでは+更新行(renews)の操作ができません。取引（収入・支出）の+更新の作成APIをご利用ください。 セグメントタグ情報は法人アドバンスプラン（および旧法人プロフェッショナルプラン）以上で利用可能です。利用可能なセグメントの数は、法人アドバンスプラン...
 
 ### リクエストボディ
 
@@ -83,6 +83,8 @@
     - item_code (任意): string - 品目コード 例: `code001`
     - section_id (任意): integer(int64) - 部門ID 例: `1` (最小: 1)
     - section_code (任意): string - 部門コード 例: `code001`
+    - partner_id (任意): integer(int64) - 取引先ID 例: `1` (最小: 0)
+    - partner_code (任意): string - 取引先コード 例: `code001`
     - tag_ids (任意): array[integer] - メモタグID
     - segment_1_tag_id (任意): integer(int64) - セグメント１タグID 例: `1` (最小: 1)
     - segment_1_tag_code (任意): string - セグメント１タグコード 例: `code001`
@@ -157,7 +159,7 @@
 
 操作: 取引（収入・支出）の更新
 
-説明: 概要 指定した事業所の取引（収入・支出）を更新する 定義 issue_date : 発生日 due_date : 支払期日 amount : 金額 due_amount : 支払残額 type income : 収入 expense : 支出 details : 取引の明細行(最大40行) renews : 取引の+更新行 payments : 取引の支払行 from_walletable_type bank_account : 銀行口座 credit_card : クレジットカード wallet : 現金 private_account_item : プライベート資金（法人の場合は役員借入金もしくは役員借入金、個人の場合は事業主貸もしくは事業主借） receipt_ids : ファイルボックス（証憑ファイル）ID 注意点 本APIでは支払行(payments)の操作ができません。取引（収入・支出）の支払行の作成・更新・削除APIをご利用ください。 本APIでは+更新行(renews)の操作ができません。取引（収入・支出）の+更新の作成・更新・削除APIをご利用ください。 本APIでは...
+説明: 概要 指定した事業所の取引（収入・支出）を更新する 定義 issue_date : 発生日 due_date : 支払期日 amount : 金額 due_amount : 支払残額 type income : 収入 expense : 支出 details : 取引の明細行(最大100行) renews : 取引の+更新行 payments : 取引の支払行 from_walletable_type bank_account : 銀行口座 credit_card : クレジットカード wallet : 現金 private_account_item : プライベート資金（法人の場合は役員借入金もしくは役員借入金、個人の場合は事業主貸もしくは事業主借） receipt_ids : ファイルボックス（証憑ファイル）ID 注意点 本APIでは支払行(payments)の操作ができません。取引（収入・支出）の支払行の作成・更新・削除APIをご利用ください。 本APIでは+更新行(renews)の操作ができません。取引（収入・支出）の+更新の作成・更新・削除APIをご利用ください。 本APIで...
 
 ### パラメータ
 
@@ -185,6 +187,7 @@
  例: `1` (最小: -9223372036854776000, 最大: 9223372036854776000)
     - item_id (任意): integer(int64) - 品目ID 例: `1` (最小: 1)
     - section_id (任意): integer(int64) - 部門ID 例: `1` (最小: 1)
+    - partner_id (任意): integer(int64) - 取引先ID 例: `1` (最小: 0)
     - tag_ids (任意): array[integer] - メモタグID
     - segment_1_tag_id (任意): integer(int64) - セグメント１タグID 例: `1` (最小: 1)
     - segment_2_tag_id (任意): integer(int64) - セグメント２タグID 例: `1` (最小: 1)
