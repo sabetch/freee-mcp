@@ -27,8 +27,8 @@
 | end_issue_date | query | いいえ | string | 申請日で絞込：終了日(yyyy-mm-dd) |
 | applicant_id | query | いいえ | integer(int64) | 申請者のユーザーID |
 | approver_id | query | いいえ | integer(int64) | 承認者のユーザーID |
-| min_amount | query | いいえ | integer(int64) | 金額で絞込 (下限金額) |
-| max_amount | query | いいえ | integer(int64) | 金額で絞込 (上限金額) |
+| min_amount | query | いいえ | integer(int64) | 経費申請の合計金額で絞込：下限金額 (単位:円、以上) |
+| max_amount | query | いいえ | integer(int64) | 経費申請の合計金額で絞込：上限金額 (単位:円、以下) |
 | offset | query | いいえ | integer(int64) | 取得レコードのオフセット (デフォルト: 0) |
 | limit | query | いいえ | integer(int64) | 取得レコードの件数 (デフォルト: 50, 最小: 1, 最大: 500) |
 
@@ -49,6 +49,9 @@
     - deal_id (必須): integer(int64) - 取引ID (申請ステータス:statusがapprovedで、取引が存在する時のみdeal_idが表示されます) 例: `1` (最小: 1)
     - deal_status (必須): string - 取引ステータス (申請ステータス:statusがapprovedで、取引が存在する時のみdeal_statusが表示されます settled:精算済み, unsettled:清算待ち) (選択肢: settled, unsettled) 例: `settled`
     - applicant_id (必須): integer(int64) - 申請者のユーザーID 例: `1` (最小: 1)
+    - proxy_applicant_id (任意): integer(int64) - 代理申請者のユーザーID。
+他のユーザーが申請者に代わって申請した場合に、その代理申請者のユーザーIDが入る。
+代理申請ではない場合は null。 例: `2` (最小: 1)
     - application_number (必須): string - 申請No. 例: `2`
     - current_step_id (任意): integer(int64) - 現在承認ステップID 例: `1` (最小: 1)
     - current_round (任意): integer(int64) - 現在のround。差し戻し等により申請がstepの最初からやり直しになるとroundの値が増えます。 例: `1` (最小: 0, 最大: 2147483647)
@@ -112,8 +115,16 @@ trueを指定した時は下書き（draft）で経費申請を作成します�
 <ul>
   <li>承認済みの既存各種申請IDのみ指定可能です。</li>
   <li>各種申請一覧APIを利用して取得してください。</li>
+  <li>親申請の種別を購買申請にする場合は parent_type に PurchaseRequest を指定してください。</li>
 </ul>
  例: `2` (最小: 1)
+- parent_type (任意): string - 親申請の種別 (parent_id を指定した場合のみ有効)<br>
+<ul>
+  <li>ApprovalRequest: 各種申請 (parent_type 未指定時のデフォルト)</li>
+  <li>PurchaseRequest: 購買申請</li>
+</ul>
+上記以外の値を指定するとバリデーションエラーになります。
+ 例: `ApprovalRequest`
 - segment_1_tag_id (任意): integer(int64) - セグメント１タグID<br>
 セグメントタグ一覧の取得APIを利用して取得してください。<br>
 <a href="https://support.freee.co.jp/hc/ja/articles/360020679611" target="_blank">セグメント（分析用タグ）の設定</a><br>
@@ -143,6 +154,9 @@ trueを指定した時は下書き（draft）で経費申請を作成します�
   - deal_id (必須): integer(int64) - 取引ID (申請ステータス:statusがapprovedで、取引が存在する時のみdeal_idが表示されます) 例: `1` (最小: 1)
   - deal_status (必須): string - 取引ステータス (申請ステータス:statusがapprovedで、取引が存在する時のみdeal_statusが表示されます settled:精算済み, unsettled:清算待ち) (選択肢: settled, unsettled) 例: `settled`
   - applicant_id (必須): integer(int64) - 申請者のユーザーID 例: `1` (最小: 1)
+  - proxy_applicant_id (任意): integer(int64) - 代理申請者のユーザーID。
+他のユーザーが申請者に代わって申請した場合に、その代理申請者のユーザーIDが入る。
+代理申請ではない場合は null。 例: `2` (最小: 1)
   - approvers (必須): array[object] - 承認者（配列）
   承認ステップのresource_typeがunspecified (指定なし)の場合はapproversはレスポンスに含まれません。
   しかし、resource_typeがunspecifiedの承認ステップにおいて誰かが承認・却下・差し戻しのいずれかのアクションを取った後は、
@@ -154,7 +168,15 @@ trueを指定した時は下書き（draft）で経費申請を作成します�
   - approval_flow_logs (必須): array[object] - 経費申請の承認履歴（配列）
   - current_step_id (必須): integer(int64) - 現在承認ステップID 例: `1` (最小: 1)
   - current_round (必須): integer(int64) - 現在のround。差し戻し等により申請がstepの最初からやり直しになるとroundの値が増えます。 例: `1` (最小: 0, 最大: 2147483647)
-  - parent_id (任意): integer(int64) - 親申請ID。各種申請が使用可能なプランの時のみレスポンスに含まれます。 例: `2` (最小: 1)
+  - parent_id (任意): integer(int64) - 親申請ID。
+各種申請または購買申請が使用可能なプランの事業所でのみレスポンスに含まれる（キー自体が存在しない場合がある）。
+関連付けが解除されている場合や親申請が未設定の場合は null。 例: `2` (最小: 1)
+  - parent_type (任意): string - 親申請の種別。parent_id とペアで返却される。
+* `ApprovalRequest` - 各種申請
+* `PurchaseRequest` - 購買申請
+
+各種申請または購買申請が使用可能なプランの事業所でのみレスポンスに含まれる（キー自体が存在しない場合がある）。
+関連付けが解除されている場合や親申請が未設定の場合は null。 (選択肢: ApprovalRequest, PurchaseRequest) 例: `ApprovalRequest`
   - segment_1_tag_id (任意): integer(int64) - セグメント１タグID 例: `1` (最小: 1)
   - segment_2_tag_id (任意): integer(int64) - セグメント２タグID 例: `2` (最小: 1)
   - segment_3_tag_id (任意): integer(int64) - セグメント３タグID 例: `3` (最小: 1)
@@ -188,6 +210,9 @@ trueを指定した時は下書き（draft）で経費申請を作成します�
   - deal_id (必須): integer(int64) - 取引ID (申請ステータス:statusがapprovedで、取引が存在する時のみdeal_idが表示されます) 例: `1` (最小: 1)
   - deal_status (必須): string - 取引ステータス (申請ステータス:statusがapprovedで、取引が存在する時のみdeal_statusが表示されます settled:精算済み, unsettled:清算待ち) (選択肢: settled, unsettled) 例: `settled`
   - applicant_id (必須): integer(int64) - 申請者のユーザーID 例: `1` (最小: 1)
+  - proxy_applicant_id (任意): integer(int64) - 代理申請者のユーザーID。
+他のユーザーが申請者に代わって申請した場合に、その代理申請者のユーザーIDが入る。
+代理申請ではない場合は null。 例: `2` (最小: 1)
   - approvers (必須): array[object] - 承認者（配列）
   承認ステップのresource_typeがunspecified (指定なし)の場合はapproversはレスポンスに含まれません。
   しかし、resource_typeがunspecifiedの承認ステップにおいて誰かが承認・却下・差し戻しのいずれかのアクションを取った後は、
@@ -199,7 +224,15 @@ trueを指定した時は下書き（draft）で経費申請を作成します�
   - approval_flow_logs (必須): array[object] - 経費申請の承認履歴（配列）
   - current_step_id (必須): integer(int64) - 現在承認ステップID 例: `1` (最小: 1)
   - current_round (必須): integer(int64) - 現在のround。差し戻し等により申請がstepの最初からやり直しになるとroundの値が増えます。 例: `1` (最小: 0, 最大: 2147483647)
-  - parent_id (任意): integer(int64) - 親申請ID。各種申請が使用可能なプランの時のみレスポンスに含まれます。 例: `2` (最小: 1)
+  - parent_id (任意): integer(int64) - 親申請ID。
+各種申請または購買申請が使用可能なプランの事業所でのみレスポンスに含まれる（キー自体が存在しない場合がある）。
+関連付けが解除されている場合や親申請が未設定の場合は null。 例: `2` (最小: 1)
+  - parent_type (任意): string - 親申請の種別。parent_id とペアで返却される。
+* `ApprovalRequest` - 各種申請
+* `PurchaseRequest` - 購買申請
+
+各種申請または購買申請が使用可能なプランの事業所でのみレスポンスに含まれる（キー自体が存在しない場合がある）。
+関連付けが解除されている場合や親申請が未設定の場合は null。 (選択肢: ApprovalRequest, PurchaseRequest) 例: `ApprovalRequest`
   - segment_1_tag_id (任意): integer(int64) - セグメント１タグID 例: `1` (最小: 1)
   - segment_2_tag_id (任意): integer(int64) - セグメント２タグID 例: `2` (最小: 1)
   - segment_3_tag_id (任意): integer(int64) - セグメント３タグID 例: `3` (最小: 1)
@@ -266,8 +299,18 @@ trueを指定した時は下書き（draft）で経費申請を更新します�
 <ul>
   <li>承認済みの既存各種申請IDのみ指定可能です。</li>
   <li>各種申請一覧APIを利用して取得してください。</li>
+  <li>親申請の種別を購買申請にする場合は parent_type に PurchaseRequest を指定してください。</li>
+  <li>null を指定すると、現在設定されている親申請との関連付けを解除します。</li>
+  <li>キーを指定しない場合、親申請は更新されません（他のフィールドと同じキー未指定=更新なしの挙動）。</li>
 </ul>
  例: `2` (最小: 1)
+- parent_type (任意): string - 親申請の種別 (parent_id を指定した場合のみ有効)<br>
+<ul>
+  <li>ApprovalRequest: 各種申請 (parent_type 未指定時のデフォルト)</li>
+  <li>PurchaseRequest: 購買申請</li>
+</ul>
+上記以外の値を指定するとバリデーションエラーになります。
+ 例: `ApprovalRequest`
 - segment_1_tag_id (任意): integer(int64) - セグメント１タグID<br>
 セグメントタグ一覧の取得APIを利用して取得してください。<br>
 <a href="https://support.freee.co.jp/hc/ja/articles/360020679611" target="_blank">セグメント（分析用タグ）の設定</a><br>
@@ -297,6 +340,9 @@ trueを指定した時は下書き（draft）で経費申請を更新します�
   - deal_id (必須): integer(int64) - 取引ID (申請ステータス:statusがapprovedで、取引が存在する時のみdeal_idが表示されます) 例: `1` (最小: 1)
   - deal_status (必須): string - 取引ステータス (申請ステータス:statusがapprovedで、取引が存在する時のみdeal_statusが表示されます settled:精算済み, unsettled:清算待ち) (選択肢: settled, unsettled) 例: `settled`
   - applicant_id (必須): integer(int64) - 申請者のユーザーID 例: `1` (最小: 1)
+  - proxy_applicant_id (任意): integer(int64) - 代理申請者のユーザーID。
+他のユーザーが申請者に代わって申請した場合に、その代理申請者のユーザーIDが入る。
+代理申請ではない場合は null。 例: `2` (最小: 1)
   - approvers (必須): array[object] - 承認者（配列）
   承認ステップのresource_typeがunspecified (指定なし)の場合はapproversはレスポンスに含まれません。
   しかし、resource_typeがunspecifiedの承認ステップにおいて誰かが承認・却下・差し戻しのいずれかのアクションを取った後は、
@@ -308,7 +354,15 @@ trueを指定した時は下書き（draft）で経費申請を更新します�
   - approval_flow_logs (必須): array[object] - 経費申請の承認履歴（配列）
   - current_step_id (必須): integer(int64) - 現在承認ステップID 例: `1` (最小: 1)
   - current_round (必須): integer(int64) - 現在のround。差し戻し等により申請がstepの最初からやり直しになるとroundの値が増えます。 例: `1` (最小: 0, 最大: 2147483647)
-  - parent_id (任意): integer(int64) - 親申請ID。各種申請が使用可能なプランの時のみレスポンスに含まれます。 例: `2` (最小: 1)
+  - parent_id (任意): integer(int64) - 親申請ID。
+各種申請または購買申請が使用可能なプランの事業所でのみレスポンスに含まれる（キー自体が存在しない場合がある）。
+関連付けが解除されている場合や親申請が未設定の場合は null。 例: `2` (最小: 1)
+  - parent_type (任意): string - 親申請の種別。parent_id とペアで返却される。
+* `ApprovalRequest` - 各種申請
+* `PurchaseRequest` - 購買申請
+
+各種申請または購買申請が使用可能なプランの事業所でのみレスポンスに含まれる（キー自体が存在しない場合がある）。
+関連付けが解除されている場合や親申請が未設定の場合は null。 (選択肢: ApprovalRequest, PurchaseRequest) 例: `ApprovalRequest`
   - segment_1_tag_id (任意): integer(int64) - セグメント１タグID 例: `1` (最小: 1)
   - segment_2_tag_id (任意): integer(int64) - セグメント２タグID 例: `2` (最小: 1)
   - segment_3_tag_id (任意): integer(int64) - セグメント３タグID 例: `3` (最小: 1)
@@ -366,6 +420,9 @@ trueを指定した時は下書き（draft）で経費申請を更新します�
   - deal_id (必須): integer(int64) - 取引ID (申請ステータス:statusがapprovedで、取引が存在する時のみdeal_idが表示されます) 例: `1` (最小: 1)
   - deal_status (必須): string - 取引ステータス (申請ステータス:statusがapprovedで、取引が存在する時のみdeal_statusが表示されます settled:精算済み, unsettled:清算待ち) (選択肢: settled, unsettled) 例: `settled`
   - applicant_id (必須): integer(int64) - 申請者のユーザーID 例: `1` (最小: 1)
+  - proxy_applicant_id (任意): integer(int64) - 代理申請者のユーザーID。
+他のユーザーが申請者に代わって申請した場合に、その代理申請者のユーザーIDが入る。
+代理申請ではない場合は null。 例: `2` (最小: 1)
   - approvers (必須): array[object] - 承認者（配列）
   承認ステップのresource_typeがunspecified (指定なし)の場合はapproversはレスポンスに含まれません。
   しかし、resource_typeがunspecifiedの承認ステップにおいて誰かが承認・却下・差し戻しのいずれかのアクションを取った後は、
@@ -377,7 +434,15 @@ trueを指定した時は下書き（draft）で経費申請を更新します�
   - approval_flow_logs (必須): array[object] - 経費申請の承認履歴（配列）
   - current_step_id (必須): integer(int64) - 現在承認ステップID 例: `1` (最小: 1)
   - current_round (必須): integer(int64) - 現在のround。差し戻し等により申請がstepの最初からやり直しになるとroundの値が増えます。 例: `1` (最小: 0, 最大: 2147483647)
-  - parent_id (任意): integer(int64) - 親申請ID。各種申請が使用可能なプランの時のみレスポンスに含まれます。 例: `2` (最小: 1)
+  - parent_id (任意): integer(int64) - 親申請ID。
+各種申請または購買申請が使用可能なプランの事業所でのみレスポンスに含まれる（キー自体が存在しない場合がある）。
+関連付けが解除されている場合や親申請が未設定の場合は null。 例: `2` (最小: 1)
+  - parent_type (任意): string - 親申請の種別。parent_id とペアで返却される。
+* `ApprovalRequest` - 各種申請
+* `PurchaseRequest` - 購買申請
+
+各種申請または購買申請が使用可能なプランの事業所でのみレスポンスに含まれる（キー自体が存在しない場合がある）。
+関連付けが解除されている場合や親申請が未設定の場合は null。 (選択肢: ApprovalRequest, PurchaseRequest) 例: `ApprovalRequest`
   - segment_1_tag_id (任意): integer(int64) - セグメント１タグID 例: `1` (最小: 1)
   - segment_2_tag_id (任意): integer(int64) - セグメント２タグID 例: `2` (最小: 1)
   - segment_3_tag_id (任意): integer(int64) - セグメント３タグID 例: `3` (最小: 1)
@@ -422,6 +487,9 @@ trueを指定した時は下書き（draft）で経費申請を更新します�
   - deal_id (必須): integer(int64) - 取引ID (申請ステータス:statusがapprovedで、取引が存在する時のみdeal_idが表示されます) 例: `1` (最小: 1)
   - deal_status (必須): string - 取引ステータス (申請ステータス:statusがapprovedで、取引が存在する時のみdeal_statusが表示されます settled:精算済み, unsettled:清算待ち) (選択肢: settled, unsettled) 例: `settled`
   - applicant_id (必須): integer(int64) - 申請者のユーザーID 例: `1` (最小: 1)
+  - proxy_applicant_id (任意): integer(int64) - 代理申請者のユーザーID。
+他のユーザーが申請者に代わって申請した場合に、その代理申請者のユーザーIDが入る。
+代理申請ではない場合は null。 例: `2` (最小: 1)
   - approvers (必須): array[object] - 承認者（配列）
   承認ステップのresource_typeがunspecified (指定なし)の場合はapproversはレスポンスに含まれません。
   しかし、resource_typeがunspecifiedの承認ステップにおいて誰かが承認・却下・差し戻しのいずれかのアクションを取った後は、
@@ -433,7 +501,15 @@ trueを指定した時は下書き（draft）で経費申請を更新します�
   - approval_flow_logs (必須): array[object] - 経費申請の承認履歴（配列）
   - current_step_id (必須): integer(int64) - 現在承認ステップID 例: `1` (最小: 1)
   - current_round (必須): integer(int64) - 現在のround。差し戻し等により申請がstepの最初からやり直しになるとroundの値が増えます。 例: `1` (最小: 0, 最大: 2147483647)
-  - parent_id (任意): integer(int64) - 親申請ID。各種申請が使用可能なプランの時のみレスポンスに含まれます。 例: `2` (最小: 1)
+  - parent_id (任意): integer(int64) - 親申請ID。
+各種申請または購買申請が使用可能なプランの事業所でのみレスポンスに含まれる（キー自体が存在しない場合がある）。
+関連付けが解除されている場合や親申請が未設定の場合は null。 例: `2` (最小: 1)
+  - parent_type (任意): string - 親申請の種別。parent_id とペアで返却される。
+* `ApprovalRequest` - 各種申請
+* `PurchaseRequest` - 購買申請
+
+各種申請または購買申請が使用可能なプランの事業所でのみレスポンスに含まれる（キー自体が存在しない場合がある）。
+関連付けが解除されている場合や親申請が未設定の場合は null。 (選択肢: ApprovalRequest, PurchaseRequest) 例: `ApprovalRequest`
   - segment_1_tag_id (任意): integer(int64) - セグメント１タグID 例: `1` (最小: 1)
   - segment_2_tag_id (任意): integer(int64) - セグメント２タグID 例: `2` (最小: 1)
   - segment_3_tag_id (任意): integer(int64) - セグメント３タグID 例: `3` (最小: 1)
