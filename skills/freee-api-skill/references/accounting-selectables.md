@@ -10,35 +10,44 @@
 
 操作: フォーム用選択項目情報の取得
 
-説明: 概要 指定した事業所のフォーム用選択項目情報を取得する
+説明: 概要 指定した事業所で勘定科目の入力フォームを構築するための、勘定科目カテゴリー、勘定科目、デフォルト税区分、決算書表示名を取得します。 注意点 includes に account_item を指定した場合に、account_categories と account_groups を返します。 includes を指定しない場合、レスポンスは空のオブジェクトになります。
 
 ### パラメータ
 
 | 名前 | 位置 | 必須 | 型 | 説明 |
 |------|------|------|-----|------|
 | company_id | query | はい | integer(int64) | 事業所ID |
-| includes | query | いいえ | string | 取得する項目(項目: account_item) (選択肢: account_item) |
+| includes | query | いいえ | string | 取得する選択項目
+* `account_item` - 勘定科目カテゴリー、勘定科目、デフォルト税区分、決算書表示名 (選択肢: account_item) |
 
 ### レスポンス (200)
 
-- account_categories (任意): array[object]
+フォーム用選択項目情報の取得に成功
+
+- account_categories (任意): array[object] - 勘定科目を用途別に分類したカテゴリーの一覧
   配列の要素:
-    - balance (必須): string - 収支 (選択肢: expense, income) 例: `expense`
-    - org_code (必須): string - 事業形態（個人事業主: personal、法人: corporate） (選択肢: personal, corporate) 例: `personal`
-    - role (必須): string - カテゴリーコード 例: `ex_food`
-    - title (必須): string - カテゴリー名 例: `飲食費`
-    - desc (任意): string - カテゴリーの説明 例: `飲食に使用した経費`
+    - balance (必須): string - 収支区分（expense: 支出、income: 収入） (選択肢: expense, income) 例: `expense`
+    - org_code (必須): string - 事業形態（personal: 個人事業主、corporate: 法人） (選択肢: personal, corporate) 例: `personal`
+    - role (必須): string - 勘定科目カテゴリーを識別するコード 例: `ex_food`
+    - title (必須): string - フォームに表示する勘定科目カテゴリー名 例: `飲食費`
+    - desc (必須): string - 勘定科目カテゴリーの用途。説明がない場合は空文字列になります。 例: `飲食に使用した経費`
     - account_items (必須): array[object] - 勘定科目の一覧
-- account_groups (任意): array[object] - 決算書表示名（小カテゴリー）
+- account_groups (任意): array[object] - 勘定科目を決算書上で集約するための決算書表示名（小カテゴリー）の一覧
   配列の要素:
-    - id (必須): integer(int64) - 決算書表示名（小カテゴリー）ID 例: `1` (最小: 1)
-    - name (必須): string - 決算書表示名 例: `預託金`
-    - account_structure_id (必須): integer(int64) - 年度ID 例: `1` (最小: 1)
-    - account_category_id (必須): integer(int64) - 勘定科目カテゴリーID 例: `1` (最小: 1)
-    - detail_type (任意): integer(int64) - 詳細パラメータの種類 例: `1` (最小: 0, 最大: 4)
-    - index (必須): integer(int64) - 並び順 例: `1`
-    - created_at (任意): string - 作成日時 例: `2019-12-17T13:47:24+09:00`
-    - updated_at (任意): string - 更新日時 例: `2019-12-17T13:47:24+09:00`
+    - id (必須): integer(int64) - 決算書表示名（小カテゴリー）を識別するID 例: `1` (最小: 1)
+    - name (必須): string - 決算書に表示する小カテゴリー名 例: `預託金`
+    - account_structure_id (必須): integer(int64) - 決算書表示名が属する勘定科目体系のID 例: `1` (最小: 1)
+    - account_category_id (必須): integer(int64) - 決算書表示名が属する勘定科目カテゴリーのID 例: `1` (最小: 1)
+    - company_id (必須): integer(int64) - 事業所ID 例: `1` (最小: 1)
+    - detail_type (必須): integer(int64) - 取引明細で利用する補助項目の種類
+* `0` - 補助項目なし
+* `1` - 勘定科目
+* `2` - 取引先
+* `3` - 品目
+* `4` - 部門 (選択肢: 0, 1, 2, 3, 4) 例: `1` (最小: 0, 最大: 4)
+    - index (必須): integer(int64) - 決算書表示名の並び順。小さい値ほど先に表示されます。 例: `1` (最小: 0, 最大: 2147483647)
+    - created_at (必須): string(date-time) - 作成日時（ISO 8601）。記録されていない場合は null になります。 例: `2019-12-17T13:47:24+09:00`
+    - updated_at (必須): string(date-time) - 更新日時（ISO 8601）。記録されていない場合は null になります。 例: `2019-12-17T13:47:24+09:00`
 
 
 

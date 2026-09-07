@@ -30,7 +30,10 @@
     "Quotations": "quotations",
     "Fixed assets": "fixed-assets",
     "General ledgers": "general-ledgers",
-    "Account groups": "account-groups"
+    "Account groups": "account-groups",
+    "Expense application currencies": "expense-application-currencies",
+    "Purchase requests": "purchase-requests",
+    "User matchers": "user-matchers"
   },
   "hr-api": {
     "ログインユーザー": "login-user",
@@ -65,7 +68,10 @@
   "invoice-api": {
     "Invoices": "invoices",
     "Quotations": "quotations",
-    "DeliverySlips": "delivery-slips"
+    "DeliverySlips": "delivery-slips",
+    "PaymentNotices": "payment-notices",
+    "PurchaseOrders": "purchase-orders",
+    "Receipts": "receipts"
   },
   "pm-api": {
     "Users": "users",
@@ -74,13 +80,23 @@
     "Projects": "projects",
     "Teams": "teams",
     "UnitCosts": "unit-costs",
-    "Workloads": "workloads"
+    "Workloads": "workloads",
+    "LaborBudgets": "labor-budgets",
+    "WorkloadTagGroups": "workload-tag-groups"
   },
   "sm-api": {
     "businesses": "businesses",
     "master": "master",
     "sales_orders": "sales-orders",
     "deliveries": "deliveries",
-    "sales": "sales"
+    "sales": "sales",
+    "advance_receipts": "advance-receipts",
+    "cost_budgets": "cost-budgets",
+    "other_costs": "other-costs",
+    "periodic_sales": "periodic-sales",
+    "procurements": "procurements",
+    "purchase_orders": "purchase-orders",
+    "quotations": "quotations",
+    "sales_schedules": "sales-schedules"
   }
 }
