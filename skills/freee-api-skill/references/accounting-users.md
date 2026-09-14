@@ -10,7 +10,7 @@
 
 操作: 事業所に所属するユーザー一覧の取得
 
-説明: 概要 事業所に所属するユーザー一覧を取得する
+説明: 概要 指定した事業所に所属するユーザーの一覧を取得する 事業所のメンバーのユーザーID・メールアドレス・氏名を確認できます。取引や申請などの担当者（user_id）を指定する前に、対象ユーザーのIDを調べる用途で使用します。 注意点 各ユーザーの権限は返りません。ログインユーザー自身の権限を確認する場合は「ログインユーザーの権限の取得 (/api/1/users/capabilities)」を使用してください。
 
 ### パラメータ
 
@@ -24,68 +24,68 @@
 - users (必須): array[object]
   配列の要素:
     - id (必須): integer(int64) - ユーザーID 例: `1` (最小: 1)
-    - email (必須): string - メールアドレス 例: `example@freee.co.jp`
-    - display_name (任意): string - 表示名 例: `山田太郎`
-    - first_name (任意): string - 氏名（名） 例: `太郎`
-    - last_name (任意): string - 氏名（姓） 例: `山田`
-    - first_name_kana (任意): string - 氏名（カナ・名） 例: `タロウ`
-    - last_name_kana (任意): string - 氏名（カナ・姓） 例: `ヤマダ`
+    - email (必須): string - メールアドレス 例: `user@example.com`
+    - display_name (必須): string - 表示名。未設定の場合はnullになります。 例: `山田太郎`
+    - first_name (必須): string - 氏名（名）。未設定の場合はnullになります。 例: `太郎`
+    - last_name (必須): string - 氏名（姓）。未設定の場合はnullになります。 例: `山田`
+    - first_name_kana (必須): string - 氏名（カナ・名）。未設定の場合はnullになります。 例: `タロウ`
+    - last_name_kana (必須): string - 氏名（カナ・姓）。未設定の場合はnullになります。 例: `ヤマダ`
 
 ### GET /api/1/users/me
 
 操作: ログインユーザーの取得
 
-説明: 概要 ログインユーザーを取得する
+説明: 概要 アクセストークンに紐づくログインユーザーの情報を取得する API連携アプリの認可後に、操作しているユーザー本人の情報（ユーザーID・メールアドレス・氏名）や、そのユーザーが所属する事業所の一覧を確認する用途で使用します。 注意点 companiesパラメータを指定しない場合は、ユーザーの基本情報のみが返ります（レスポンスにcompaniesは含まれません）。 advisorパラメータはcompaniesと同時に指定してください。companiesを指定せずにadvisorを指定した場合は400エラーになります。 companies・advisorはパラメータの指定有無で判定されます。falseを指定した場合もtrueと同様に扱われるため、事業所一覧が不要な場合はパラメータ自体を省略してください。
 
 ### パラメータ
 
 | 名前 | 位置 | 必須 | 型 | 説明 |
 |------|------|------|-----|------|
-| companies | query | いいえ | boolean | 取得情報にユーザーが所属する事業所一覧を含める (選択肢: true, false) |
-| advisor | query | いいえ | boolean | 取得情報に事業がアドバイザー事象所の場合は事業所毎の一意なプロフィールIDを含める (選択肢: true, false) |
+| companies | query | いいえ | boolean | ユーザーが所属する事業所一覧をレスポンスに含めるかどうか (true: 含める、未指定: 含めない)。指定有無で判定されるため、falseを指定した場合もtrueと同様に扱われます。 (選択肢: true, false) |
+| advisor | query | いいえ | boolean | 事業所ごとのアドバイザープロファイルID (advisor_id) をレスポンスの事業所一覧に含めるかどうか (true: 含める、未指定: 含めない)。companiesと同時に指定してください。指定有無で判定されるため、falseを指定した場合もtrueと同様に扱われます。 (選択肢: true, false) |
 
 ### レスポンス (200)
 
 - user (必須): object
   - id (必須): integer(int64) - ユーザーID 例: `1` (最小: 1)
-  - email (必須): string - メールアドレス 例: `contaxt@example.com`
-  - display_name (任意): string - 表示ユーザー名 例: `フリー太郎`
-  - first_name (任意): string - 名 例: `太郎`
-  - last_name (任意): string - 姓 例: `フリー`
-  - first_name_kana (任意): string - 名（カナ） 例: `タロウ`
-  - last_name_kana (任意): string - 姓（カナ） 例: `フリー`
-  - companies (任意): array[object]
+  - email (必須): string - メールアドレス 例: `user@example.com`
+  - display_name (必須): string - 表示名。未設定の場合はnullになります。 例: `フリー太郎`
+  - first_name (必須): string - 氏名（名）。未設定の場合はnullになります。 例: `太郎`
+  - last_name (必須): string - 氏名（姓）。未設定の場合はnullになります。 例: `フリー`
+  - first_name_kana (必須): string - 氏名（カナ・名）。未設定の場合はnullになります。 例: `タロウ`
+  - last_name_kana (必須): string - 氏名（カナ・姓）。未設定の場合はnullになります。 例: `フリー`
+  - companies (任意): array[object] - ユーザーが所属する事業所の一覧。リクエストでcompanies=trueを指定した場合のみ返ります。
 
 ### PUT /api/1/users/me
 
 操作: ログインユーザーの更新
 
-説明: 概要 ログインユーザーを更新する
+説明: 概要 アクセストークンに紐づくログインユーザーの基本情報（表示名・氏名・カナ氏名）を更新する 注意点 更新できるのはログインユーザー自身の情報のみです。他のユーザーの情報は更新できません（ユーザーIDの指定はありません）。 リクエストボディでキーを省略した項目は更新されません。項目を未設定に戻す場合は空文字を指定してください。
 
 ### リクエストボディ
 
-- display_name (任意): string - 表示名 (20文字以内) 例: `山田太郎`
-- first_name (任意): string - 氏名（名） (20文字以内) 例: `太郎`
-- last_name (任意): string - 氏名（姓） (20文字以内) 例: `山田`
-- first_name_kana (任意): string - 氏名（カナ・名） (20文字以内) 例: `タロウ`
-- last_name_kana (任意): string - 氏名（カナ・姓） (20文字以内) 例: `ヤマダ`
+- display_name (任意): string - 表示名 (20文字以内)。キーを省略した場合は更新されません。空文字を指定すると未設定になります。 例: `山田太郎`
+- first_name (任意): string - 氏名（名） (20文字以内)。キーを省略した場合は更新されません。空文字を指定すると未設定になります。 例: `太郎`
+- last_name (任意): string - 氏名（姓） (20文字以内)。キーを省略した場合は更新されません。空文字を指定すると未設定になります。 例: `山田`
+- first_name_kana (任意): string - 氏名（カナ・名） (20文字以内)。キーを省略した場合は更新されません。空文字を指定すると未設定になります。 例: `タロウ`
+- last_name_kana (任意): string - 氏名（カナ・姓） (20文字以内)。キーを省略した場合は更新されません。空文字を指定すると未設定になります。 例: `ヤマダ`
 
 ### レスポンス (200)
 
-- user (任意): object
+- user (必須): object
   - id (必須): integer(int64) - ユーザーID 例: `1` (最小: 1)
-  - email (必須): string - メールアドレス 例: `example@freee.co.jp`
-  - display_name (任意): string - 表示名 例: `山田太郎`
-  - first_name (任意): string - 氏名（名） 例: `太郎`
-  - last_name (任意): string - 氏名（姓） 例: `山田`
-  - first_name_kana (任意): string - 氏名（カナ・名） 例: `タロウ`
-  - last_name_kana (任意): string - 氏名（カナ・姓） 例: `ヤマダ`
+  - email (必須): string - メールアドレス 例: `user@example.com`
+  - display_name (必須): string - 表示名。未設定の場合はnullになります。 例: `山田太郎`
+  - first_name (必須): string - 氏名（名）。未設定の場合はnullになります。 例: `太郎`
+  - last_name (必須): string - 氏名（姓）。未設定の場合はnullになります。 例: `山田`
+  - first_name_kana (必須): string - 氏名（カナ・名）。未設定の場合はnullになります。 例: `タロウ`
+  - last_name_kana (必須): string - 氏名（カナ・姓）。未設定の場合はnullになります。 例: `ヤマダ`
 
 ### GET /api/1/users/capabilities
 
 操作: ログインユーザーの権限の取得
 
-説明: 概要 ログインユーザーの権限を取得する
+説明: 概要 指定した事業所におけるログインユーザーの権限を取得する 機能（レスポンスの各キー）ごとに、閲覧 (read)・作成 (create)・更新 (update)・削除 (destroy) などの操作が許可されているかどうかがbooleanで返ります。APIで取引や申請などを操作する前に、必要な権限があるかを確認する用途で使用します。 注意点 ログインユーザーが所属していない事業所のcompany_idを指定した場合は404エラーになります。 一部の機能では、read/create/update/destroy以外のキー（例: 操作可能な範囲を表すallowed_target、操作可否を表すwrite/confirm）が返ります。各機能のスキーマを参照してください。
 
 ### パラメータ
 
@@ -112,6 +112,10 @@
     <tr>
       <td style="padding: 5px">deals</td>
       <td style="padding: 5px">取引</td>
+    </tr>
+    <tr>
+      <td style="padding: 5px">deal_linkage</td>
+      <td style="padding: 5px">取引連携（freee請求書など、freee会計以外から連携させる取引）</td>
     </tr>
     <tr>
       <td style="padding: 5px">transfers</td>
@@ -146,12 +150,28 @@
       <td style="padding: 5px">経費精算の給与連携</td>
     </tr>
     <tr>
+      <td style="padding: 5px">manage_bulk_expense_application_approvals</td>
+      <td style="padding: 5px">経費精算の一括承認</td>
+    </tr>
+    <tr>
       <td style="padding: 5px">payment_requests</td>
       <td style="padding: 5px">支払依頼</td>
     </tr>
     <tr>
+      <td style="padding: 5px">payment_request_templates</td>
+      <td style="padding: 5px">支払テンプレート</td>
+    </tr>
+    <tr>
       <td style="padding: 5px">approval_requests</td>
       <td style="padding: 5px">各種申請</td>
+    </tr>
+    <tr>
+      <td style="padding: 5px">purchase_requests</td>
+      <td style="padding: 5px">購買申請</td>
+    </tr>
+    <tr>
+      <td style="padding: 5px">suspense_payments</td>
+      <td style="padding: 5px">仮払金</td>
     </tr>
     <tr>
       <td style="padding: 5px">reports</td>
@@ -170,6 +190,10 @@
       <td style="padding: 5px">支払管理レポート(一括振込ファイルを含む)</td>
     </tr>
     <tr>
+      <td style="padding: 5px">reports_purchase_budgets</td>
+      <td style="padding: 5px">購買進捗モニター</td>
+    </tr>
+    <tr>
       <td style="padding: 5px">reports_cash_balance</td>
       <td style="padding: 5px">現預金レポート/資金繰りレポート</td>
     </tr>
@@ -180,6 +204,10 @@
     <tr>
       <td style="padding: 5px">reports_managements_navigation</td>
       <td style="padding: 5px">経営ナビゲーション</td>
+    </tr>
+    <tr>
+      <td style="padding: 5px">reports_managements_introduction</td>
+      <td style="padding: 5px">経営プランニング・経営ナビゲーションの紹介ページ</td>
     </tr>
     <tr>
       <td style="padding: 5px">reports_custom_reports_aggregate</td>
@@ -224,6 +252,10 @@
     <tr>
       <td style="padding: 5px">annual_reports</td>
       <td style="padding: 5px">決算書、確定申告書類</td>
+    </tr>
+    <tr>
+      <td style="padding: 5px">consolidation</td>
+      <td style="padding: 5px">連結会計</td>
     </tr>
     <tr>
       <td style="padding: 5px">tax_reports</td>
@@ -366,6 +398,18 @@
       <td style="padding: 5px">受発注書類変更履歴</td>
     </tr>
     <tr>
+      <td style="padding: 5px">entries_reviews</td>
+      <td style="padding: 5px">記帳レビュー</td>
+    </tr>
+    <tr>
+      <td style="padding: 5px">freee_cards_stream</td>
+      <td style="padding: 5px">freeeカードで経理</td>
+    </tr>
+    <tr>
+      <td style="padding: 5px">proxy_application_settings</td>
+      <td style="padding: 5px">代理申請の設定</td>
+    </tr>
+    <tr>
       <td style="padding: 5px">workflows</td>
       <td style="padding: 5px">仕訳承認</td>
     </tr>
@@ -376,6 +420,22 @@
     <tr>
       <td style="padding: 5px">oauth_authorizations</td>
       <td style="padding: 5px">アプリ認可</td>
+    </tr>
+    <tr>
+      <td style="padding: 5px">division_tag_1</td>
+      <td style="padding: 5px">セグメント1</td>
+    </tr>
+    <tr>
+      <td style="padding: 5px">division_tag_2</td>
+      <td style="padding: 5px">セグメント2</td>
+    </tr>
+    <tr>
+      <td style="padding: 5px">division_tag_3</td>
+      <td style="padding: 5px">セグメント3</td>
+    </tr>
+    <tr>
+      <td style="padding: 5px">currencies</td>
+      <td style="padding: 5px">外貨（通貨の設定）</td>
     </tr>
     <tr>
       <td style="padding: 5px">bank_accountant_staff_users</td>
@@ -397,6 +457,11 @@
   - update (任意): boolean - 更新 例: `true`
   - destroy (任意): boolean - 削除 例: `true`
   - allowed_target (任意): string - 「自分のみ」がonになっている場合はself_only、offになっている場合はallになります。 (選択肢: self_only, all)
+- deal_linkage (必須): object
+  - read (任意): boolean - 閲覧 例: `true`
+  - create (任意): boolean - 作成 例: `true`
+  - update (任意): boolean - 更新 例: `true`
+  - destroy (任意): boolean - 削除 例: `true`
 - transfers (必須): object
   - read (任意): boolean - 閲覧 例: `true`
   - create (任意): boolean - 作成 例: `true`
@@ -430,13 +495,33 @@
   - allowed_target (任意): string - 「自分のみ」がonになっている場合はself_only、offになっている場合はallになります。 (選択肢: self_only, all)
 - expense_application_sync_payroll (必須): object
   - create (任意): boolean - 作成 例: `true`
+- manage_bulk_expense_application_approvals (必須): object
+  - write (任意): boolean - 操作 例: `true`
 - payment_requests (必須): object
   - read (任意): boolean - 閲覧 例: `true`
   - create (任意): boolean - 作成 例: `true`
   - update (任意): boolean - 更新 例: `true`
   - destroy (任意): boolean - 削除 例: `true`
   - allowed_target (任意): string - 「自分のみ」がonになっている場合はself_only、offになっている場合はallになります。 (選択肢: self_only, all)
+- payment_request_templates (必須): object
+  - read (任意): boolean - 閲覧 例: `true`
+  - create (任意): boolean - 作成 例: `true`
+  - update (任意): boolean - 更新 例: `true`
+  - destroy (任意): boolean - 削除 例: `true`
+  - allowed_target (任意): string - 「自分のみ」がonになっている場合はself_only、offになっている場合はallになります。 (選択肢: self_only, all)
 - approval_requests (必須): object
+  - read (任意): boolean - 閲覧 例: `true`
+  - create (任意): boolean - 作成 例: `true`
+  - update (任意): boolean - 更新 例: `true`
+  - destroy (任意): boolean - 削除 例: `true`
+  - allowed_target (任意): string - 「自分のみ」がonになっている場合はself_only、offになっている場合はallになります。 (選択肢: self_only, all)
+- purchase_requests (必須): object
+  - read (任意): boolean - 閲覧 例: `true`
+  - create (任意): boolean - 作成 例: `true`
+  - update (任意): boolean - 更新 例: `true`
+  - destroy (任意): boolean - 削除 例: `true`
+  - allowed_target (任意): string - 「自分のみ」がonになっている場合はself_only、offになっている場合はallになります。 (選択肢: self_only, all)
+- suspense_payments (必須): object
   - read (任意): boolean - 閲覧 例: `true`
   - create (任意): boolean - 作成 例: `true`
   - update (任意): boolean - 更新 例: `true`
@@ -451,6 +536,9 @@
 - reports_payables (必須): object
   - read (任意): boolean - 閲覧 例: `true`
   - write (任意): boolean - 操作 例: `true`
+- reports_purchase_budgets (必須): object
+  - read (任意): boolean - 閲覧 例: `true`
+  - write (任意): boolean - 操作 例: `true`
 - reports_cash_balance (必須): object
   - read (任意): boolean - 閲覧 例: `true`
 - reports_managements_planning (必須): object
@@ -459,6 +547,8 @@
 - reports_managements_navigation (必須): object
   - read (任意): boolean - 閲覧 例: `true`
   - write (任意): boolean - 操作 例: `true`
+- reports_managements_introduction (必須): object
+  - read (任意): boolean - 閲覧 例: `true`
 - reports_custom_reports_aggregate (必須): object
   - read (任意): boolean - 閲覧 例: `true`
 - reports_pl (必須): object
@@ -496,6 +586,8 @@
   - update (任意): boolean - 更新 例: `true`
   - destroy (任意): boolean - 削除 例: `true`
 - annual_reports (必須): object
+  - read (任意): boolean - 閲覧 例: `true`
+- consolidation (必須): object
   - read (任意): boolean - 閲覧 例: `true`
 - tax_reports (必須): object
   - read (任意): boolean - 閲覧 例: `true`
@@ -629,6 +721,35 @@
   - update (任意): boolean - 更新 例: `true`
   - destroy (任意): boolean - 削除 例: `true`
 - oauth_authorizations (必須): object
+  - read (任意): boolean - 閲覧 例: `true`
+  - create (任意): boolean - 作成 例: `true`
+  - update (任意): boolean - 更新 例: `true`
+  - destroy (任意): boolean - 削除 例: `true`
+- division_tag_1 (必須): object
+  - read (任意): boolean - 閲覧 例: `true`
+  - create (任意): boolean - 作成 例: `true`
+  - update (任意): boolean - 更新 例: `true`
+  - destroy (任意): boolean - 削除 例: `true`
+- division_tag_2 (必須): object
+  - read (任意): boolean - 閲覧 例: `true`
+  - create (任意): boolean - 作成 例: `true`
+  - update (任意): boolean - 更新 例: `true`
+  - destroy (任意): boolean - 削除 例: `true`
+- division_tag_3 (必須): object
+  - read (任意): boolean - 閲覧 例: `true`
+  - create (任意): boolean - 作成 例: `true`
+  - update (任意): boolean - 更新 例: `true`
+  - destroy (任意): boolean - 削除 例: `true`
+- currencies (必須): object
+  - read (任意): boolean - 閲覧 例: `true`
+  - create (任意): boolean - 作成 例: `true`
+  - update (任意): boolean - 更新 例: `true`
+  - destroy (任意): boolean - 削除 例: `true`
+- entries_reviews (必須): object
+  - read (任意): boolean - 閲覧 例: `true`
+- freee_cards_stream (必須): object
+  - confirm (任意): boolean - 操作 例: `true`
+- proxy_application_settings (必須): object
   - read (任意): boolean - 閲覧 例: `true`
   - create (任意): boolean - 作成 例: `true`
   - update (任意): boolean - 更新 例: `true`

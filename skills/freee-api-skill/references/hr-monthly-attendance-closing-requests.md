@@ -49,6 +49,7 @@ successful operation
     - company_id (必須): integer(int32) - 事業所ID 例: `1` (最小: 1, 最大: 2147483647)
     - application_number (必須): integer(int32) - 申請No 例: `1` (最小: 1, 最大: 2147483647)
     - applicant_id (必須): integer(int32) - 申請者のユーザーID 例: `1` (最小: 1, 最大: 2147483647)
+    - proxy_applicant_id (任意): integer(int32) - 代理申請者のユーザーID 例: `1` (最小: 1, 最大: 2147483647)
     - approver_ids (任意): array[integer] - 承認者のユーザーID配列<br>
 次の場合、空配列になります。
 - 指定なしの申請経路を利用した、申請ステータスが承認済み以外の申請
@@ -82,6 +83,7 @@ successful operation
   - company_id (必須): integer(int32) - 事業所ID 例: `1` (最小: 1, 最大: 2147483647)
   - application_number (必須): integer(int32) - 申請No 例: `1` (最小: 1, 最大: 2147483647)
   - applicant_id (必須): integer(int32) - 申請者のユーザーID 例: `1` (最小: 1, 最大: 2147483647)
+  - proxy_applicant_id (任意): integer(int32) - 代理申請者のユーザーID 例: `1` (最小: 1, 最大: 2147483647)
   - approver_ids (任意): array[integer] - 承認者のユーザーID配列<br>
 次の場合、空配列になります。
 - 指定なしの申請経路を利用した、申請ステータスが承認済み以外の申請
@@ -119,6 +121,7 @@ successful operation
   - company_id (必須): integer(int32) - 事業所ID 例: `1` (最小: 1, 最大: 2147483647)
   - application_number (必須): integer(int32) - 申請No 例: `1` (最小: 1, 最大: 2147483647)
   - applicant_id (必須): integer(int32) - 申請者のユーザーID 例: `1` (最小: 1, 最大: 2147483647)
+  - proxy_applicant_id (任意): integer(int32) - 代理申請者のユーザーID 例: `1` (最小: 1, 最大: 2147483647)
   - approver_ids (任意): array[integer] - 承認者のユーザーID配列<br>
 次の場合、空配列になります。
 - 指定なしの申請経路を利用した、申請ステータスが承認済み以外の申請
@@ -161,6 +164,7 @@ successful operation
   - company_id (必須): integer(int32) - 事業所ID 例: `1` (最小: 1, 最大: 2147483647)
   - application_number (必須): integer(int32) - 申請No 例: `1` (最小: 1, 最大: 2147483647)
   - applicant_id (必須): integer(int32) - 申請者のユーザーID 例: `1` (最小: 1, 最大: 2147483647)
+  - proxy_applicant_id (任意): integer(int32) - 代理申請者のユーザーID 例: `1` (最小: 1, 最大: 2147483647)
   - approver_ids (任意): array[integer] - 承認者のユーザーID配列<br>
 次の場合、空配列になります。
 - 指定なしの申請経路を利用した、申請ステータスが承認済み以外の申請
@@ -222,6 +226,7 @@ successful operation
   - company_id (必須): integer(int32) - 事業所ID 例: `1` (最小: 1, 最大: 2147483647)
   - application_number (必須): integer(int32) - 申請No 例: `1` (最小: 1, 最大: 2147483647)
   - applicant_id (必須): integer(int32) - 申請者のユーザーID 例: `1` (最小: 1, 最大: 2147483647)
+  - proxy_applicant_id (任意): integer(int32) - 代理申請者のユーザーID 例: `1` (最小: 1, 最大: 2147483647)
   - approver_ids (任意): array[integer] - 承認者のユーザーID配列<br>
 次の場合、空配列になります。
 - 指定なしの申請経路を利用した、申請ステータスが承認済み以外の申請
