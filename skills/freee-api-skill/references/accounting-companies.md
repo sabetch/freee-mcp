@@ -10,76 +10,76 @@
 
 操作: 事業所一覧の取得
 
-説明: 概要 ユーザーが所属する事業所一覧を取得する
+説明: 概要 アクセストークンのユーザーが所属するすべての事業所の一覧を取得する 注意点 本APIで取得できるのは事業所の基本情報（ID・名称・事業所番号・ユーザー権限）のみです。会計年度や設定情報を含む詳細は事業所の取得（GET /api/1/companies/{id}）を利用してください。 他のAPIのパラメータとして利用する事業所ID（company_id）は、本APIのレスポンスの id を指定します。
 
 ### レスポンス (200)
 
-- companies (必須): array[object]
+- companies (必須): array[object] - アクセストークンのユーザーが所属する事業所の一覧
   配列の要素:
-    - id (必須): integer(int64) - 事業所ID 例: `1` (最小: 1)
-    - name (必須): string - 事業所名 例: `freee事務所`
-    - name_kana (必須): string - 事業所名（カナ） 例: `フリージムショ`
-    - display_name (必須): string - 事業所名 例: `freee事務所`
-    - company_number (必須): string - 事業所番号（ハイフン無し)(半角英数字10桁) 例: `97e576421b`
-    - role (必須): string - ユーザーの権限
+    - id (必須): integer(int64) - 事業所ID。他のAPIで事業所を指定するパラメータ（company_id）にはこの値を使用する 例: `1` (最小: 1)
+    - name (必須): string - 事業所の正式名称 (100文字以内)。未設定の場合は null 例: `freee事務所`
+    - name_kana (必須): string - 事業所の正式名称フリガナ (100文字以内)。未設定の場合は null 例: `フリージムショ`
+    - display_name (必須): string - 事業所の表示名。freee上の画面表示に使用される名称 例: `freee事務所`
+    - company_number (必須): string - 事業所番号（ハイフン無し・半角英数字10桁） 例: `97e576421b`
+    - role (必須): string - アクセストークンのユーザーがこの事業所で持つ権限
 
 * admin - 管理者
 * simple_accounting - 一般（経理）
 * read_only - 取引登録のみ
 * self_only - 閲覧のみ
-* workflow - 申請・承認 (選択肢: admin, simple_accounting, self_only, read_only, workflow) 例: `admin`
+* workflow - 申請・承認 (選択肢: admin, simple_accounting, self_only, read_only, workflow, product_linkage, bookkeeping, bookkeeping_report, bookkeeping_simple, bookkeeping_simple_report, bookkeeping_prime, bookkeeping_prime_report, voucher_mgt, voucher_mgt_report, bank_accountant, bank_accountant_report) 例: `admin`
 
 ### GET /api/1/companies/{id}
 
 操作: 事業所の取得
 
-説明: 概要 ユーザーが所属する事業所を取得する
+説明: 概要 指定した事業所の詳細情報（名称・連絡先・各種設定・会計年度の一覧）を取得する 注意点 クエリパラメータを指定しない場合は事業所の基本情報と会計年度の一覧のみを返します。勘定科目・税区分コード・品目・取引先・部門・メモタグ・口座の一覧が必要な場合は、details または対応する個別のクエリパラメータを指定してください。 details および個別指定のクエリパラメータに指定できる値は true のみです。一覧を含めない場合は、false を指定するのではなくパラメータ自体を省略してください。 アクセストークンのユーザーが所属していない事業所IDを指定した場合は 400 (存在しない事業所のid) を返します。所属する事業所のIDは事業所一覧の取得（GET /api/1/companies）で確認できます。
 
 ### パラメータ
 
 | 名前 | 位置 | 必須 | 型 | 説明 |
 |------|------|------|-----|------|
-| id | path | はい | integer(int64) | 事業所ID |
-| details | query | いいえ | boolean | 取得情報に勘定科目・税区分コード・品目・取引先・部門・メモタグ・口座の一覧を含める (選択肢: true) |
-| account_items | query | いいえ | boolean | 取得情報に勘定科目一覧を含める (選択肢: true) |
-| taxes | query | いいえ | boolean | 取得情報に税区分コード一覧を含める (選択肢: true) |
-| items | query | いいえ | boolean | 取得情報に品目一覧を含める (選択肢: true) |
-| partners | query | いいえ | boolean | 取得情報に取引先一覧を含める (選択肢: true) |
-| sections | query | いいえ | boolean | 取得情報に部門一覧を含める (選択肢: true) |
-| tags | query | いいえ | boolean | 取得情報にメモタグ一覧を含める (選択肢: true) |
-| walletables | query | いいえ | boolean | 取得情報に口座一覧を含める (選択肢: true) |
+| id | path | はい | integer(int64) | 事業所ID。事業所一覧の取得（GET /api/1/companies）のレスポンスの id を指定する |
+| details | query | いいえ | boolean | true を指定すると、レスポンスに勘定科目 (account_items)・税区分コード (tax_codes)・品目 (items)・取引先 (partners)・部門 (sections)・メモタグ (tags)・口座 (walletables) の一覧をまとめて含める。一覧を含めない場合はパラメータ自体を省略する (選択肢: true) |
+| account_items | query | いいえ | boolean | true を指定すると、レスポンスに勘定科目一覧 (account_items) を含める (選択肢: true) |
+| taxes | query | いいえ | boolean | true を指定すると、レスポンスに税区分コード一覧 (tax_codes) を含める (選択肢: true) |
+| items | query | いいえ | boolean | true を指定すると、レスポンスに品目一覧 (items) を含める (選択肢: true) |
+| partners | query | いいえ | boolean | true を指定すると、レスポンスに取引先一覧 (partners) を含める (選択肢: true) |
+| sections | query | いいえ | boolean | true を指定すると、レスポンスに部門一覧 (sections) を含める (選択肢: true) |
+| tags | query | いいえ | boolean | true を指定すると、レスポンスにメモタグ一覧 (tags) を含める (選択肢: true) |
+| walletables | query | いいえ | boolean | true を指定すると、レスポンスに口座一覧 (walletables) を含める (選択肢: true) |
 
 ### レスポンス (200)
 
 - company (必須): object
-  - id (必須): integer(int64) - 事業所ID 例: `1` (最小: 1)
-  - name (必須): string - 事業所の正式名称 (100文字以内) 例: `freee事務所`
-  - name_kana (必須): string - 正式名称フリガナ (100文字以内) 例: `フリージムショ`
-  - display_name (必須): string - 事業所名 例: `freee事務所`
+  - id (必須): integer(int64) - 事業所ID。他のAPIで事業所を指定するパラメータ（company_id）にはこの値を使用する 例: `1` (最小: 1)
+  - name (必須): string - 事業所の正式名称 (100文字以内)。未設定の場合は null 例: `freee事務所`
+  - name_kana (必須): string - 事業所の正式名称フリガナ (100文字以内)。未設定の場合は null 例: `フリージムショ`
+  - display_name (必須): string - 事業所の表示名。freee上の画面表示に使用される名称 例: `freee事務所`
   - tax_at_source_calc_type (必須): integer(int64) - 源泉徴収税計算（0: 消費税を含める、1: 消費税を含めない） 例: `0` (最小: 0, 最大: 1)
-  - contact_name (必須): string - 担当者名 (50文字以内) 例: `user1`
-  - head_count (必須): integer(int64) - 従業員数（0: 経営者のみ、1: 2〜5人、2: 6〜10人、3: 11〜20人、4: 21〜30人、5: 31〜40人、6: 41〜100人、7: 100人以上、13: 21〜50人、14: 51〜100人、15: 101〜300人、16: 501〜1000人、17: 1001人以上、18: 301〜500人 例: `1` (最小: 0, 最大: 99)
-  - corporate_number (必須): string - 法人番号 (半角数字13桁、法人のみ) 例: `1234567890123`
+  - contact_name (必須): string - 担当者名 (50文字以内)。未設定の場合は null 例: `user1`
+  - head_count (必須): integer(int64) - 従業員数（0: 経営者のみ、1: 2〜5人、2: 6〜10人、3: 11〜20人、4: 21〜30人、5: 31〜40人、6: 41〜100人、7: 100人以上、13: 21〜50人、14: 51〜100人、15: 101〜300人、16: 501〜1000人、17: 1001人以上、18: 301〜500人）。未設定の場合は null 例: `1` (最小: 0, 最大: 99)
+  - corporate_number (必須): string - 法人番号 (半角数字13桁、法人のみ)。未設定の場合および個人事業主の場合は空文字 例: `1234567890123`
   - txn_number_format (必須): string - 仕訳番号形式（not_used: 使用しない、digits: 数字（例：5091824）、alnum: 英数字（例：59J0P）） (選択肢: not_used, digits, alnum) 例: `not_used`
-  - default_wallet_account_id (任意): integer(int64) - デフォルトの決済口座が紐づく勘定科目ID 例: `1` (最小: 1)
+  - default_wallet_account_id (必須): integer(int64) - デフォルトの決済口座が紐づく勘定科目ID。未設定の場合は null 例: `1` (最小: 1)
   - private_settlement (必須): boolean - プライベート資金/役員資金（false: 使用しない、true: 使用する） 例: `true`
   - minus_format (必須): integer(int64) - マイナスの表示方法（0: -、 1: △） 例: `0` (最小: 0, 最大: 1)
   - org_code (必須): integer - 事業所種別コード（1: 法人、 2: 個人事業主） 例: `1` (最小: 1, 最大: 2)
-  - company_number (必須): string - 事業所番号（ハイフン無し)(半角英数字10桁) 例: `97e576421b`
-  - role (必須): string - ユーザーの権限
+  - company_number (必須): string - 事業所番号（ハイフン無し・半角英数字10桁） 例: `97e576421b`
+  - role (必須): string - アクセストークンのユーザーがこの事業所で持つ権限
 
 * admin - 管理者
 * simple_accounting - 一般（経理）
 * read_only - 取引登録のみ
 * self_only - 閲覧のみ
-* workflow - 申請・承認 (選択肢: admin, simple_accounting, self_only, read_only, workflow) 例: `admin`
-  - phone1 (必須): string - 電話番号１ 例: `03-1234-xxxx`
-  - phone2 (必須): string - 電話番号２ 例: `090-1234-xxxx`
-  - fax (必須): string - FAX 例: `03-1234-xxxx`
-  - zipcode (必須): string - 郵便番号 例: `000-0000`
+* workflow - 申請・承認 (選択肢: admin, simple_accounting, self_only, read_only, workflow, product_linkage, bookkeeping, bookkeeping_report, bookkeeping_simple, bookkeeping_simple_report, bookkeeping_prime, bookkeeping_prime_report, voucher_mgt, voucher_mgt_report, bank_accountant, bank_accountant_report) 例: `admin`
+  - phone1 (必須): string - 電話番号１。未設定の場合は null 例: `03-1234-xxxx`
+  - phone2 (必須): string - 電話番号２。未設定の場合は null 例: `090-1234-xxxx`
+  - fax (必須): string - FAX番号。未設定の場合は null 例: `03-1234-xxxx`
+  - zipcode (必須): string - 郵便番号。未設定の場合は null 例: `000-0000`
   - prefecture_code (必須): integer(int64) - 都道府県コード（-1: 設定しない、0: 北海道、1:青森、2:岩手、3:宮城、4:秋田、5:山形、6:福島、7:茨城、8:栃木、9:群馬、10:埼玉、11:千葉、12:東京、13:神奈川、14:新潟、15:富山、16:石川、17:福井、18:山梨、19:長野、20:岐阜、21:静岡、22:愛知、23:三重、24:滋賀、25:京都、26:大阪、27:兵庫、28:奈良、29:和歌山、30:鳥取、31:島根、32:岡山、33:広島、34:山口、35:徳島、36:香川、37:愛媛、38:高知、39:福岡、40:佐賀、41:長崎、42:熊本、43:大分、44:宮崎、45:鹿児島、46:沖縄 例: `4` (最小: -1, 最大: 46)
-  - street_name1 (必須): string - 市区町村・番地 例: `ＸＸ区ＹＹ１−１−１`
-  - street_name2 (必須): string - 建物名・部屋番号など 例: `ビル１Ｆ`
+  - street_name1 (必須): string - 市区町村・番地。未設定の場合は null 例: `ＸＸ区ＹＹ１−１−１`
+  - street_name2 (必須): string - 建物名・部屋番号など。未設定の場合は null 例: `ビル１Ｆ`
   - invoice_layout (必須): string - 請求書レイアウト
 * `default_classic` - レイアウト１/クラシック (デフォルト)
 
@@ -235,15 +235,15 @@
   - others_side_business: その他(副業や株取引のみなど)
   - others_deduction: その他(医療費などの控除のみ)
   - default: 未定 (選択肢: , agriculture, forestry, fishing_industry, mining, civil_contractors, pavement, carpenter, renovation, electrical_plumbing, grocery, machinery_manufacturing, printing, other_manufacturing, software_development, system_development, survey_analysis, server_management, website_production, online_service_management, online_advertising_agency, online_advertising_planning_production, online_media_management, portal_site_management, other_it_services, transport_delivery, delivery, other_transportation_logistics, other_wholesale, clothing_wholesale_fiber, food_wholesale, entrusted_development_wholesale, online_shop, fashion_grocery_store, food_store, entrusted_store, other_store, financial_instruments_exchange, commodity_futures_investment_advisor, other_financial, brokerage_insurance, other_insurance, real_estate_developer, real_estate_brokerage, rent_coin_parking_management, rental_office_co_working_space, rental_lease, cpa_tax_accountant, law_office, judicial_and_administrative_scrivener, labor_consultant, other_profession, business_consultant, academic_research_development, advertising_agency, advertising_planning_production, design_development, apparel_industry_design, website_design, advertising_planning_design, other_design, restaurants_coffee_shops, sale_of_lunch, bread_confectionery_manufacture_sale, delivery_catering_mobile_catering, hotel_inn, homestay, travel_agency, leisure_sports_facility_management, show_event_management, barber, beauty_salon, spa_sand_bath_sauna, este_ail_salon, bridal_planning_introduce_wedding, memorial_ceremony_funeral, moving, courier_industry, house_maid_cleaning_agency, re_tailoring_clothes, training_institute_management, tutoring_school, music_calligraphy_abacus_classroom, english_school, tennis_yoga_judo_school, culture_school, seminar_planning_management, hospital_clinic, dental_clinic, other_medical_services, nursery, nursing_home, rehabilitation_support_services, other_welfare, visit_welfare_service, recruitment_temporary_staffing, life_related_recruitment_temporary_staffing, car_maintenance_car_repair, machinery_equipment_maintenance_repair, cleaning_maintenance_building_management, security, other_services, npo, general_incorporated_association, general_incorporated_foundation, other_association, manufacturing, education, medical, ict, food, construction, transportation, trading, retail, finance, real_estate, travel, accountant, lawer, consultant, recruit, publication, design, others, company_employee, others_side_business, others_deduction, default)
-  - workflow_setting (必須): string - 仕訳承認フロー（enable: 有効、 disable: 無効） (選択肢: enable, disable) 例: `disabled`
-  - fiscal_years (必須): array[object]
-  - account_items (任意): array[object]
-  - tax_codes (任意): array[object]
-  - items (任意): array[object]
-  - partners (任意): array[object]
-  - sections (任意): array[object]
-  - tags (任意): array[object]
-  - walletables (任意): array[object]
+  - workflow_setting (必須): string - 仕訳承認フロー（enable: 有効、 disable: 無効） (選択肢: enable, disable) 例: `disable`
+  - fiscal_years (必須): array[object] - 会計年度の一覧（現在および過去の有効な会計年度）
+  - account_items (任意): array[object] - 勘定科目の一覧。クエリパラメータ account_items または details に true を指定した場合のみ返る
+  - tax_codes (任意): array[object] - 税区分コードの一覧。クエリパラメータ taxes または details に true を指定した場合のみ返る
+  - items (任意): array[object] - 品目の一覧。クエリパラメータ items または details に true を指定した場合のみ返る
+  - partners (任意): array[object] - 取引先の一覧。クエリパラメータ partners または details に true を指定した場合のみ返る
+  - sections (任意): array[object] - 部門の一覧。クエリパラメータ sections または details に true を指定した場合のみ返る
+  - tags (任意): array[object] - メモタグの一覧。クエリパラメータ tags または details に true を指定した場合のみ返る
+  - walletables (任意): array[object] - 口座の一覧（操作ユーザーが利用可能な口座のみ）。クエリパラメータ walletables または details に true を指定した場合のみ返る
 
 
 
