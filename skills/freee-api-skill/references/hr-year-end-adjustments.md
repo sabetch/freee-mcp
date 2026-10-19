@@ -83,7 +83,7 @@ successful operation
   - is_working_student (任意): boolean - 勤労学生かどうか
   - is_foreigner (任意): boolean - 外国人かどうか
   - other_company_revenue (任意): integer - その他の事業所の給与収入 例: `1000000` (最小: 0, 最大: 1999999999)
-  - all_other_income (任意): integer - 給与以外の所得 例: `1000000` (最小: 0, 最大: 1999999999)
+  - all_other_income (任意): integer - 給与以外の所得 例: `1000000` (最小: -999999999, 最大: 1999999999)
   - householder (任意): string - 世帯主の続柄 myself: 本人, husband: 夫, wife: 妻, father: 父, mother: 母, child: 子, senior_brother: 兄, junior_brother: 弟, senior_sister: 姉, junior_sister: 妹, grandchild: 孫, grandfather: 祖父, grandmother: 祖母, father_in_law: 義父, mother_in_law: 義母, grandfather_in_law: 義祖父, grandmother_in_law: 義祖母, other: その他 (選択肢: myself, husband, wife, father, mother, child, senior_brother, junior_brother, senior_sister, junior_sister, grandchild, grandfather, grandmother, father_in_law, mother_in_law, grandfather_in_law, grandmother_in_law, other)
   - householder_name (任意): string - 世帯主の名前 例: `山田 太郎`
   - is_calc_income_tax (任意): boolean - 所得税の計算対象かどうか
@@ -99,7 +99,7 @@ successful operation
     - social_insurance_and_tax_dependent (任意): string - 扶養状況 social_insurance_and_tax: 所得税・住民税と社会保険, tax_only: 所得税・住民税のみ, social_insurance_only: 社会保険のみ, not_dependent: 扶養していない (選択肢: social_insurance_and_tax, tax_only, social_insurance_only, not_dependent)
     - income (任意): integer(int32) - 所得 配偶者は「扶養状況」がsocial_insurance_only又はnot_dependentの場合のみ更新可能。配偶者以外は更新可能。 配偶者で「扶養状況」がsocial_insurance_and_tax又はtax_onlyの場合、「給与収入」、「給与以外の所得」から自動で「所得」が計算されます。 (最小: 0, 最大: 999999999)
     - employment_revenue (任意): integer(int32) - 給与収入 配偶者は「扶養状況」がsocial_insurance_and_tax又はtax_onlyの場合のみ更新可能。配偶者以外は更新不可。更新不可の場合は0となります。 (最小: 0, 最大: 999999999)
-    - all_other_income (任意): integer(int32) - 給与以外の所得 配偶者は「扶養状況」がsocial_insurance_and_tax又はtax_onlyの場合のみ更新可能。配偶者以外は更新不可。更新不可の場合は0となります。 (最小: 0, 最大: 999999999)
+    - all_other_income (任意): integer(int32) - 給与以外の所得 配偶者は「扶養状況」がsocial_insurance_and_tax又はtax_onlyの場合のみ更新可能。配偶者以外は更新不可。更新不可の場合は0となります。 (最小: -999999999, 最大: 999999999)
     - disability_type (任意): string - 障害に該当するか null不可 na: 障害なし, general: 一般の障害者, heavy: 特別障害者 (選択肢: na, general, heavy)
     - residence_type (任意): string - 同居・別居 null不可 live_in: 同居, resident: 別居(国内), non_resident: 別居(国外) (選択肢: live_in, resident, non_resident)
     - zipcode1 (任意): string - 住民票住所の郵便番号1 「同居・別居」が「同居」の場合は「年末調整従業員情報」の「住民票住所の郵便番号1」を登録 例: `141`
@@ -109,7 +109,7 @@ successful operation
     - address_kana (任意): string - 住民票住所の市区町村以降の住所カナ 「同居・別居」が「同居」の場合は「年末調整従業員情報」の「住民票住所の市区町村以降の住所カナ」を登録 例: `シナガワクオオサキ1-2-2`
     - annual_remittance_amount (任意): integer(int32) - 国外居住親族への年間の送金額 「同居・別居」が「同居」、「別居(国内)」の場合は登録不可 (最小: 0, 最大: 999999999)
     - non_resident_dependents_reason (任意): string(string) - 非居住者である親族の条件 none: なし, over_16_to_under_30_or_over_70: 16歳以上30歳未満又は70歳以上, study_abroad: 留学, handicapped: 障害者, over_38_man: 38万円以上の支払 続柄が「配偶者」または「同居・別居」が「同居」、「別居(国内)」の場合は登録不可 (選択肢: none, over_16_to_under_30_or_over_70, study_abroad, handicapped, over_38_man)
-    - is_resident_tax_only_deduction (任意): boolean - 住民税のみの控除対象かどうか
+    - is_resident_tax_only_deduction (任意): boolean - 住民税のみの控除対象かどうか 2025年以前の年末調整でのみ返却されます。2026年以降の年末調整では入力された所得額から住民税の控除対象かどうかが自動判定されるため、レスポンスに含まれません。
     - retirement_income (任意): integer(int32) - 退職所得 (最小: 0, 最大: 999999999)
 - insurances (任意): array[object] - 保険料情報(年末調整対象外の場合は取得できません。)
   配列の要素:
@@ -148,9 +148,9 @@ successful operation
     - kind_of_purpose (任意): string - 保険等の種類（目的）<br>
 保険の種類にて、生命保険・介護医療保険・個人年金保険または地震保険・旧長期損害保険を選択している時のみ、入力した値が反映されます。<br>
 上記以外の保険では入力した値は反映されません。 例: `利差配当付終身`
-    - period (任意): string - 保険期間又は年金支払期間<br>
+    - period (任意): string - 保険期間又は年金支払期間（終身、0年〜100年、0ヶ月〜11ヶ月のいずれか）<br>
 保険の種類にて、生命保険・介護医療保険・個人年金保険または地震保険・旧長期損害保険を選択している時のみ、入力した値が反映されます。<br>
-上記以外の保険では入力した値は反映されません。 (選択肢: 終身, 0年, 1年, 2年, 3年, 4年, 5年, 6年, 7年, 8年, 9年, 10年, 11年, 12年, 13年, 14年, 15年, 16年, 17年, 18年, 19年, 20年, 21年, 22年, 23年, 24年, 25年, 26年, 27年, 28年, 29年, 30年, 31年, 32年, 33年, 34年, 35年, 36年, 37年, 38年, 39年, 40年, 41年, 42年, 43年, 44年, 45年, 46年, 47年, 48年, 49年, 50年, 51年, 52年, 53年, 54年, 55年, 56年, 57年, 58年, 59年, 60年, 61年, 62年, 63年, 64年, 65年, 66年, 67年, 68年, 69年, 70年, 71年, 72年, 73年, 74年, 75年, 76年, 77年, 78年, 79年, 80年, 81年, 82年, 83年, 84年, 85年, 86年, 87年, 88年, 89年, 90年, 91年, 92年, 93年, 94年, 95年, 96年, 97年, 98年, 99年, 100年, ) 例: `終身`
+上記以外の保険では入力した値は反映されません。 (選択肢: 終身, 0年, 1年, 2年, 3年, 4年, 5年, 6年, 7年, 8年, 9年, 10年, 11年, 12年, 13年, 14年, 15年, 16年, 17年, 18年, 19年, 20年, 21年, 22年, 23年, 24年, 25年, 26年, 27年, 28年, 29年, 30年, 31年, 32年, 33年, 34年, 35年, 36年, 37年, 38年, 39年, 40年, 41年, 42年, 43年, 44年, 45年, 46年, 47年, 48年, 49年, 50年, 51年, 52年, 53年, 54年, 55年, 56年, 57年, 58年, 59年, 60年, 61年, 62年, 63年, 64年, 65年, 66年, 67年, 68年, 69年, 70年, 71年, 72年, 73年, 74年, 75年, 76年, 77年, 78年, 79年, 80年, 81年, 82年, 83年, 84年, 85年, 86年, 87年, 88年, 89年, 90年, 91年, 92年, 93年, 94年, 95年, 96年, 97年, 98年, 99年, 100年, 0ヶ月, 1ヶ月, 2ヶ月, 3ヶ月, 4ヶ月, 5ヶ月, 6ヶ月, 7ヶ月, 8ヶ月, 9ヶ月, 10ヶ月, 11ヶ月, ) 例: `終身`
     - policyholder_last_name (任意): string - 保険等の契約者 姓<br>
 保険の種類にて、生命保険・介護医療保険・個人年金保険または地震保険・旧長期損害保険を選択している時のみ、入力した値が反映されます。<br>
 上記以外の保険では入力した値は反映されません。 例: `契約`
@@ -179,7 +179,7 @@ xml: 電子的控除証明書を利用。証明書画像データの提出が免
     - id (任意): integer(int32) - 住宅ローンID 例: `1` (最小: 1, 最大: 2147483647)
     - residence_start_date (任意): string(date) - 居住開始の年月日 例: `2022-03-31`
     - remaining_balance_at_yearend (任意): integer - 住宅借入金等年末残高 例: `5000000` (最小: -999999999, 最大: 999999999)
-    - category (任意): string - 住宅借入金等特別控除区分 general: 住: 一般の住宅借入金等, qualified: 認: 認定住宅の新築等, extension: 増: 特定増改築等, earthquake: 震: 震災特例法による特別控除 (選択肢: general, qualified, extension, earthquake)
+    - category (任意): string - 住宅借入金等特別控除区分 general: 住: 一般の住宅借入金等, qualified: 認: 認定住宅の新築等, extension: 増: 特定増改築等, earthquake: 震: 震災特例法による特別控除 extensionは2025年以前の年末調整でのみ返却されます。2026年以降の年末調整では特定増改築等住宅借入金等特別控除の廃止により登録できません。 (選択肢: general, qualified, extension, earthquake)
     - specific_case_type (任意): string - 特定取得/特別特定取得 not_qualified: 該当しない, specified: 特定取得, special_specified_or_special_exception: 特別特定取得または特別特例取得, exception_special_exception: 特例特別特例取得 special_residential_house 特家 (選択肢: not_qualified, specified, special_specified_or_special_exception, exception_special_exception, special_residential_house)
 - payroll_and_bonus (任意): object
   - fixed_payroll (任意): integer(int32) - 確定給与額 例: `10000000` (最小: -999999999, 最大: 999999999)
@@ -268,7 +268,7 @@ successful operation
   - is_working_student (任意): boolean - 勤労学生かどうか
   - is_foreigner (任意): boolean - 外国人かどうか
   - other_company_revenue (任意): integer - その他の事業所の給与収入 例: `1000000` (最小: 0, 最大: 1999999999)
-  - all_other_income (任意): integer - 給与以外の所得 例: `1000000` (最小: 0, 最大: 1999999999)
+  - all_other_income (任意): integer - 給与以外の所得 例: `1000000` (最小: -999999999, 最大: 1999999999)
   - householder (任意): string - 世帯主の続柄 myself: 本人, husband: 夫, wife: 妻, father: 父, mother: 母, child: 子, senior_brother: 兄, junior_brother: 弟, senior_sister: 姉, junior_sister: 妹, grandchild: 孫, grandfather: 祖父, grandmother: 祖母, father_in_law: 義父, mother_in_law: 義母, grandfather_in_law: 義祖父, grandmother_in_law: 義祖母, other: その他 (選択肢: myself, husband, wife, father, mother, child, senior_brother, junior_brother, senior_sister, junior_sister, grandchild, grandfather, grandmother, father_in_law, mother_in_law, grandfather_in_law, grandmother_in_law, other)
   - householder_name (任意): string - 世帯主の名前 例: `山田 太郎`
   - is_calc_income_tax (任意): boolean - 所得税の計算対象かどうか
@@ -343,7 +343,7 @@ successful operation
     - birth_date (必須): string(date) - 生年月日 null不可 1900年1月1日から現在年+5の12月31日まで登録可能 例: `1999-01-01` (パターン: ^[1-9][0-9]{3}-[0-9]{2}-[0-9]{2}$)
     - social_insurance_and_tax_dependent (必須): string - 扶養状況 social_insurance_and_tax: 所得税・住民税と社会保険, tax_only: 所得税・住民税のみ, social_insurance_only: 社会保険のみ, not_dependent: 扶養していない (選択肢: social_insurance_and_tax, tax_only, social_insurance_only, not_dependent)
     - income (任意): integer(int32) - 所得 配偶者は「扶養状況」がsocial_insurance_only又はnot_dependentの場合のみ更新可能。配偶者以外は更新可能。 配偶者で「扶養状況」がsocial_insurance_and_tax又はtax_onlyの場合、「給与収入」、「給与以外の所得」から自動で「所得」が計算されます。 (最小: 0, 最大: 999999999)
-    - employment_revenue (任意): integer(int32) - 給与収入 配偶者は「扶養状況」がsocial_insurance_and_tax又はtax_onlyの場合のみ更新可能。配偶者以外は更新不可。更新不可の場合は0となります。 (最小: -999999999, 最大: 999999999)
+    - employment_revenue (任意): integer(int32) - 給与収入 配偶者は「扶養状況」がsocial_insurance_and_tax又はtax_onlyの場合のみ更新可能。配偶者以外は更新不可。更新不可の場合は0となります。 (最小: 0, 最大: 999999999)
     - all_other_income (任意): integer(int32) - 給与以外の所得 配偶者は「扶養状況」がsocial_insurance_and_tax又はtax_onlyの場合のみ更新可能。配偶者以外は更新不可。更新不可の場合は0となります。 (最小: -999999999, 最大: 999999999)
     - disability_type (必須): string - 障害に該当するか null不可 na: 障害なし, general: 一般の障害者, heavy: 特別障害者 (選択肢: na, general, heavy)
     - residence_type (必須): string - 同居・別居 null不可 live_in: 同居, resident: 別居(国内), non_resident: 別居(国外) (選択肢: live_in, resident, non_resident)
@@ -354,7 +354,7 @@ successful operation
     - address_kana (任意): string - 住民票住所の市区町村以降の住所カナ 「同居・別居」が「同居」の場合は「年末調整従業員情報」の「住民票住所の市区町村以降の住所カナ」を登録 例: `シナガワクオオサキ1-2-2`
     - annual_remittance_amount (任意): integer(int32) - 国外居住親族への年間の送金額 「同居・別居」が「同居」、「別居(国内)」の場合は登録不可 (最小: 0, 最大: 999999999)
     - non_resident_dependents_reason (任意): string(string) - 非居住者である親族の条件 none: なし, over_16_to_under_30_or_over_70: 16歳以上30歳未満又は70歳以上, study_abroad: 留学, handicapped: 障害者, over_38_man: 38万円以上の支払 続柄が「配偶者」または「同居・別居」が「同居」、「別居(国内)」の場合は登録不可 (選択肢: none, over_16_to_under_30_or_over_70, study_abroad, handicapped, over_38_man)
-    - is_resident_tax_only_deduction (任意): boolean - 住民税のみの控除対象かどうか
+    - is_resident_tax_only_deduction (任意): boolean - 住民税のみの控除対象かどうか 2025年以前の年末調整でのみ更新可能。2026年以降の年末調整では入力された所得額から住民税の控除対象かどうかが自動判定されるため、指定しても無視されます。
     - retirement_income (任意): integer(int32) - 退職所得 (最小: 0, 最大: 999999999)
 
 ### レスポンス (200)
@@ -373,7 +373,7 @@ successful operation
     - social_insurance_and_tax_dependent (任意): string - 扶養状況 social_insurance_and_tax: 所得税・住民税と社会保険, tax_only: 所得税・住民税のみ, social_insurance_only: 社会保険のみ, not_dependent: 扶養していない (選択肢: social_insurance_and_tax, tax_only, social_insurance_only, not_dependent)
     - income (任意): integer(int32) - 所得 配偶者は「扶養状況」がsocial_insurance_only又はnot_dependentの場合のみ更新可能。配偶者以外は更新可能。 配偶者で「扶養状況」がsocial_insurance_and_tax又はtax_onlyの場合、「給与収入」、「給与以外の所得」から自動で「所得」が計算されます。 (最小: 0, 最大: 999999999)
     - employment_revenue (任意): integer(int32) - 給与収入 配偶者は「扶養状況」がsocial_insurance_and_tax又はtax_onlyの場合のみ更新可能。配偶者以外は更新不可。更新不可の場合は0となります。 (最小: 0, 最大: 999999999)
-    - all_other_income (任意): integer(int32) - 給与以外の所得 配偶者は「扶養状況」がsocial_insurance_and_tax又はtax_onlyの場合のみ更新可能。配偶者以外は更新不可。更新不可の場合は0となります。 (最小: 0, 最大: 999999999)
+    - all_other_income (任意): integer(int32) - 給与以外の所得 配偶者は「扶養状況」がsocial_insurance_and_tax又はtax_onlyの場合のみ更新可能。配偶者以外は更新不可。更新不可の場合は0となります。 (最小: -999999999, 最大: 999999999)
     - disability_type (任意): string - 障害に該当するか null不可 na: 障害なし, general: 一般の障害者, heavy: 特別障害者 (選択肢: na, general, heavy)
     - residence_type (任意): string - 同居・別居 null不可 live_in: 同居, resident: 別居(国内), non_resident: 別居(国外) (選択肢: live_in, resident, non_resident)
     - zipcode1 (任意): string - 住民票住所の郵便番号1 「同居・別居」が「同居」の場合は「年末調整従業員情報」の「住民票住所の郵便番号1」を登録 例: `141`
@@ -383,7 +383,7 @@ successful operation
     - address_kana (任意): string - 住民票住所の市区町村以降の住所カナ 「同居・別居」が「同居」の場合は「年末調整従業員情報」の「住民票住所の市区町村以降の住所カナ」を登録 例: `シナガワクオオサキ1-2-2`
     - annual_remittance_amount (任意): integer(int32) - 国外居住親族への年間の送金額 「同居・別居」が「同居」、「別居(国内)」の場合は登録不可 (最小: 0, 最大: 999999999)
     - non_resident_dependents_reason (任意): string(string) - 非居住者である親族の条件 none: なし, over_16_to_under_30_or_over_70: 16歳以上30歳未満又は70歳以上, study_abroad: 留学, handicapped: 障害者, over_38_man: 38万円以上の支払 続柄が「配偶者」または「同居・別居」が「同居」、「別居(国内)」の場合は登録不可 (選択肢: none, over_16_to_under_30_or_over_70, study_abroad, handicapped, over_38_man)
-    - is_resident_tax_only_deduction (任意): boolean - 住民税のみの控除対象かどうか
+    - is_resident_tax_only_deduction (任意): boolean - 住民税のみの控除対象かどうか 2025年以前の年末調整でのみ返却されます。2026年以降の年末調整では入力された所得額から住民税の控除対象かどうかが自動判定されるため、レスポンスに含まれません。
     - retirement_income (任意): integer(int32) - 退職所得 (最小: 0, 最大: 999999999)
 
 ### PUT /api/v1/yearend_adjustments/{year}/previous_jobs/{employee_id}
@@ -491,9 +491,9 @@ successful operation
   - kind_of_purpose (任意): string - 保険等の種類（目的）<br>
 保険の種類にて、生命保険・介護医療保険・個人年金保険または地震保険・旧長期損害保険を選択している時のみ、入力した値が反映されます。<br>
 上記以外の保険では入力した値は反映されません。 例: `利差配当付終身`
-  - period (任意): string - 保険期間又は年金支払期間<br>
+  - period (任意): string - 保険期間又は年金支払期間（終身、0年〜100年、0ヶ月〜11ヶ月のいずれか）<br>
 保険の種類にて、生命保険・介護医療保険・個人年金保険または地震保険・旧長期損害保険を選択している時のみ、入力した値が反映されます。<br>
-上記以外の保険では入力した値は反映されません。 (選択肢: 終身, 0年, 1年, 2年, 3年, 4年, 5年, 6年, 7年, 8年, 9年, 10年, 11年, 12年, 13年, 14年, 15年, 16年, 17年, 18年, 19年, 20年, 21年, 22年, 23年, 24年, 25年, 26年, 27年, 28年, 29年, 30年, 31年, 32年, 33年, 34年, 35年, 36年, 37年, 38年, 39年, 40年, 41年, 42年, 43年, 44年, 45年, 46年, 47年, 48年, 49年, 50年, 51年, 52年, 53年, 54年, 55年, 56年, 57年, 58年, 59年, 60年, 61年, 62年, 63年, 64年, 65年, 66年, 67年, 68年, 69年, 70年, 71年, 72年, 73年, 74年, 75年, 76年, 77年, 78年, 79年, 80年, 81年, 82年, 83年, 84年, 85年, 86年, 87年, 88年, 89年, 90年, 91年, 92年, 93年, 94年, 95年, 96年, 97年, 98年, 99年, 100年, ) 例: `終身`
+上記以外の保険では入力した値は反映されません。 (選択肢: 終身, 0年, 1年, 2年, 3年, 4年, 5年, 6年, 7年, 8年, 9年, 10年, 11年, 12年, 13年, 14年, 15年, 16年, 17年, 18年, 19年, 20年, 21年, 22年, 23年, 24年, 25年, 26年, 27年, 28年, 29年, 30年, 31年, 32年, 33年, 34年, 35年, 36年, 37年, 38年, 39年, 40年, 41年, 42年, 43年, 44年, 45年, 46年, 47年, 48年, 49年, 50年, 51年, 52年, 53年, 54年, 55年, 56年, 57年, 58年, 59年, 60年, 61年, 62年, 63年, 64年, 65年, 66年, 67年, 68年, 69年, 70年, 71年, 72年, 73年, 74年, 75年, 76年, 77年, 78年, 79年, 80年, 81年, 82年, 83年, 84年, 85年, 86年, 87年, 88年, 89年, 90年, 91年, 92年, 93年, 94年, 95年, 96年, 97年, 98年, 99年, 100年, 0ヶ月, 1ヶ月, 2ヶ月, 3ヶ月, 4ヶ月, 5ヶ月, 6ヶ月, 7ヶ月, 8ヶ月, 9ヶ月, 10ヶ月, 11ヶ月, ) 例: `終身`
   - policyholder_last_name (任意): string - 保険等の契約者 姓<br>
 保険の種類にて、生命保険・介護医療保険・個人年金保険または地震保険・旧長期損害保険を選択している時のみ、入力した値が反映されます。<br>
 上記以外の保険では入力した値は反映されません。 例: `契約`
@@ -556,9 +556,9 @@ successful operation
     - kind_of_purpose (任意): string - 保険等の種類（目的）<br>
 保険の種類にて、生命保険・介護医療保険・個人年金保険または地震保険・旧長期損害保険を選択している時のみ、入力した値が反映されます。<br>
 上記以外の保険では入力した値は反映されません。 例: `利差配当付終身`
-    - period (任意): string - 保険期間又は年金支払期間<br>
+    - period (任意): string - 保険期間又は年金支払期間（終身、0年〜100年、0ヶ月〜11ヶ月のいずれか）<br>
 保険の種類にて、生命保険・介護医療保険・個人年金保険または地震保険・旧長期損害保険を選択している時のみ、入力した値が反映されます。<br>
-上記以外の保険では入力した値は反映されません。 (選択肢: 終身, 0年, 1年, 2年, 3年, 4年, 5年, 6年, 7年, 8年, 9年, 10年, 11年, 12年, 13年, 14年, 15年, 16年, 17年, 18年, 19年, 20年, 21年, 22年, 23年, 24年, 25年, 26年, 27年, 28年, 29年, 30年, 31年, 32年, 33年, 34年, 35年, 36年, 37年, 38年, 39年, 40年, 41年, 42年, 43年, 44年, 45年, 46年, 47年, 48年, 49年, 50年, 51年, 52年, 53年, 54年, 55年, 56年, 57年, 58年, 59年, 60年, 61年, 62年, 63年, 64年, 65年, 66年, 67年, 68年, 69年, 70年, 71年, 72年, 73年, 74年, 75年, 76年, 77年, 78年, 79年, 80年, 81年, 82年, 83年, 84年, 85年, 86年, 87年, 88年, 89年, 90年, 91年, 92年, 93年, 94年, 95年, 96年, 97年, 98年, 99年, 100年, ) 例: `終身`
+上記以外の保険では入力した値は反映されません。 (選択肢: 終身, 0年, 1年, 2年, 3年, 4年, 5年, 6年, 7年, 8年, 9年, 10年, 11年, 12年, 13年, 14年, 15年, 16年, 17年, 18年, 19年, 20年, 21年, 22年, 23年, 24年, 25年, 26年, 27年, 28年, 29年, 30年, 31年, 32年, 33年, 34年, 35年, 36年, 37年, 38年, 39年, 40年, 41年, 42年, 43年, 44年, 45年, 46年, 47年, 48年, 49年, 50年, 51年, 52年, 53年, 54年, 55年, 56年, 57年, 58年, 59年, 60年, 61年, 62年, 63年, 64年, 65年, 66年, 67年, 68年, 69年, 70年, 71年, 72年, 73年, 74年, 75年, 76年, 77年, 78年, 79年, 80年, 81年, 82年, 83年, 84年, 85年, 86年, 87年, 88年, 89年, 90年, 91年, 92年, 93年, 94年, 95年, 96年, 97年, 98年, 99年, 100年, 0ヶ月, 1ヶ月, 2ヶ月, 3ヶ月, 4ヶ月, 5ヶ月, 6ヶ月, 7ヶ月, 8ヶ月, 9ヶ月, 10ヶ月, 11ヶ月, ) 例: `終身`
     - policyholder_last_name (任意): string - 保険等の契約者 姓<br>
 保険の種類にて、生命保険・介護医療保険・個人年金保険または地震保険・旧長期損害保険を選択している時のみ、入力した値が反映されます。<br>
 上記以外の保険では入力した値は反映されません。 例: `契約`
@@ -634,9 +634,9 @@ xml: 電子的控除証明書を利用。証明書画像データの提出が免
   - kind_of_purpose (任意): string - 保険等の種類（目的）<br>
 保険の種類にて、生命保険・介護医療保険・個人年金保険または地震保険・旧長期損害保険を選択している時のみ、入力した値が反映されます。<br>
 上記以外の保険では入力した値は反映されません。 例: `利差配当付終身`
-  - period (任意): string - 保険期間又は年金支払期間<br>
+  - period (任意): string - 保険期間又は年金支払期間（終身、0年〜100年、0ヶ月〜11ヶ月のいずれか）<br>
 保険の種類にて、生命保険・介護医療保険・個人年金保険または地震保険・旧長期損害保険を選択している時のみ、入力した値が反映されます。<br>
-上記以外の保険では入力した値は反映されません。 (選択肢: 終身, 0年, 1年, 2年, 3年, 4年, 5年, 6年, 7年, 8年, 9年, 10年, 11年, 12年, 13年, 14年, 15年, 16年, 17年, 18年, 19年, 20年, 21年, 22年, 23年, 24年, 25年, 26年, 27年, 28年, 29年, 30年, 31年, 32年, 33年, 34年, 35年, 36年, 37年, 38年, 39年, 40年, 41年, 42年, 43年, 44年, 45年, 46年, 47年, 48年, 49年, 50年, 51年, 52年, 53年, 54年, 55年, 56年, 57年, 58年, 59年, 60年, 61年, 62年, 63年, 64年, 65年, 66年, 67年, 68年, 69年, 70年, 71年, 72年, 73年, 74年, 75年, 76年, 77年, 78年, 79年, 80年, 81年, 82年, 83年, 84年, 85年, 86年, 87年, 88年, 89年, 90年, 91年, 92年, 93年, 94年, 95年, 96年, 97年, 98年, 99年, 100年, ) 例: `終身`
+上記以外の保険では入力した値は反映されません。 (選択肢: 終身, 0年, 1年, 2年, 3年, 4年, 5年, 6年, 7年, 8年, 9年, 10年, 11年, 12年, 13年, 14年, 15年, 16年, 17年, 18年, 19年, 20年, 21年, 22年, 23年, 24年, 25年, 26年, 27年, 28年, 29年, 30年, 31年, 32年, 33年, 34年, 35年, 36年, 37年, 38年, 39年, 40年, 41年, 42年, 43年, 44年, 45年, 46年, 47年, 48年, 49年, 50年, 51年, 52年, 53年, 54年, 55年, 56年, 57年, 58年, 59年, 60年, 61年, 62年, 63年, 64年, 65年, 66年, 67年, 68年, 69年, 70年, 71年, 72年, 73年, 74年, 75年, 76年, 77年, 78年, 79年, 80年, 81年, 82年, 83年, 84年, 85年, 86年, 87年, 88年, 89年, 90年, 91年, 92年, 93年, 94年, 95年, 96年, 97年, 98年, 99年, 100年, 0ヶ月, 1ヶ月, 2ヶ月, 3ヶ月, 4ヶ月, 5ヶ月, 6ヶ月, 7ヶ月, 8ヶ月, 9ヶ月, 10ヶ月, 11ヶ月, ) 例: `終身`
   - policyholder_last_name (任意): string - 保険等の契約者 姓<br>
 保険の種類にて、生命保険・介護医療保険・個人年金保険または地震保険・旧長期損害保険を選択している時のみ、入力した値が反映されます。<br>
 上記以外の保険では入力した値は反映されません。 例: `契約`
@@ -699,9 +699,9 @@ successful operation
     - kind_of_purpose (任意): string - 保険等の種類（目的）<br>
 保険の種類にて、生命保険・介護医療保険・個人年金保険または地震保険・旧長期損害保険を選択している時のみ、入力した値が反映されます。<br>
 上記以外の保険では入力した値は反映されません。 例: `利差配当付終身`
-    - period (任意): string - 保険期間又は年金支払期間<br>
+    - period (任意): string - 保険期間又は年金支払期間（終身、0年〜100年、0ヶ月〜11ヶ月のいずれか）<br>
 保険の種類にて、生命保険・介護医療保険・個人年金保険または地震保険・旧長期損害保険を選択している時のみ、入力した値が反映されます。<br>
-上記以外の保険では入力した値は反映されません。 (選択肢: 終身, 0年, 1年, 2年, 3年, 4年, 5年, 6年, 7年, 8年, 9年, 10年, 11年, 12年, 13年, 14年, 15年, 16年, 17年, 18年, 19年, 20年, 21年, 22年, 23年, 24年, 25年, 26年, 27年, 28年, 29年, 30年, 31年, 32年, 33年, 34年, 35年, 36年, 37年, 38年, 39年, 40年, 41年, 42年, 43年, 44年, 45年, 46年, 47年, 48年, 49年, 50年, 51年, 52年, 53年, 54年, 55年, 56年, 57年, 58年, 59年, 60年, 61年, 62年, 63年, 64年, 65年, 66年, 67年, 68年, 69年, 70年, 71年, 72年, 73年, 74年, 75年, 76年, 77年, 78年, 79年, 80年, 81年, 82年, 83年, 84年, 85年, 86年, 87年, 88年, 89年, 90年, 91年, 92年, 93年, 94年, 95年, 96年, 97年, 98年, 99年, 100年, ) 例: `終身`
+上記以外の保険では入力した値は反映されません。 (選択肢: 終身, 0年, 1年, 2年, 3年, 4年, 5年, 6年, 7年, 8年, 9年, 10年, 11年, 12年, 13年, 14年, 15年, 16年, 17年, 18年, 19年, 20年, 21年, 22年, 23年, 24年, 25年, 26年, 27年, 28年, 29年, 30年, 31年, 32年, 33年, 34年, 35年, 36年, 37年, 38年, 39年, 40年, 41年, 42年, 43年, 44年, 45年, 46年, 47年, 48年, 49年, 50年, 51年, 52年, 53年, 54年, 55年, 56年, 57年, 58年, 59年, 60年, 61年, 62年, 63年, 64年, 65年, 66年, 67年, 68年, 69年, 70年, 71年, 72年, 73年, 74年, 75年, 76年, 77年, 78年, 79年, 80年, 81年, 82年, 83年, 84年, 85年, 86年, 87年, 88年, 89年, 90年, 91年, 92年, 93年, 94年, 95年, 96年, 97年, 98年, 99年, 100年, 0ヶ月, 1ヶ月, 2ヶ月, 3ヶ月, 4ヶ月, 5ヶ月, 6ヶ月, 7ヶ月, 8ヶ月, 9ヶ月, 10ヶ月, 11ヶ月, ) 例: `終身`
     - policyholder_last_name (任意): string - 保険等の契約者 姓<br>
 保険の種類にて、生命保険・介護医療保険・個人年金保険または地震保険・旧長期損害保険を選択している時のみ、入力した値が反映されます。<br>
 上記以外の保険では入力した値は反映されません。 例: `契約`
@@ -772,7 +772,7 @@ successful operation
     - id (任意): integer(int32) - 住宅ローンID 例: `1` (最小: 1, 最大: 2147483647)
     - residence_start_date (任意): string(date) - 居住開始の年月日 例: `2022-03-31`
     - remaining_balance_at_yearend (任意): integer - 住宅借入金等年末残高 例: `5000000` (最小: -999999999, 最大: 999999999)
-    - category (任意): string - 住宅借入金等特別控除区分 general: 住: 一般の住宅借入金等, qualified: 認: 認定住宅の新築等, extension: 増: 特定増改築等, earthquake: 震: 震災特例法による特別控除 (選択肢: general, qualified, extension, earthquake)
+    - category (任意): string - 住宅借入金等特別控除区分 general: 住: 一般の住宅借入金等, qualified: 認: 認定住宅の新築等, extension: 増: 特定増改築等, earthquake: 震: 震災特例法による特別控除 extensionは2025年以前の年末調整でのみ返却されます。2026年以降の年末調整では特定増改築等住宅借入金等特別控除の廃止により登録できません。 (選択肢: general, qualified, extension, earthquake)
     - specific_case_type (任意): string - 特定取得/特別特定取得 not_qualified: 該当しない, specified: 特定取得, special_specified_or_special_exception: 特別特定取得または特別特例取得, exception_special_exception: 特例特別特例取得 special_residential_house 特家 (選択肢: not_qualified, specified, special_specified_or_special_exception, exception_special_exception, special_residential_house)
 
 ### POST /api/v1/yearend_adjustments/{year}/housing_loans/{employee_id}
@@ -794,7 +794,7 @@ successful operation
 - housing_loan (必須): object
   - residence_start_date (必須): string(date) - 居住開始の年月日 2000年1月1日から現在年+5の12月31日まで登録可能 例: `2022-03-31` (パターン: ^[2-9][0-9]{3}-[0-9]{2}-[0-9]{2}$)
   - remaining_balance_at_yearend (必須): integer - 住宅借入金等年末残高 例: `5000000` (最小: -999999999, 最大: 999999999)
-  - category (必須): string - 住宅借入金等特別控除区分 general: 住: 一般の住宅借入金等, qualified: 認: 認定住宅の新築等, extension: 増: 特定増改築等, earthquake: 震: 震災特例法による特別控除 (選択肢: general, qualified, extension, earthquake)
+  - category (必須): string - 住宅借入金等特別控除区分 general: 住: 一般の住宅借入金等, qualified: 認: 認定住宅の新築等, extension: 増: 特定増改築等, earthquake: 震: 震災特例法による特別控除 extensionは2025年以前の年末調整でのみ登録可能。2026年以降の年末調整では特定増改築等住宅借入金等特別控除の廃止により指定するとエラーになります。 (選択肢: general, qualified, extension, earthquake)
   - specific_case_type (必須): string - 特定取得/特別特定取得 not_qualified: 該当しない, specified: 特定取得, special_specified_or_special_exception: 特別特定取得または特別特例取得, exception_special_exception: 特例特別特例取得 special_residential_house 特家 (選択肢: not_qualified, specified, special_specified_or_special_exception, exception_special_exception, special_residential_house)
 
 ### レスポンス (201)
@@ -807,7 +807,7 @@ successful operation
     - id (任意): integer(int32) - 住宅ローンID 例: `1` (最小: 1, 最大: 2147483647)
     - residence_start_date (任意): string(date) - 居住開始の年月日 例: `2022-03-31`
     - remaining_balance_at_yearend (任意): integer - 住宅借入金等年末残高 例: `5000000` (最小: -999999999, 最大: 999999999)
-    - category (任意): string - 住宅借入金等特別控除区分 general: 住: 一般の住宅借入金等, qualified: 認: 認定住宅の新築等, extension: 増: 特定増改築等, earthquake: 震: 震災特例法による特別控除 (選択肢: general, qualified, extension, earthquake)
+    - category (任意): string - 住宅借入金等特別控除区分 general: 住: 一般の住宅借入金等, qualified: 認: 認定住宅の新築等, extension: 増: 特定増改築等, earthquake: 震: 震災特例法による特別控除 extensionは2025年以前の年末調整でのみ返却されます。2026年以降の年末調整では特定増改築等住宅借入金等特別控除の廃止により登録できません。 (選択肢: general, qualified, extension, earthquake)
     - specific_case_type (任意): string - 特定取得/特別特定取得 not_qualified: 該当しない, specified: 特定取得, special_specified_or_special_exception: 特別特定取得または特別特例取得, exception_special_exception: 特例特別特例取得 special_residential_house 特家 (選択肢: not_qualified, specified, special_specified_or_special_exception, exception_special_exception, special_residential_house)
 
 ### PUT /api/v1/yearend_adjustments/{year}/housing_loans/{employee_id}/{id}
@@ -830,7 +830,7 @@ successful operation
 - housing_loan (必須): object
   - residence_start_date (必須): string(date) - 居住開始の年月日 2000年1月1日から現在年+5の12月31日まで登録可能 例: `2022-03-31` (パターン: ^[2-9][0-9]{3}-[0-9]{2}-[0-9]{2}$)
   - remaining_balance_at_yearend (必須): integer - 住宅借入金等年末残高 例: `5000000` (最小: -999999999, 最大: 999999999)
-  - category (必須): string - 住宅借入金等特別控除区分 general: 住: 一般の住宅借入金等, qualified: 認: 認定住宅の新築等, extension: 増: 特定増改築等, earthquake: 震: 震災特例法による特別控除 (選択肢: general, qualified, extension, earthquake)
+  - category (必須): string - 住宅借入金等特別控除区分 general: 住: 一般の住宅借入金等, qualified: 認: 認定住宅の新築等, extension: 増: 特定増改築等, earthquake: 震: 震災特例法による特別控除 extensionは2025年以前の年末調整でのみ登録可能。2026年以降の年末調整では特定増改築等住宅借入金等特別控除の廃止により指定するとエラーになります。 (選択肢: general, qualified, extension, earthquake)
   - specific_case_type (必須): string - 特定取得/特別特定取得 not_qualified: 該当しない, specified: 特定取得, special_specified_or_special_exception: 特別特定取得または特別特例取得, exception_special_exception: 特例特別特例取得 special_residential_house 特家 (選択肢: not_qualified, specified, special_specified_or_special_exception, exception_special_exception, special_residential_house)
 
 ### レスポンス (200)
@@ -843,7 +843,7 @@ successful operation
     - id (任意): integer(int32) - 住宅ローンID 例: `1` (最小: 1, 最大: 2147483647)
     - residence_start_date (任意): string(date) - 居住開始の年月日 例: `2022-03-31`
     - remaining_balance_at_yearend (任意): integer - 住宅借入金等年末残高 例: `5000000` (最小: -999999999, 最大: 999999999)
-    - category (任意): string - 住宅借入金等特別控除区分 general: 住: 一般の住宅借入金等, qualified: 認: 認定住宅の新築等, extension: 増: 特定増改築等, earthquake: 震: 震災特例法による特別控除 (選択肢: general, qualified, extension, earthquake)
+    - category (任意): string - 住宅借入金等特別控除区分 general: 住: 一般の住宅借入金等, qualified: 認: 認定住宅の新築等, extension: 増: 特定増改築等, earthquake: 震: 震災特例法による特別控除 extensionは2025年以前の年末調整でのみ返却されます。2026年以降の年末調整では特定増改築等住宅借入金等特別控除の廃止により登録できません。 (選択肢: general, qualified, extension, earthquake)
     - specific_case_type (任意): string - 特定取得/特別特定取得 not_qualified: 該当しない, specified: 特定取得, special_specified_or_special_exception: 特別特定取得または特別特例取得, exception_special_exception: 特例特別特例取得 special_residential_house 特家 (選択肢: not_qualified, specified, special_specified_or_special_exception, exception_special_exception, special_residential_house)
 
 ### DELETE /api/v1/yearend_adjustments/{year}/housing_loans/{employee_id}/{id}

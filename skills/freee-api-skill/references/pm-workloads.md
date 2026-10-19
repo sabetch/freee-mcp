@@ -40,6 +40,9 @@
   - project_id (必須): integer(int32) - 対象プロジェクトID 例: `100`
   - project_name (必須): string - プロジェクト名 例: `プロジェクトA`
   - project_code (必須): string - プロジェクトコード 例: `PRJ-A`
+  - unit_cost_id (任意): integer - 工数に適用された従業員単価マスタID。工数の人件費をエクスポートする権限がある場合のみ返却します。 例: `1`
+  - unit_cost_name (任意): string - 工数に適用された従業員単価マスタ名。工数の人件費をエクスポートする権限がある場合のみ返却します。 例: `エンジニア`
+  - unit_cost_amount (任意): integer - 工数に適用された従業員単価の金額（円）。工数の人件費をエクスポートする権限がある場合のみ返却します。 例: `2000`
   - memo (任意): string - 業務内容 例: `会議`
   - minutes (必須): integer - 工数実績（分） 例: `9600`
   - workload_tags (任意): array[object] - 工数タグ
@@ -68,6 +71,53 @@
 
 - workloads (必須): array[object]
 - meta (必須): object
+
+### PATCH /workloads/{id}
+
+操作: 工数編集
+
+説明: 指定した工数の情報を更新します。リクエストに含まれていないフィールドは更新されません。memo と workload_tags は null（または空）で削除できます。
+
+### パラメータ
+
+| 名前 | 位置 | 必須 | 型 | 説明 |
+|------|------|------|-----|------|
+| id | path | はい | integer | 工数ID |
+
+### リクエストボディ
+
+- company_id (必須): integer(int32) - 事業所ID 例: `1`
+- project_id (任意): integer(int32) - 対象プロジェクトID 例: `100`
+- date (任意): string(date) - 対象日 例: `2020-12-15`
+- minutes (任意): integer(int32) - 記録時間（分） 例: `120` (最小: 1, 最大: 1440)
+- memo (任意): string - 業務内容。null または空文字を指定すると削除されます。 例: `コーディング`
+- workload_tags (任意): array[object] - 工数タグ。配列全体が指定内容で置き換えられます。null または空配列を指定すると削除されます。
+  配列の要素:
+    - tag_group_id (必須): integer(int32) - 工数タググループID 例: `11`
+    - tag_id (必須): integer(int32) - 工数タグID 例: `12`
+
+### レスポンス (200)
+
+成功時
+
+- workload (必須): object
+
+### DELETE /workloads/{id}
+
+操作: 工数削除
+
+説明: 指定した工数を削除します。
+
+### パラメータ
+
+| 名前 | 位置 | 必須 | 型 | 説明 |
+|------|------|------|-----|------|
+| id | path | はい | integer | 工数ID |
+| company_id | query | はい | integer | 事業所ID |
+
+### レスポンス (204)
+
+成功時
 
 ### GET /workload_summaries
 
