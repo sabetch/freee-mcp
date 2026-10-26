@@ -82,11 +82,27 @@
 
 ### レスポンス (200)
 
+### GET /master/members
+
+操作: メンバー一覧
+
+説明: 概要 メンバー一覧を取得します。 使用可能なもののみを返却します。
+
+### パラメータ
+
+| 名前 | 位置 | 必須 | 型 | 説明 |
+|------|------|------|-----|------|
+|  |  | いいえ |  |  |
+|  |  | いいえ |  |  |
+| limit | query | いいえ | integer(int32) | 取得レコードの件数（デフォルト：100, 最小：1, 最大：500） |
+
+### レスポンス (200)
+
 ### GET /master/custom_fields/business/definitions
 
 操作: 案件カスタム項目定義一覧
 
-説明: 概要 カスタム項目定義の一覧を取得します。 使用可能なもののみを返却します。 入力形式の一覧 text: 一行テキスト textarea: 複数行テキスト amount: 金額 quantity: 数量 number: 数値 date: 日付 enum: プルダウン partner: 取引先 employee: 従業員 section: 部門 master_item: 商品
+説明: 概要 カスタム項目定義の一覧を取得します。 使用可能なもののみを返却します。 入力形式の一覧 text: 一行テキスト textarea: 複数行テキスト amount: 金額 quantity: 数量 number: 数値 date: 日付 enum: プルダウン partner: 取引先 employee: 従業員 section: 部門 master_item: 商品 member: メンバー
 
 ### パラメータ
 

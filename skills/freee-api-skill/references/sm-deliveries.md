@@ -10,12 +10,16 @@
 
 操作: 納品一覧
 
-説明: 概要 納品の一覧を取得します。 登録されている納品情報を一覧形式で取得できます。 各種フィルタ条件を指定することで、特定の条件に合致する納品のみを取得することが可能です。 定義 start_registered_date : 登録日(絞り込み開始) end_registered_date : 登録日(絞り込み終了) start_delivery_date : 納品日(絞り込み開始) end_delivery_date : 納品日(絞り込み終了) start_acceptance_date : 検収日(絞り込み開始) end_acceptance_date : 検収日(絞り込み終了) charge_employee_ids : 社内担当者の従業員ID(複数指定可) customer_ids : 顧客の取引先ID(複数指定可) delivery_status : 納品ステータス canceled : 取消状態(デフォルト:false) `limit`と`offset`パラメータを使用してページネーションが可能です。 デフォルトでは20件ずつ取得され、最大100件まで一度に取得できます。
+説明: 概要 納品の一覧を取得します。 登録されている納品情報を一覧形式で取得できます。 各種フィルタ条件を指定することで、特定の条件に合致する納品のみを取得することが可能です。 定義 start_registered_date : 登録日(絞り込み開始) end_registered_date : 登録日(絞り込み終了) start_last_updated_date : 更新日(絞り込み開始) end_last_updated_date : 更新日(絞り込み終了) start_delivery_date : 納品日(絞り込み開始) end_delivery_date : 納品日(絞り込み終了) start_acceptance_date : 検収日(絞り込み開始) end_acceptance_date : 検収日(絞り込み終了) charge_employee_ids : 社内担当者の従業員ID(複数指定可) charge_member_ids : 社内担当者のメンバーID(複数指定可) customer_ids : 顧客の取引先ID(複数指定可) delivery_no : 納品No....
 
 ### パラメータ
 
 | 名前 | 位置 | 必須 | 型 | 説明 |
 |------|------|------|-----|------|
+|  |  | いいえ |  |  |
+|  |  | いいえ |  |  |
+|  |  | いいえ |  |  |
+|  |  | いいえ |  |  |
 |  |  | いいえ |  |  |
 |  |  | いいえ |  |  |
 |  |  | いいえ |  |  |
@@ -69,6 +73,58 @@
 | 名前 | 位置 | 必須 | 型 | 説明 |
 |------|------|------|-----|------|
 | id | path | はい | string | 納品ID |
+
+### レスポンス (200)
+
+### POST /deliveries/{id}/cancellation
+
+操作: 納品取消
+
+説明: 概要 指定されたIDの納品を取り消します。
+
+### パラメータ
+
+| 名前 | 位置 | 必須 | 型 | 説明 |
+|------|------|------|-----|------|
+| id | path | はい | string | 納品ID |
+
+### レスポンス (200)
+
+### PUT /deliveries/{id}/delivery_status
+
+操作: 納品ステータス変更
+
+説明: 概要 指定されたIDの納品の納品ステータスを変更します。 定義 status : 納品ステータス (未納品: not_delivered, 納品済: delivered)
+
+### パラメータ
+
+| 名前 | 位置 | 必須 | 型 | 説明 |
+|------|------|------|-----|------|
+| id | path | はい | string | 納品ID |
+
+### リクエストボディ
+
+(必須)
+
+
+### レスポンス (200)
+
+### PUT /deliveries/{id}/acceptance_status
+
+操作: 検収ステータス変更
+
+説明: 概要 指定されたIDの納品の検収ステータスを変更します。 定義 status : 検収ステータス (未検収: not_accepted, 検収済: accepted)
+
+### パラメータ
+
+| 名前 | 位置 | 必須 | 型 | 説明 |
+|------|------|------|-----|------|
+| id | path | はい | string | 納品ID |
+
+### リクエストボディ
+
+(必須)
+
 
 ### レスポンス (200)
 
