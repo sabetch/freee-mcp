@@ -33,7 +33,8 @@ successful operation
 - work_days (任意): number(float) - 労働日数
 - total_work_mins (任意): integer(int32) - 総勤務時間（分）
 - total_normal_work_mins (任意): integer(int32) - 所定内労働時間（分）
-- total_excess_statutory_work_mins (任意): integer(int32) - 給与計算に用いられる法定内残業時間（分）
+- total_excess_statutory_work_mins (任意): integer(int32) - [deprecated] 給与計算に用いられる法定内残業時間（分） ※ 削除予定のため total_overtime_within_statutory_work_mins を参照してください
+- total_overtime_within_statutory_work_mins (任意): integer(int32) - 給与計算に用いられる法定内残業時間（分）
 - total_overtime_except_normal_work_mins (任意): integer(int32) - 所定外法定外労働時間
 - total_overtime_within_normal_work_mins (任意): integer(int32) - 所定内法定外労働時間（裁量労働制の場合はみなしベース）
 - total_prescribed_holiday_work_mins (任意): integer(int32) - 所定休日労働時間（分）
@@ -61,7 +62,8 @@ successful operation
     - total_normal_time_mins (任意): integer(int32) - 所定内労働時間（分）
 - work_records (任意): array[object] - 日々の勤怠情報
 - total_shortage_work_mins (任意): integer(int32) - 不足時間（分）
-- total_deemed_paid_excess_statutory_work_mins (任意): integer(int32) - みなし外の法定内残業時間（分）
+- total_deemed_paid_excess_statutory_work_mins (任意): integer(int32) - [deprecated] みなし外の法定内残業時間（分） ※ 削除予定のため total_deemed_paid_overtime_within_statutory_work_mins を参照してください
+- total_deemed_paid_overtime_within_statutory_work_mins (任意): integer(int32) - みなし外の法定内残業時間（分）
 - total_deemed_paid_overtime_except_normal_work_mins (任意): integer(int32) - みなし外の時間外労働時間（分）
 
 ### PUT /api/v1/employees/{employee_id}/work_record_summaries/{year}/{month}
@@ -87,11 +89,14 @@ successful operation
 - work_days_on_legal_holidays (任意): number(float) - 法定休日の勤務日数 (最小: 0, 最大: 31)
 - total_work_mins (任意): integer - 労働時間（分） (最小: 0, 最大: 2147483647)
 - total_normal_work_mins (任意): integer - 所定労働時間（分） (最小: 0, 最大: 2147483647)
-- total_excess_statutory_work_mins (任意): integer - 給与計算に用いられる法定内残業時間（分） (最小: 0, 最大: 2147483647)
+- total_excess_statutory_work_mins (任意): integer - [deprecated] 給与計算に用いられる法定内残業時間（分） ※ 削除予定のため total_overtime_within_statutory_work_mins を指定してください。両方指定した場合はエラーになります (最小: 0, 最大: 2147483647)
+- total_overtime_within_statutory_work_mins (任意): integer - 給与計算に用いられる法定内残業時間（分） (最小: 0, 最大: 2147483647)
 - total_holiday_work_mins (任意): integer - 法定休日労働時間（分） (最小: 0, 最大: 2147483647)
 - total_latenight_work_mins (任意): integer - 深夜労働時間（分） (最小: 0, 最大: 2147483647)
-- total_actual_excess_statutory_work_mins (任意): integer - 実労働時間ベースの法定内残業時間（分） (最小: 0, 最大: 2147483647)
-- total_overtime_work_mins (任意): integer - 時間外労働時間（分） (最小: 0, 最大: 2147483647)
+- total_actual_excess_statutory_work_mins (任意): integer - [deprecated] 実労働時間ベースの法定内残業時間（分） ※ 削除予定のため total_actual_overtime_within_statutory_work_mins を指定してください。両方指定した場合はエラーになります (最小: 0, 最大: 2147483647)
+- total_actual_overtime_within_statutory_work_mins (任意): integer - 実労働時間ベースの法定内残業時間（分） (最小: 0, 最大: 2147483647)
+- total_overtime_work_mins (任意): integer - [deprecated] 時間外労働時間（分） ※ 削除予定のため total_overtime_excess_statutory_work_mins を指定してください。両方指定した場合はエラーになります (最小: 0, 最大: 2147483647)
+- total_overtime_excess_statutory_work_mins (任意): integer - 時間外労働時間（分） (最小: 0, 最大: 2147483647)
 - total_prescribed_holiday_work_mins (任意): integer - 所定休日労働時間（分） (最小: 0, 最大: 2147483647)
 - num_absences (任意): number(float) - 欠勤日数 (最小: 0, 最大: 31)
 - num_absences_for_deduction (任意): number(float) - 控除対象の欠勤日数
@@ -107,7 +112,8 @@ successful operation
 フレックスタイム制と裁量労働制の場合は、指定した値が反映されず無視されます。 (最小: 0, 最大: 2147483647)
 - num_paid_holidays (任意): number(float) - 有給取得日数 (最小: 0, 最大: 31)
 - total_shortage_work_mins (任意): integer - 不足時間（分）（フレックスタイム制でのみ使用） (最小: 0, 最大: 2147483647)
-- total_deemed_paid_excess_statutory_work_mins (任意): integer - みなし外の法定内残業時間（分）（裁量労働制でのみ使用） (最小: 0, 最大: 2147483647)
+- total_deemed_paid_excess_statutory_work_mins (任意): integer - [deprecated] みなし外の法定内残業時間（分）（裁量労働制でのみ使用） ※ 削除予定のため total_deemed_paid_overtime_within_statutory_work_mins を指定してください。両方指定した場合はエラーになります (最小: 0, 最大: 2147483647)
+- total_deemed_paid_overtime_within_statutory_work_mins (任意): integer - みなし外の法定内残業時間（分）（裁量労働制でのみ使用） (最小: 0, 最大: 2147483647)
 - total_deemed_paid_overtime_except_normal_work_mins (任意): integer - みなし外の時間外労働時間（分）（裁量労働制でのみ使用） (最小: 0, 最大: 2147483647)
 
 ### レスポンス (200)
@@ -121,7 +127,8 @@ successful operation
 - work_days (任意): number(float) - 労働日数
 - total_work_mins (任意): integer(int32) - 総勤務時間（分）
 - total_normal_work_mins (任意): integer(int32) - 所定内労働時間（分）
-- total_excess_statutory_work_mins (任意): integer(int32) - 給与計算に用いられる法定内残業時間（分）
+- total_excess_statutory_work_mins (任意): integer(int32) - [deprecated] 給与計算に用いられる法定内残業時間（分） ※ 削除予定のため total_overtime_within_statutory_work_mins を参照してください
+- total_overtime_within_statutory_work_mins (任意): integer(int32) - 給与計算に用いられる法定内残業時間（分）
 - total_overtime_except_normal_work_mins (任意): integer(int32) - 所定外法定外労働時間
 - total_overtime_within_normal_work_mins (任意): integer(int32) - 所定内法定外労働時間（裁量労働制の場合はみなしベース）
 - total_prescribed_holiday_work_mins (任意): integer(int32) - 所定休日労働時間（分）
@@ -149,7 +156,8 @@ successful operation
     - total_normal_time_mins (任意): integer(int32) - 所定内労働時間（分）
 - work_records (任意): array[object] - 日々の勤怠情報
 - total_shortage_work_mins (任意): integer(int32) - 不足時間（分）
-- total_deemed_paid_excess_statutory_work_mins (任意): integer(int32) - みなし外の法定内残業時間（分）
+- total_deemed_paid_excess_statutory_work_mins (任意): integer(int32) - [deprecated] みなし外の法定内残業時間（分） ※ 削除予定のため total_deemed_paid_overtime_within_statutory_work_mins を参照してください
+- total_deemed_paid_overtime_within_statutory_work_mins (任意): integer(int32) - みなし外の法定内残業時間（分）
 - total_deemed_paid_overtime_except_normal_work_mins (任意): integer(int32) - みなし外の時間外労働時間（分）
 
 

@@ -463,6 +463,213 @@
         "hasJsonBody": true
       }
     },
+    "/api/v1/employees/{employee_id}/allowance_rules": {
+      "get": {
+        "summary": "従業員の手当情報の取得",
+        "description": "<h2 id=\"\">概要</h2>\n<p>指定した従業員の手当情報をリストで返します。</p>\n\n<h2 id=\"_1\">注意点</h2>\n<ul>\n  <li>管理者権限を持ったユーザーのみ実行可能です。</li>\n</ul>",
+        "parameters": [
+          {
+            "name": "company_id",
+            "in": "query",
+            "type": "integer",
+            "required": true,
+            "description": "事業所ID"
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "type": "integer",
+            "required": true,
+            "description": "従業員情報を取得したい年"
+          },
+          {
+            "name": "month",
+            "in": "query",
+            "type": "integer",
+            "required": true,
+            "description": "従業員情報を取得したい月<br>\n締め日支払い日設定が翌月払いの従業員情報の場合は、 指定したmonth + 1の値が検索結果として返します。<br>\n翌月払いの従業員の2022/01の従業員情報を取得する場合は、year=2021,month=12を指定してください。<br>"
+          },
+          {
+            "name": "employee_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "description": "従業員ID"
+          }
+        ]
+      },
+      "put": {
+        "summary": "従業員の手当情報の更新",
+        "description": "<h2 id=\"\">概要</h2>\n<p>指定した従業員の手当情報を更新します。</p>\n\n<h2 id=\"_1\">注意点</h2>\n<ul>\n  <li>管理者権限を持ったユーザーのみ実行可能です。</li>\n  <li>賞与に紐づく手当（frequency=bonus）の場合、対象年月に賞与情報が登録されている必要があります。</li>\n</ul>",
+        "parameters": [
+          {
+            "name": "employee_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "description": "従業員ID"
+          }
+        ],
+        "hasJsonBody": true
+      }
+    },
+    "/api/v1/employees/{employee_id}/allowance_rules/{id}": {
+      "delete": {
+        "summary": "従業員の手当情報の削除",
+        "description": "<h2 id=\"\">概要</h2>\n<p>指定した従業員の手当情報を削除します。</p>\n\n<h2 id=\"_1\">注意点</h2>\n<ul>\n  <li>管理者権限を持ったユーザーのみ実行可能です。</li>\n</ul>",
+        "parameters": [
+          {
+            "name": "company_id",
+            "in": "query",
+            "type": "integer",
+            "required": true,
+            "description": "事業所ID"
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "type": "integer",
+            "required": true,
+            "description": "削除対象の手当ルールを判定する締め年"
+          },
+          {
+            "name": "month",
+            "in": "query",
+            "type": "integer",
+            "required": true,
+            "description": "削除対象の手当ルールを判定する締め月<br>\n翌月払いの従業員でも、支給月ではなく締め年月を指定してください。<br>\n例: 翌月払い従業員の 2022/01 支給分を対象にする場合は year=2021, month=12 を指定します。<br>"
+          },
+          {
+            "name": "employee_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "description": "従業員ID"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "description": "従業員手当ID"
+          }
+        ]
+      }
+    },
+    "/api/v1/employees/{employee_id}/deduction_rules": {
+      "get": {
+        "summary": "従業員の控除情報の取得",
+        "description": "<h2 id=\"\">概要</h2>\n<p>指定した従業員の控除情報をリストで返します。</p>\n\n<h2 id=\"_1\">注意点</h2>\n<ul>\n  <li>管理者権限を持ったユーザーのみ実行可能です。</li>\n</ul>",
+        "parameters": [
+          {
+            "name": "company_id",
+            "in": "query",
+            "type": "integer",
+            "required": true,
+            "description": "事業所ID"
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "type": "integer",
+            "required": true,
+            "description": "従業員情報を取得したい年"
+          },
+          {
+            "name": "month",
+            "in": "query",
+            "type": "integer",
+            "required": true,
+            "description": "従業員情報を取得したい月<br>\n締め日支払い日設定が翌月払いの従業員情報の場合は、 指定したmonth + 1の値が検索結果として返します。<br>\n翌月払いの従業員の2022/01の従業員情報を取得する場合は、year=2021,month=12を指定してください。<br>"
+          },
+          {
+            "name": "employee_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "description": "従業員ID"
+          }
+        ]
+      },
+      "put": {
+        "summary": "従業員の控除情報の更新",
+        "description": "<h2 id=\"\">概要</h2>\n<p>指定した従業員の控除情報を更新します。</p>\n\n<h2 id=\"_1\">注意点</h2>\n<ul>\n  <li>管理者権限を持ったユーザーのみ実行可能です。</li>\n  <li>賞与に紐づく控除（frequency=bonus）の場合、対象年月に賞与情報が登録されている必要があります。</li>\n</ul>",
+        "parameters": [
+          {
+            "name": "company_id",
+            "in": "query",
+            "type": "integer",
+            "required": true,
+            "description": "事業所ID"
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "type": "integer",
+            "required": true,
+            "description": "更新対象の控除ルールを判定する締め年"
+          },
+          {
+            "name": "month",
+            "in": "query",
+            "type": "integer",
+            "required": true,
+            "description": "更新対象の控除ルールを判定する締め月<br>\n翌月払いの従業員でも、支給月ではなく締め年月を指定してください。<br>\n例: 翌月払い従業員の 2022/01 支給分を対象にする場合は year=2021, month=12 を指定します。<br>"
+          },
+          {
+            "name": "employee_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "description": "従業員ID"
+          }
+        ],
+        "hasJsonBody": true
+      }
+    },
+    "/api/v1/employees/{employee_id}/deduction_rules/{id}": {
+      "delete": {
+        "summary": "従業員の控除情報の削除",
+        "description": "<h2 id=\"\">概要</h2>\n<p>指定した従業員の控除情報を削除します。</p>\n\n<h2 id=\"_1\">注意点</h2>\n<ul>\n  <li>管理者権限を持ったユーザーのみ実行可能です。</li>\n</ul>",
+        "parameters": [
+          {
+            "name": "company_id",
+            "in": "query",
+            "type": "integer",
+            "required": true,
+            "description": "事業所ID"
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "type": "integer",
+            "required": true,
+            "description": "削除対象の控除ルールを判定する締め年"
+          },
+          {
+            "name": "month",
+            "in": "query",
+            "type": "integer",
+            "required": true,
+            "description": "削除対象の控除ルールを判定する締め月<br>\n翌月払いの従業員でも、支給月ではなく締め年月を指定してください。<br>\n例: 翌月払い従業員の 2022/01 支給分を対象にする場合は year=2021, month=12 を指定します。<br>"
+          },
+          {
+            "name": "employee_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "description": "従業員ID"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "description": "従業員控除ID"
+          }
+        ]
+      }
+    },
     "/api/v1/employees/{employee_id}/profile_custom_fields": {
       "get": {
         "summary": "従業員のカスタム項目の取得",
@@ -529,7 +736,7 @@
       },
       "put": {
         "summary": "勤怠の更新",
-        "description": "<h2 id=\"\">概要</h2>\n<p>指定した従業員の勤怠情報を更新します。</p>\n<h2 id=\"_1\">注意点</h2>\n<ul>\n  <li>振替出勤・振替休日・代休出勤・代休の登録はAPIでは行うことができません。</li>\n</ul>\n\n<h2 id=\"_2\">examples</h2>\n<ul>\n  <li>出勤日について出退勤時刻および休憩時間を更新する場合は以下のようなパラメータをリクエストします。\n    <pre>\n      <code>\n      {\n        \"company_id\": 1,\n        \"break_records\": [\n          {\n            \"clock_in_at\": \"2017-05-25 12:00:00\",\n            \"clock_out_at\": \"2017-05-25 13:00:00\"\n          }\n        ],\n        \"work_record_segments\": [\n          {\n            \"clock_in_at\": \"2017-05-25 09:10:00\",\n            \"clock_out_at\": \"2017-05-25 18:20:00\"\n          }\n        ]\n      }\n      </code>\n    </pre>\n  </li>\n\n  <li>勤務パターンや既定の所定労働時間を変更する場合は use_default_work_pattern に false を指定するとともに、各設定を上書きするパラメータをリクエストします。\n    <pre>\n      <code>\n      {\n        \"company_id\": 1,\n        \"break_records\": [\n          {\n            \"clock_in_at\": \"2017-05-25 12:00:00\",\n            \"clock_out_at\": \"2017-05-25 13:00:00\"\n          }\n        ],\n        \"work_record_segments\": [\n          {\n            \"clock_in_at\": \"2017-05-25 09:10:00\",\n            \"clock_out_at\": \"2017-05-25 18:20:00:00\"\n          }\n        ],\n        \"day_pattern\": \"normal_day\",\n        \"normal_work_clock_in_at\": \"2017-05-25 11:00:00\",\n        \"normal_work_clock_out_at\": \"2017-12-20 20:00:00\",\n        \"normal_work_mins\": 0,\n        \"use_default_work_pattern\": false\n      }\n      </code>\n    </pre>\n  </li>\n\n  <li>有給取得時の連携について半休の場合は通常勤務のように勤務開始・終了時間を指定しつつ、加えて以下の要素を指定することで API での勤怠をつけることができます。\n    <pre>\n      <code>\n      {\n        \"company_id\": 1,\n        \"break_records\": [\n          {\n            \"clock_in_at\": \"2023-12-22 12:00:00\",\n            \"clock_out_at\": \"2023-12-22 13:00:00\"\n          }\n        ],\n        \"work_record_segments\": [\n          {\n            \"clock_in_at\": \"2017-05-25 09:10:00\",\n            \"clock_out_at\": \"2017-05-25 18:20:00:00\"\n          }\n        ],\n        \"paid_holidays\": [\n          {\n            \"type\": \"half\"\n            \"mins\": 240\n          }\n        ]\n      }\n      </code>\n    </pre>\n  </li>\n\n  <li>有給取得時の連携について午前休または午後休の場合は通常勤務のように勤務開始・終了時間を指定しつつ、加えて以下の要素を指定することで API での勤怠をつけることができます。\n    <pre>\n      <code>\n      {\n        \"company_id\": 1,\n        \"break_records\": [\n          {\n            \"clock_in_at\": \"2023-12-22 16:00:00\",\n            \"clock_out_at\": \"2023-12-22 16:30:00\"\n          }\n        ],\n        \"clock_in_at\": \"2023-12-22 14:00:00\",\n        \"clock_out_at\": \"2023-12-22 18:00:00\",\n        \"paid_holidays\": [\n          {\n            \"type\": \"morning_off\"\n          }\n        ]\n      }\n      </code>\n    </pre>\n  </li>\n\n  <li>有給取得時の連携について半日単位の年次有給休暇と時間単位の年次有給休暇を同日に取得する場合は通常勤務のように勤務開始・終了時間を指定しつつ、加えて以下の要素を指定することで API での勤怠をつけることができます。\n    <pre>\n      <code>\n      {\n        \"company_id\": 1,\n        \"break_records\": [\n          {\n            \"clock_in_at\": \"2023-12-22 16:00:00\",\n            \"clock_out_at\": \"2023-12-22 16:30:00\"\n          }\n        ],\n        \"clock_in_at\": \"2023-12-22 14:00:00\",\n        \"clock_out_at\": \"2023-12-22 18:00:00\",\n        \"paid_holidays\": [\n          {\n            \"type\": \"half\",\n            \"mins\": 240\n          },\n          {\n            \"type\": \"hourly\",\n            \"mins\": 120\n          },\n        ]\n      }\n      </code>\n    </pre>\n  </li>\n\n  <li>特別休暇取得時の連携について全休の場合は以下の要素を指定することで API での勤怠をつけることができます。\n    <ul>\n      <li>special_holiday (全休の場合1.0を指定します)</li>\n      <li>special_holiday_setting_id (特別休暇設定IDを指定します)</li>\n    </ul>\n    <pre>\n      <code>\n      {\n        \"company_id\": 1,\n        \"special_holiday\": 1.0\n        \"special_holiday_setting_id\": 1\n      }\n      </code>\n    </pre>\n  </li>\n\n  <li>特別休暇取得時の連携について時間休の場合は通常勤務のように勤務開始・終了時間を指定しつつ、加えて以下の要素を指定することで API での勤怠をつけることができます。\n    <ul>\n      <li>special_holiday_setting_id (特別休暇設定IDを指定します)</li>\n      <li>hourly_special_holiday_mins (時間休により計上される所定労働時間を分で指定します)</li>\n    </ul>\n    <pre>\n      <code>\n      {\n        \"company_id\": 1,\n        \"break_records\": [\n          {\n            \"clock_in_at\": \"2023-12-22 12:00:00\",\n            \"clock_out_at\": \"2023-12-22 13:00:00\"\n          }\n        ],\n        \"work_record_segments\": [\n          {\n            \"clock_in_at\": \"2017-05-25 09:10:00\",\n            \"clock_out_at\": \"2017-05-25 18:20:00:00\"\n          }\n        ],\n        \"special_holiday_setting_id\": 1,\n        \"hourly_special_holiday_mins\": 120\n      }\n      </code>\n    </pre>\n  </li>\n\n  <li>特別休暇取得時の連携について午前休または午後休の場合は通常勤務のように勤務開始・終了時間を指定しつつ、加えて以下の要素を指定することで API での勤怠をつけることができます。\n    <ul>\n      <li>special_holiday_setting_id (特別休暇設定IDを指定します)</li>\n      <li>half_holiday_type (morning_off または afternoon_off を指定します)</li>\n    </ul>\n    <pre>\n      <code>\n      {\n        \"company_id\": 1,\n        \"break_records\": [\n          {\n            \"clock_in_at\": \"2023-12-22 12:00:00\",\n            \"clock_out_at\": \"2023-12-22 12:30:00\"\n          }\n        ],\n        \"clock_in_at\": \"2023-12-22 09:00:00\",\n        \"clock_out_at\": \"2023-12-22 13:00:00\",\n        \"special_holiday_setting_id\": 1,\n        \"half_holiday_type\": \"afternoon_off\"\n      }\n      </code>\n    </pre>\n  </li>\n\n  <li>欠勤を付ける場合は company_idとis_absence 以外のパラメータは必要ありません。\n    <pre>\n      <code>\n      {\n        \"company_id\": 1,\n        \"is_absence\": true\n      }\n      </code>\n    </pre>\n  </li>\n\n</ul>",
+        "description": "<h2 id=\"\">概要</h2>\n<p>指定した従業員の勤怠情報を更新します。</p>\n<h2 id=\"_1\">注意点</h2>\n<ul>\n  <li>振替出勤・振替休日・代休出勤・代休の登録はAPIでは行うことができません。</li>\n</ul>\n\n<h2 id=\"_2\">examples</h2>\n<ul>\n  <li>出勤日について出退勤時刻および休憩時間を更新する場合は以下のようなパラメータをリクエストします。\n    <pre>\n      <code>\n      {\n        \"company_id\": 1,\n        \"break_records\": [\n          {\n            \"clock_in_at\": \"2017-05-25 12:00:00\",\n            \"clock_out_at\": \"2017-05-25 13:00:00\"\n          }\n        ],\n        \"work_record_segments\": [\n          {\n            \"clock_in_at\": \"2017-05-25 09:10:00\",\n            \"clock_out_at\": \"2017-05-25 18:20:00\"\n          }\n        ]\n      }\n      </code>\n    </pre>\n  </li>\n\n  <li>勤務パターンや既定の所定労働時間を変更する場合は use_default_work_pattern に false を指定するとともに、各設定を上書きするパラメータをリクエストします。\n    <pre>\n      <code>\n      {\n        \"company_id\": 1,\n        \"break_records\": [\n          {\n            \"clock_in_at\": \"2017-05-25 12:00:00\",\n            \"clock_out_at\": \"2017-05-25 13:00:00\"\n          }\n        ],\n        \"work_record_segments\": [\n          {\n            \"clock_in_at\": \"2017-05-25 09:10:00\",\n            \"clock_out_at\": \"2017-05-25 18:20:00\"\n          }\n        ],\n        \"day_pattern\": \"normal_day\",\n        \"normal_work_clock_in_at\": \"2017-05-25 11:00:00\",\n        \"normal_work_clock_out_at\": \"2017-12-20 20:00:00\",\n        \"normal_work_mins\": 0,\n        \"use_default_work_pattern\": false\n      }\n      </code>\n    </pre>\n  </li>\n\n  <li>有給取得時の連携について半休の場合は通常勤務のように勤務開始・終了時間を指定しつつ、加えて以下の要素を指定することで API での勤怠をつけることができます。\n    <pre>\n      <code>\n      {\n        \"company_id\": 1,\n        \"break_records\": [\n          {\n            \"clock_in_at\": \"2023-12-22 12:00:00\",\n            \"clock_out_at\": \"2023-12-22 13:00:00\"\n          }\n        ],\n        \"work_record_segments\": [\n          {\n            \"clock_in_at\": \"2017-05-25 09:10:00\",\n            \"clock_out_at\": \"2017-05-25 18:20:00\"\n          }\n        ],\n        \"paid_holidays\": [\n          {\n            \"type\": \"half\"\n            \"mins\": 240\n          }\n        ]\n      }\n      </code>\n    </pre>\n  </li>\n\n  <li>有給取得時の連携について午前休または午後休の場合は通常勤務のように勤務開始・終了時間を指定しつつ、加えて以下の要素を指定することで API での勤怠をつけることができます。\n    <pre>\n      <code>\n      {\n        \"company_id\": 1,\n        \"break_records\": [\n          {\n            \"clock_in_at\": \"2023-12-22 16:00:00\",\n            \"clock_out_at\": \"2023-12-22 16:30:00\"\n          }\n        ],\n        \"clock_in_at\": \"2023-12-22 14:00:00\",\n        \"clock_out_at\": \"2023-12-22 18:00:00\",\n        \"paid_holidays\": [\n          {\n            \"type\": \"morning_off\"\n          }\n        ]\n      }\n      </code>\n    </pre>\n  </li>\n\n  <li>有給取得時の連携について半日単位の年次有給休暇と時間単位の年次有給休暇を同日に取得する場合は通常勤務のように勤務開始・終了時間を指定しつつ、加えて以下の要素を指定することで API での勤怠をつけることができます。\n    <pre>\n      <code>\n      {\n        \"company_id\": 1,\n        \"break_records\": [\n          {\n            \"clock_in_at\": \"2023-12-22 16:00:00\",\n            \"clock_out_at\": \"2023-12-22 16:30:00\"\n          }\n        ],\n        \"clock_in_at\": \"2023-12-22 14:00:00\",\n        \"clock_out_at\": \"2023-12-22 18:00:00\",\n        \"paid_holidays\": [\n          {\n            \"type\": \"half\",\n            \"mins\": 240\n          },\n          {\n            \"type\": \"hourly\",\n            \"mins\": 120\n          },\n        ]\n      }\n      </code>\n    </pre>\n  </li>\n\n  <li>特別休暇取得時の連携について全休の場合は以下の要素を指定することで API での勤怠をつけることができます。\n    <ul>\n      <li>special_holiday (全休の場合1.0を指定します)</li>\n      <li>special_holiday_setting_id (特別休暇設定IDを指定します)</li>\n    </ul>\n    <pre>\n      <code>\n      {\n        \"company_id\": 1,\n        \"special_holiday\": 1.0\n        \"special_holiday_setting_id\": 1\n      }\n      </code>\n    </pre>\n  </li>\n\n  <li>特別休暇取得時の連携について時間休の場合は通常勤務のように勤務開始・終了時間を指定しつつ、加えて以下の要素を指定することで API での勤怠をつけることができます。\n    <ul>\n      <li>special_holiday_setting_id (特別休暇設定IDを指定します)</li>\n      <li>hourly_special_holiday_mins (時間休により計上される所定労働時間を分で指定します)</li>\n    </ul>\n    <pre>\n      <code>\n      {\n        \"company_id\": 1,\n        \"break_records\": [\n          {\n            \"clock_in_at\": \"2023-12-22 12:00:00\",\n            \"clock_out_at\": \"2023-12-22 13:00:00\"\n          }\n        ],\n        \"work_record_segments\": [\n          {\n            \"clock_in_at\": \"2017-05-25 09:10:00\",\n            \"clock_out_at\": \"2017-05-25 18:20:00\"\n          }\n        ],\n        \"special_holiday_setting_id\": 1,\n        \"hourly_special_holiday_mins\": 120\n      }\n      </code>\n    </pre>\n  </li>\n\n  <li>特別休暇取得時の連携について午前休または午後休の場合は通常勤務のように勤務開始・終了時間を指定しつつ、加えて以下の要素を指定することで API での勤怠をつけることができます。\n    <ul>\n      <li>special_holiday_setting_id (特別休暇設定IDを指定します)</li>\n      <li>half_holiday_type (morning_off または afternoon_off を指定します)</li>\n    </ul>\n    <pre>\n      <code>\n      {\n        \"company_id\": 1,\n        \"break_records\": [\n          {\n            \"clock_in_at\": \"2023-12-22 12:00:00\",\n            \"clock_out_at\": \"2023-12-22 12:30:00\"\n          }\n        ],\n        \"clock_in_at\": \"2023-12-22 09:00:00\",\n        \"clock_out_at\": \"2023-12-22 13:00:00\",\n        \"special_holiday_setting_id\": 1,\n        \"half_holiday_type\": \"afternoon_off\"\n      }\n      </code>\n    </pre>\n  </li>\n\n  <li>欠勤を付ける場合は company_idとis_absence 以外のパラメータは必要ありません。\n    <pre>\n      <code>\n      {\n        \"company_id\": 1,\n        \"is_absence\": true\n      }\n      </code>\n    </pre>\n  </li>\n\n</ul>",
         "parameters": [
           {
             "name": "employee_id",
@@ -806,7 +1013,7 @@
     "/api/v1/employees/{employee_id}/attendance_tag_summaries/{year}/{month}": {
       "get": {
         "summary": "勤怠タグ月次サマリの取得",
-        "description": "<h2 id=\"\">概要</h2>\n<p>\n  指定した従業員・年月の勤怠タグサマリを更新します。<br />\n  年月は給与支払い月を指定してください。\n</p>",
+        "description": "<h2 id=\"\">概要</h2>\n<p>\n  指定した従業員・年月の勤怠タグサマリの一覧を返します。<br />\n  年月は給与支払い月を指定してください。\n</p>",
         "parameters": [
           {
             "name": "company_id",
@@ -1014,6 +1221,22 @@
             "description": "従業員ID"
           }
         ]
+      }
+    },
+    "/api/v1/salaries/employee_payroll_statements/{employee_id}/remark": {
+      "put": {
+        "summary": "給与明細の備考の更新",
+        "description": "<h2 id=\"\">概要</h2>\n<p>指定した従業員の給与明細の備考を更新します。</p>\n\n<h2 id=\"_1\">注意点</h2>\n<ul>\n  <li>管理者権限を持ったユーザーのみ実行可能です。</li>\n</ul>",
+        "parameters": [
+          {
+            "name": "employee_id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "description": "従業員ID"
+          }
+        ],
+        "hasJsonBody": true
       }
     },
     "/api/v1/bonuses/employee_payroll_statements": {
@@ -1227,6 +1450,164 @@
             "type": "integer",
             "required": true,
             "description": "部門ID"
+          },
+          {
+            "name": "company_id",
+            "in": "query",
+            "type": "integer",
+            "required": true,
+            "description": "事業所ID"
+          }
+        ]
+      }
+    },
+    "/api/v1/allowances": {
+      "get": {
+        "summary": "その他手当一覧の取得",
+        "description": "<h2 id=\"\">概要</h2>\n<p>指定した事業所のその他手当情報をリストで返します。</p>\n\n<h2 id=\"_1\">注意点</h2>\n<ul>\n  <li>管理者権限を持ったユーザーのみ実行可能です。</li>\n</ul>",
+        "parameters": [
+          {
+            "name": "company_id",
+            "in": "query",
+            "type": "integer",
+            "required": true,
+            "description": "事業所ID"
+          },
+          {
+            "name": "frequency",
+            "in": "query",
+            "type": "string",
+            "required": false,
+            "description": "支給頻度フィルタ（省略で全件取得）"
+          },
+          {
+            "name": "is_active",
+            "in": "query",
+            "type": "boolean",
+            "required": false,
+            "description": "表示状態フィルタ（省略で全件取得）"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer",
+            "required": false,
+            "description": "取得レコードの件数 (デフォルト: 50, 最小: 1, 最大: 100)"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "integer",
+            "required": false,
+            "description": "取得レコードのオフセット (デフォルト: 0)"
+          }
+        ]
+      },
+      "post": {
+        "summary": "その他手当の作成",
+        "description": "<h2 id=\"\">概要</h2>\n<p>指定した事業所のその他手当を新規作成します。</p>\n\n<h2 id=\"_1\">注意点</h2>\n<ul>\n  <li>管理者権限を持ったユーザーのみ実行可能です。</li>\n</ul>",
+        "parameters": [
+          {
+            "name": "company_id",
+            "in": "query",
+            "type": "integer",
+            "required": true,
+            "description": "事業所ID"
+          }
+        ],
+        "hasJsonBody": true
+      }
+    },
+    "/api/v1/allowances/{id}": {
+      "get": {
+        "summary": "その他手当の取得",
+        "description": "<h2 id=\"\">概要</h2>\n<p>指定した事業所のその他手当情報を返します。</p>\n\n<h2 id=\"_1\">注意点</h2>\n<ul>\n  <li>管理者権限を持ったユーザーのみ実行可能です。</li>\n</ul>",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "description": "その他手当ID"
+          },
+          {
+            "name": "company_id",
+            "in": "query",
+            "type": "integer",
+            "required": true,
+            "description": "事業所ID"
+          }
+        ]
+      }
+    },
+    "/api/v1/deductions": {
+      "get": {
+        "summary": "その他控除一覧の取得",
+        "description": "<h2 id=\"\">概要</h2>\n<p>指定した事業所のその他控除情報をリストで返します。</p>\n\n<h2 id=\"_1\">注意点</h2>\n<ul>\n  <li>管理者権限を持ったユーザーのみ実行可能です。</li>\n</ul>",
+        "parameters": [
+          {
+            "name": "company_id",
+            "in": "query",
+            "type": "integer",
+            "required": true,
+            "description": "事業所ID"
+          },
+          {
+            "name": "frequency",
+            "in": "query",
+            "type": "string",
+            "required": false,
+            "description": "支給頻度フィルタ（省略で全件取得）"
+          },
+          {
+            "name": "is_active",
+            "in": "query",
+            "type": "boolean",
+            "required": false,
+            "description": "表示状態フィルタ（省略で全件取得）"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer",
+            "required": false,
+            "description": "取得レコードの件数 (デフォルト: 50, 最小: 1, 最大: 100)"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "type": "integer",
+            "required": false,
+            "description": "取得レコードのオフセット (デフォルト: 0)"
+          }
+        ]
+      },
+      "post": {
+        "summary": "その他控除の作成",
+        "description": "<h2 id=\"\">概要</h2>\n<p>指定した事業所のその他控除を新規作成します。</p>\n\n<h2 id=\"_1\">注意点</h2>\n<ul>\n  <li>管理者権限を持ったユーザーのみ実行可能です。</li>\n</ul>",
+        "parameters": [
+          {
+            "name": "company_id",
+            "in": "query",
+            "type": "integer",
+            "required": true,
+            "description": "事業所ID"
+          }
+        ],
+        "hasJsonBody": true
+      }
+    },
+    "/api/v1/deductions/{id}": {
+      "get": {
+        "summary": "その他控除の取得",
+        "description": "<h2 id=\"\">概要</h2>\n<p>指定した事業所のその他控除情報を返します。</p>\n\n<h2 id=\"_1\">注意点</h2>\n<ul>\n  <li>管理者権限を持ったユーザーのみ実行可能です。</li>\n</ul>",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "integer",
+            "required": true,
+            "description": "その他控除ID"
           },
           {
             "name": "company_id",
@@ -1534,7 +1915,7 @@
       },
       "post": {
         "summary": "勤務時間修正申請の作成",
-        "description": "<h2 id=\"\">概要</h2>\n<p>指定した事業所の勤務時間修正を新規作成します。</p>\n\n<h2 id=\"_2\">examples</h2>\n<ul>\n  <li>勤務時間を修正する場合は以下のようなパラメータを指定します。\n    <pre>\n      <code>\n        {\n          \"company_id\": 1,\n          \"target_date\": \"2017-05-25\",\n          \"break_records\": [\n            {\n              \"clock_in_at\": \"2017-05-25 12:00:00\",\n              \"clock_out_at\": \"2017-05-25 13:00:00\"\n            }\n          ],\n          \"work_records\": [\n            {\n              \"clock_in_at\": \"2017-05-25 09:10:00\",\n              \"clock_out_at\": \"2017-05-25 18:20:00\"\n            }\n          ],\n          \"approval_flow_route_id\": 1\n        }\n      </code>\n    </pre>\n  </li>\n</ul>\n\n<h2 id=\"_1\">注意点</h2>\n<ul>\n  <li>申請経路、承認者の指定として部門役職データ連携を活用し、以下のいずれかを利用している申請と申請経路はAPI経由で参照は可能ですが、作成と更新、承認ステータスの変更ができません。</li>\n  <ul>\n    <li>役職指定（申請者の所属部門）</li>\n    <li>役職指定（申請時に部門指定）</li>\n    <li>部門および役職指定</li>\n  </ul>\n  <li>申請者と承認者が同一ユーザーの場合、feedback(差戻し)をするとレスポンスは以下のようになります。</li>\n  <ul>\n    <li>status: draft</li>\n    <li>approval_flow_logs.action: cancel</li>\n  </ul>\n</ul>",
+        "description": "<h2 id=\"\">概要</h2>\n<p>指定した事業所の勤務時間修正を新規作成します。</p>\n\n<h2 id=\"_2\">examples</h2>\n<ul>\n  <li>勤務時間を修正する場合は以下のようなパラメータを指定します。\n    <pre>\n      <code>\n        {\n          \"company_id\": 1,\n          \"target_date\": \"2017-05-25\",\n          \"break_records\": [\n            {\n              \"clock_in_at\": \"12:00:00\",\n              \"clock_out_at\": \"13:00:00\"\n            }\n          ],\n          \"work_records\": [\n            {\n              \"clock_in_at\": \"09:10:00\",\n              \"clock_out_at\": \"18:20:00\"\n            }\n          ],\n          \"approval_flow_route_id\": 1\n        }\n      </code>\n    </pre>\n  </li>\n</ul>\n\n<h2 id=\"_1\">注意点</h2>\n<ul>\n  <li>申請経路、承認者の指定として部門役職データ連携を活用し、以下のいずれかを利用している申請と申請経路はAPI経由で参照は可能ですが、作成と更新、承認ステータスの変更ができません。</li>\n  <ul>\n    <li>役職指定（申請者の所属部門）</li>\n    <li>役職指定（申請時に部門指定）</li>\n    <li>部門および役職指定</li>\n  </ul>\n  <li>申請者と承認者が同一ユーザーの場合、feedback(差戻し)をするとレスポンスは以下のようになります。</li>\n  <ul>\n    <li>status: draft</li>\n    <li>approval_flow_logs.action: cancel</li>\n  </ul>\n</ul>",
         "hasJsonBody": true
       }
     },
@@ -1561,7 +1942,7 @@
       },
       "put": {
         "summary": "勤務時間修正申請の更新",
-        "description": "<h2 id=\"\">概要</h2>\n<p>指定した事業所の勤務時間修正申請情報を更新します。</p>\n\n<h2 id=\"_2\">examples</h2>\n<ul>\n  <li>勤務時間を修正する場合は以下のようなパラメータを指定します。\n    <pre>\n      <code>\n        {\n          \"company_id\": 1,\n          \"target_date\": \"2017-05-25\",\n          \"break_records\": [\n            {\n              \"clock_in_at\": \"2017-05-25 12:00:00\",\n              \"clock_out_at\": \"2017-05-25 13:00:00\"\n            }\n          ],\n          \"work_records\": [\n            {\n              \"clock_in_at\": \"2017-05-25 09:10:00\",\n              \"clock_out_at\": \"2017-05-25 18:20:00\"\n            }\n          ],\n          \"approval_flow_route_id\": 1\n        }\n      </code>\n    </pre>\n  </li>\n</ul>\n\n<h2 id=\"_1\">注意点</h2>\n<ul>\n  <li>申請経路、承認者の指定として部門役職データ連携を活用し、以下のいずれかを利用している申請と申請経路はAPI経由で参照は可能ですが、作成と更新、承認ステータスの変更ができません。</li>\n  <ul>\n    <li>役職指定（申請者の所属部門）</li>\n    <li>役職指定（申請時に部門指定）</li>\n    <li>部門および役職指定</li>\n  </ul>\n  <li>申請者と承認者が同一ユーザーの場合、feedback(差戻し)をするとレスポンスは以下のようになります。</li>\n  <ul>\n    <li>status: draft</li>\n    <li>approval_flow_logs.action: cancel</li>\n  </ul>\n</ul>",
+        "description": "<h2 id=\"\">概要</h2>\n<p>指定した事業所の勤務時間修正申請情報を更新します。</p>\n\n<h2 id=\"_2\">examples</h2>\n<ul>\n  <li>勤務時間を修正する場合は以下のようなパラメータを指定します。\n    <pre>\n      <code>\n        {\n          \"company_id\": 1,\n          \"target_date\": \"2017-05-25\",\n          \"break_records\": [\n            {\n              \"clock_in_at\": \"12:00:00\",\n              \"clock_out_at\": \"13:00:00\"\n            }\n          ],\n          \"work_records\": [\n            {\n              \"clock_in_at\": \"09:10:00\",\n              \"clock_out_at\": \"18:20:00\"\n            }\n          ],\n          \"approval_flow_route_id\": 1\n        }\n      </code>\n    </pre>\n  </li>\n</ul>\n\n<h2 id=\"_1\">注意点</h2>\n<ul>\n  <li>申請経路、承認者の指定として部門役職データ連携を活用し、以下のいずれかを利用している申請と申請経路はAPI経由で参照は可能ですが、作成と更新、承認ステータスの変更ができません。</li>\n  <ul>\n    <li>役職指定（申請者の所属部門）</li>\n    <li>役職指定（申請時に部門指定）</li>\n    <li>部門および役職指定</li>\n  </ul>\n  <li>申請者と承認者が同一ユーザーの場合、feedback(差戻し)をするとレスポンスは以下のようになります。</li>\n  <ul>\n    <li>status: draft</li>\n    <li>approval_flow_logs.action: cancel</li>\n  </ul>\n</ul>",
         "parameters": [
           {
             "name": "id",

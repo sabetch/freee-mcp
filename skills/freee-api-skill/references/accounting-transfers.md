@@ -10,7 +10,7 @@
 
 操作: 取引（振替）一覧の取得
 
-説明: 概要 指定した事業所の取引（振替）一覧を取得する 定義 amount : 振替金額 from_walletable_type, to_walletable_type bank_account : 銀行口座 credit_card : クレジットカード wallet : その他の決済口座
+説明: 概要 指定した事業所の取引（振替）一覧を取得する 注意点 振替元・振替先に指定できる口座のIDと口座区分（type）は、口座一覧の取得（GET /api/1/walletables）で確認できます。 振替先口座はレスポンスの to_walletables（複数行）で返します。amount / to_walletable_type / to_walletable_id / description は振替先の複数指定に対応していない旧形式のフィールド（廃止予定）で、振替先が複数ある場合、amount は全行の合計金額（支払手数料が設定されている場合は手数料分を加算した金額）、to_walletable_type / to_walletable_id は金額が最大の行の値、description は各行の備考を結合した文字列を返します。
 
 ### パラメータ
 
@@ -24,53 +24,122 @@
 
 ### レスポンス (200)
 
-- transfers (必須): array[object]
+- transfers (必須): array[object] - 取引（振替）の一覧
   配列の要素:
     - id (必須): integer(int64) - 取引(振替)ID 例: `1` (最小: 1)
     - company_id (必須): integer(int64) - 事業所ID 例: `1` (最小: 1)
-    - amount (必須): integer(int64) - 金額 例: `5000` (最小: -9223372036854776000, 最大: 9223372036854776000)
+    - amount (必須): integer(int64) - 振替金額（円）。振替先が複数ある場合は全行の合計金額を返します。支払手数料が設定されている場合は、支払手数料分を加算した金額を返します。将来廃止予定。振替先の複数指定に対応していないため、to_walletablesの各行amountを利用してください。 例: `5000` (最小: -9223372036854776000, 最大: 9223372036854776000)
     - date (必須): string - 振替日 (yyyy-mm-dd) 例: `2019-12-17`
-    - from_walletable_type (必須): string - 振替元口座区分 (銀行口座: bank_account, クレジットカード: credit_card, 現金: wallet) (選択肢: bank_account, wallet, credit_card) 例: `credit_card`
-    - from_walletable_id (必須): integer(int64) - 振替元口座ID 例: `101` (最小: 1)
-    - to_walletable_type (必須): string - 振替先口座区分 (銀行口座: bank_account, クレジットカード: credit_card, 現金: wallet) (選択肢: bank_account, wallet, credit_card) 例: `bank_account`
-    - to_walletable_id (必須): integer(int64) - 振替先口座ID 例: `201` (最小: 1)
-    - description (必須): string - 備考 例: `備考`
+    - from_walletable_type (必須): string - 振替元口座の口座区分
+* `bank_account` - 銀行口座
+* `credit_card` - クレジットカード
+* `wallet` - その他の決済口座（現金・電子マネー・売掛/買掛など） (選択肢: bank_account, wallet, credit_card) 例: `credit_card`
+    - from_walletable_id (必須): integer(int64) - 振替元口座ID。口座一覧の取得（GET /api/1/walletables）で取得できるIDです。 例: `101` (最小: 1)
+    - from_partner_id (必須): integer(int64) - 振替元口座行の取引先ID。取引先が設定されていない場合は0を返します。 例: `201`
+    - from_partner_code (必須): string - 振替元口座行の取引先コード。事業所の設定で取引先コードの利用が無効の場合、または取引先が設定されていない場合はnullを返します。 例: `code001`
+    - from_section_id (必須): integer(int64) - 振替元口座行の部門ID。部門が設定されていない場合はnullを返します。 例: `1`
+    - from_section_code (必須): string - 振替元口座行の部門コード。事業所の設定で部門コードの利用が無効の場合、または部門が設定されていない場合はnullを返します。 例: `code001`
+    - from_item_id (必須): integer(int64) - 振替元口座行の品目ID。品目が設定されていない場合はnullを返します。 例: `501`
+    - from_item_code (必須): string - 振替元口座行の品目コード。事業所の設定で品目コードの利用が無効の場合、または品目が設定されていない場合はnullを返します。 例: `code001`
+    - from_tag_ids (必須): array[integer] - 振替元口座行のメモタグID 例: `[1,2,3]`
+    - from_segment_1_tag_id (任意): integer(int64) - 振替元口座行のセグメント１タグID。セグメントタグが利用できないプランの場合、キー自体がレスポンスに含まれません。セグメント１タグが設定されていない場合はnullを返します。 例: `1`
+    - from_segment_1_tag_code (任意): string - 振替元口座行のセグメント１タグコード。セグメントタグが利用できないプランの場合、キー自体がレスポンスに含まれません。事業所の設定でセグメントタグコードの利用が無効の場合、またはセグメント１タグが設定されていない場合はnullを返します。 例: `code001`
+    - from_segment_2_tag_id (任意): integer(int64) - 振替元口座行のセグメント２タグID。セグメントタグが利用できないプランの場合、キー自体がレスポンスに含まれません。セグメント２タグが設定されていない場合はnullを返します。 例: `1`
+    - from_segment_2_tag_code (任意): string - 振替元口座行のセグメント２タグコード。セグメントタグが利用できないプランの場合、キー自体がレスポンスに含まれません。事業所の設定でセグメントタグコードの利用が無効の場合、またはセグメント２タグが設定されていない場合はnullを返します。 例: `code001`
+    - from_segment_3_tag_id (任意): integer(int64) - 振替元口座行のセグメント３タグID。セグメントタグが利用できないプランの場合、キー自体がレスポンスに含まれません。セグメント３タグが設定されていない場合はnullを返します。 例: `1`
+    - from_segment_3_tag_code (任意): string - 振替元口座行のセグメント３タグコード。セグメントタグが利用できないプランの場合、キー自体がレスポンスに含まれません。事業所の設定でセグメントタグコードの利用が無効の場合、またはセグメント３タグが設定されていない場合はnullを返します。 例: `code001`
+    - to_walletable_type (必須): string - 振替先口座の口座区分。振替先が複数ある場合は金額が最大の行の値を返します。将来廃止予定。振替先の複数指定に対応していないため、to_walletablesを利用してください。
+* `bank_account` - 銀行口座
+* `credit_card` - クレジットカード
+* `wallet` - その他の決済口座（現金・電子マネー・売掛/買掛など） (選択肢: bank_account, wallet, credit_card) 例: `bank_account`
+    - to_walletable_id (必須): integer(int64) - 振替先口座ID。振替先が複数ある場合は金額が最大の行の値を返します。将来廃止予定。振替先の複数指定に対応していないため、to_walletablesを利用してください。 例: `201` (最小: 1)
+    - description (必須): string - 備考。振替先が複数ある場合は各行の備考を「, 」（カンマと半角スペース）で結合した文字列を返します。備考が未設定の場合はnullを返します。将来廃止予定。振替先の複数指定に対応していないため、to_walletablesの各行descriptionを利用してください。 例: `備考`
+    - to_walletables (必須): array[object] - 振替先口座行（複数）。各行に振替先口座・金額・備考を持つ。
 
 ### POST /api/1/transfers
 
 操作: 取引（振替）の作成
 
-説明: 概要 指定した事業所の取引（振替）を作成する 定義 amount : 振替金額 from_walletable_type, to_walletable_type bank_account : 銀行口座 credit_card : クレジットカード wallet : その他の決済口座
+説明: 概要 指定した事業所の取引（振替）を作成する 注意点 振替元・振替先に指定できる口座のIDと口座区分（type）は、口座一覧の取得（GET /api/1/walletables）で確認できます。 振替先が1つの場合は to_walletable_type / to_walletable_id / amount（必要に応じて description）を指定します。振替先が複数の場合は to_walletables（最大50行）を指定します。両方を同時に指定することはできません。 to_walletables を指定する場合、振替元は from_walletable_type / from_walletable_id で共通指定し、各行の amount には0円より大きい金額を指定します。複数行で同一の振替先口座は指定できません。
 
 ### リクエストボディ
 
-- to_walletable_id (必須): integer(int64) - 振替先口座ID 例: `1` (最小: 1)
-- to_walletable_type (必須): string - 振替先口座区分 (銀行口座: bank_account, クレジットカード: credit_card, 現金: wallet) (選択肢: bank_account, credit_card, wallet) 例: `bank_account`
-- from_walletable_id (必須): integer(int64) - 振替元口座ID 例: `1` (最小: 1)
-- from_walletable_type (必須): string - 振替元口座区分 (銀行口座: bank_account, クレジットカード: credit_card, 現金: wallet) (選択肢: bank_account, credit_card, wallet) 例: `credit_card`
-- amount (必須): integer(int64) - 金額 例: `5000` (最小: -9223372036854776000, 最大: 9223372036854776000)
+- to_walletable_id (任意): integer(int64) - 振替先口座ID（単一振替先の場合に指定）。口座一覧の取得（GET /api/1/walletables）で取得できるIDを指定します。to_walletablesと同時に指定することはできません。将来廃止予定。振替先の複数指定に対応していないため、to_walletablesを利用してください。 例: `1` (最小: 1)
+- to_walletable_type (任意): string - 振替先口座の口座区分（単一振替先の場合に指定）。to_walletablesと同時に指定することはできません。将来廃止予定。振替先の複数指定に対応していないため、to_walletablesを利用してください。
+* `bank_account` - 銀行口座
+* `credit_card` - クレジットカード
+* `wallet` - その他の決済口座（現金・電子マネー・売掛/買掛など） (選択肢: bank_account, credit_card, wallet) 例: `bank_account`
+- from_walletable_id (必須): integer(int64) - 振替元口座ID。口座一覧の取得（GET /api/1/walletables）で取得できるIDを指定します。 例: `1` (最小: 1)
+- from_walletable_type (必須): string - 振替元口座の口座区分
+* `bank_account` - 銀行口座
+* `credit_card` - クレジットカード
+* `wallet` - その他の決済口座（現金・電子マネー・売掛/買掛など） (選択肢: bank_account, credit_card, wallet) 例: `credit_card`
+- amount (任意): integer(int64) - 振替金額（円・単一振替先の場合に指定）。to_walletablesと同時に指定することはできません。将来廃止予定。振替先の複数指定に対応していないため、to_walletablesの各行amountを利用してください。 例: `5000` (最小: -9223372036854776000, 最大: 9223372036854776000)
+- from_partner_id (任意): integer(int64) - 振替元口座行の取引先ID。更新時にキーを省略すると既存値を引き継ぎます。0またはnullは取引先を外す指定です。作成時にキーを省略するか、0またはnullを指定すると取引先なしになります。「口座振替（口座間移動）での取引先タグ付与ルール」が未設定の場合、既存値と同じIDの指定を除き、取引先の追加・変更・削除はできません。 例: `201` (最小: 0)
+- from_section_id (任意): integer(int64) - 振替元口座行の部門ID。更新時にキーを省略すると既存値を引き継ぎます。0またはnullは部門を外す指定です。作成時にキーを省略すると口座タグ設定に従います。口座タグ設定が固定の場合は設定タグを優先し、未設定の場合は有効なIDを指定できません。部門の入力が必須（全ての科目）の事業所では、部門なしになる保存はエラーです。 例: `1` (最小: 0)
+- from_item_id (任意): integer(int64) - 振替元口座行の品目ID。更新時にキーを省略すると既存値を引き継ぎます。0またはnullは品目を外す指定です。作成時にキーを省略すると口座タグ設定に従います。口座タグ設定が固定の場合は設定タグを優先し、未設定の場合は有効なIDを指定できません。 例: `501` (最小: 0)
+- from_tag_ids (任意): array[integer] - 振替元口座行のメモタグID。更新時にキーを省略すると既存値を引き継ぎます。空配列またはnullはメモタグをすべて外す指定です。作成時にキーを省略すると口座タグ設定に従います。口座タグ設定が固定の場合は設定タグを優先し、未設定の場合は有効なIDを指定できません。 例: `[1,2]`
+- from_segment_1_tag_id (任意): integer(int64) - 振替元口座行のセグメント１タグID。更新時にキーを省略すると既存値を引き継ぎます。0またはnullはタグを外す指定です。作成時にキーを省略すると口座タグ設定に従います。口座タグ設定が固定の場合は設定タグを優先し、未設定の場合は有効なIDを指定できません。セグメントタグを利用できないプランでは指定を無視します。 例: `1` (最小: 0)
+- from_segment_2_tag_id (任意): integer(int64) - 振替元口座行のセグメント２タグID。更新時にキーを省略すると既存値を引き継ぎます。0またはnullはタグを外す指定です。作成時にキーを省略すると口座タグ設定に従います。口座タグ設定が固定の場合は設定タグを優先し、未設定の場合は有効なIDを指定できません。セグメントタグを利用できないプランでは指定を無視します。 例: `1` (最小: 0)
+- from_segment_3_tag_id (任意): integer(int64) - 振替元口座行のセグメント３タグID。更新時にキーを省略すると既存値を引き継ぎます。0またはnullはタグを外す指定です。作成時にキーを省略すると口座タグ設定に従います。口座タグ設定が固定の場合は設定タグを優先し、未設定の場合は有効なIDを指定できません。セグメントタグを利用できないプランでは指定を無視します。 例: `1` (最小: 0)
 - date (必須): string - 振替日 (yyyy-mm-dd) 例: `2019-12-17`
 - company_id (必須): integer(int64) - 事業所ID 例: `1` (最小: 1)
-- description (任意): string - 備考 例: `備考`
+- description (任意): string - 備考（単一振替先の場合に指定）。to_walletablesと同時に指定することはできません。将来廃止予定。振替先の複数指定に対応していないため、to_walletablesの各行descriptionを利用してください。 例: `備考`
+- to_walletables (任意): array[object] - 振替先口座行（振替先が複数の場合に指定・最大50行）。単一のto_walletable_id / to_walletable_type / amount / descriptionと同時に指定することはできません。振替元はfrom_walletable_id / from_walletable_typeで共通指定。
+  配列の要素:
+    - type (必須): string - 振替先口座の口座区分
+* `bank_account` - 銀行口座
+* `credit_card` - クレジットカード
+* `wallet` - その他の決済口座（現金・電子マネー・売掛/買掛など） (選択肢: bank_account, credit_card, wallet) 例: `bank_account`
+    - id (必須): integer(int64) - 振替先口座ID。口座一覧の取得（GET /api/1/walletables）で取得できるIDを指定します。 例: `1` (最小: 1)
+    - amount (必須): integer(int64) - 振替先口座への振替金額（円）。0円より大きい金額を指定します。 例: `3000` (最小: -9223372036854776000, 最大: 9223372036854776000)
+    - description (任意): string - 備考 例: `備考`
+    - partner_id (任意): integer(int64) - 振替先口座行の取引先ID。更新時にキーを省略すると同一口座の既存行から引き継ぎます。0またはnullは取引先を外す指定です。作成時にキーを省略するか、0またはnullを指定すると取引先なしになります。「口座振替（口座間移動）での取引先タグ付与ルール」が未設定の場合、既存値と同じIDの指定を除き、取引先の追加・変更・削除はできません。 例: `201` (最小: 0)
+    - section_id (任意): integer(int64) - 振替先口座行の部門ID。更新時にキーを省略すると同一口座の既存行から引き継ぎます。0またはnullは部門を外す指定です。作成時にキーを省略すると口座タグ設定に従います。口座タグ設定が固定の場合は設定タグを優先し、未設定の場合は有効なIDを指定できません。部門の入力が必須（全ての科目）の事業所では、部門なしになる保存はエラーです。 例: `2` (最小: 0)
+    - item_id (任意): integer(int64) - 振替先口座行の品目ID。更新時にキーを省略すると同一口座の既存行から引き継ぎます。0またはnullは品目を外す指定です。作成時にキーを省略すると口座タグ設定に従います。口座タグ設定が固定の場合は設定タグを優先し、未設定の場合は有効なIDを指定できません。 例: `501` (最小: 0)
+    - tag_ids (任意): array[integer] - 振替先口座行のメモタグID。更新時にキーを省略すると同一口座の既存行から引き継ぎます。空配列またはnullはメモタグをすべて外す指定です。作成時にキーを省略すると口座タグ設定に従います。口座タグ設定が固定の場合は設定タグを優先し、未設定の場合は有効なIDを指定できません。 例: `[1,2]`
+    - segment_1_tag_id (任意): integer(int64) - 振替先口座行のセグメント１タグID。更新時にキーを省略すると同一口座の既存行から引き継ぎます。0またはnullはタグを外す指定です。作成時にキーを省略すると口座タグ設定に従います。口座タグ設定が固定の場合は設定タグを優先し、未設定の場合は有効なIDを指定できません。セグメントタグを利用できないプランでは指定を無視します。 例: `1` (最小: 0)
+    - segment_2_tag_id (任意): integer(int64) - 振替先口座行のセグメント２タグID。更新時にキーを省略すると同一口座の既存行から引き継ぎます。0またはnullはタグを外す指定です。作成時にキーを省略すると口座タグ設定に従います。口座タグ設定が固定の場合は設定タグを優先し、未設定の場合は有効なIDを指定できません。セグメントタグを利用できないプランでは指定を無視します。 例: `1` (最小: 0)
+    - segment_3_tag_id (任意): integer(int64) - 振替先口座行のセグメント３タグID。更新時にキーを省略すると同一口座の既存行から引き継ぎます。0またはnullはタグを外す指定です。作成時にキーを省略すると口座タグ設定に従います。口座タグ設定が固定の場合は設定タグを優先し、未設定の場合は有効なIDを指定できません。セグメントタグを利用できないプランでは指定を無視します。 例: `1` (最小: 0)
 
 ### レスポンス (201)
 
 - transfer (必須): object
   - id (必須): integer(int64) - 取引(振替)ID 例: `1` (最小: 1)
   - company_id (必須): integer(int64) - 事業所ID 例: `1` (最小: 1)
-  - amount (必須): integer(int64) - 金額 例: `5000` (最小: -9223372036854776000, 最大: 9223372036854776000)
+  - amount (必須): integer(int64) - 振替金額（円）。振替先が複数ある場合は全行の合計金額を返します。支払手数料が設定されている場合は、支払手数料分を加算した金額を返します。将来廃止予定。振替先の複数指定に対応していないため、to_walletablesの各行amountを利用してください。 例: `5000` (最小: -9223372036854776000, 最大: 9223372036854776000)
   - date (必須): string - 振替日 (yyyy-mm-dd) 例: `2019-12-17`
-  - from_walletable_type (必須): string - 振替元口座区分 (銀行口座: bank_account, クレジットカード: credit_card, 現金: wallet) (選択肢: bank_account, wallet, credit_card) 例: `credit_card`
-  - from_walletable_id (必須): integer(int64) - 振替元口座ID 例: `101` (最小: 1)
-  - to_walletable_type (必須): string - 振替先口座区分 (銀行口座: bank_account, クレジットカード: credit_card, 現金: wallet) (選択肢: bank_account, wallet, credit_card) 例: `bank_account`
-  - to_walletable_id (必須): integer(int64) - 振替先口座ID 例: `201` (最小: 1)
-  - description (必須): string - 備考 例: `備考`
+  - from_walletable_type (必須): string - 振替元口座の口座区分
+* `bank_account` - 銀行口座
+* `credit_card` - クレジットカード
+* `wallet` - その他の決済口座（現金・電子マネー・売掛/買掛など） (選択肢: bank_account, wallet, credit_card) 例: `credit_card`
+  - from_walletable_id (必須): integer(int64) - 振替元口座ID。口座一覧の取得（GET /api/1/walletables）で取得できるIDです。 例: `101` (最小: 1)
+  - from_partner_id (必須): integer(int64) - 振替元口座行の取引先ID。取引先が設定されていない場合は0を返します。 例: `201`
+  - from_partner_code (必須): string - 振替元口座行の取引先コード。事業所の設定で取引先コードの利用が無効の場合、または取引先が設定されていない場合はnullを返します。 例: `code001`
+  - from_section_id (必須): integer(int64) - 振替元口座行の部門ID。部門が設定されていない場合はnullを返します。 例: `1`
+  - from_section_code (必須): string - 振替元口座行の部門コード。事業所の設定で部門コードの利用が無効の場合、または部門が設定されていない場合はnullを返します。 例: `code001`
+  - from_item_id (必須): integer(int64) - 振替元口座行の品目ID。品目が設定されていない場合はnullを返します。 例: `501`
+  - from_item_code (必須): string - 振替元口座行の品目コード。事業所の設定で品目コードの利用が無効の場合、または品目が設定されていない場合はnullを返します。 例: `code001`
+  - from_tag_ids (必須): array[integer] - 振替元口座行のメモタグID 例: `[1,2,3]`
+  - from_segment_1_tag_id (任意): integer(int64) - 振替元口座行のセグメント１タグID。セグメントタグが利用できないプランの場合、キー自体がレスポンスに含まれません。セグメント１タグが設定されていない場合はnullを返します。 例: `1`
+  - from_segment_1_tag_code (任意): string - 振替元口座行のセグメント１タグコード。セグメントタグが利用できないプランの場合、キー自体がレスポンスに含まれません。事業所の設定でセグメントタグコードの利用が無効の場合、またはセグメント１タグが設定されていない場合はnullを返します。 例: `code001`
+  - from_segment_2_tag_id (任意): integer(int64) - 振替元口座行のセグメント２タグID。セグメントタグが利用できないプランの場合、キー自体がレスポンスに含まれません。セグメント２タグが設定されていない場合はnullを返します。 例: `1`
+  - from_segment_2_tag_code (任意): string - 振替元口座行のセグメント２タグコード。セグメントタグが利用できないプランの場合、キー自体がレスポンスに含まれません。事業所の設定でセグメントタグコードの利用が無効の場合、またはセグメント２タグが設定されていない場合はnullを返します。 例: `code001`
+  - from_segment_3_tag_id (任意): integer(int64) - 振替元口座行のセグメント３タグID。セグメントタグが利用できないプランの場合、キー自体がレスポンスに含まれません。セグメント３タグが設定されていない場合はnullを返します。 例: `1`
+  - from_segment_3_tag_code (任意): string - 振替元口座行のセグメント３タグコード。セグメントタグが利用できないプランの場合、キー自体がレスポンスに含まれません。事業所の設定でセグメントタグコードの利用が無効の場合、またはセグメント３タグが設定されていない場合はnullを返します。 例: `code001`
+  - to_walletable_type (必須): string - 振替先口座の口座区分。振替先が複数ある場合は金額が最大の行の値を返します。将来廃止予定。振替先の複数指定に対応していないため、to_walletablesを利用してください。
+* `bank_account` - 銀行口座
+* `credit_card` - クレジットカード
+* `wallet` - その他の決済口座（現金・電子マネー・売掛/買掛など） (選択肢: bank_account, wallet, credit_card) 例: `bank_account`
+  - to_walletable_id (必須): integer(int64) - 振替先口座ID。振替先が複数ある場合は金額が最大の行の値を返します。将来廃止予定。振替先の複数指定に対応していないため、to_walletablesを利用してください。 例: `201` (最小: 1)
+  - description (必須): string - 備考。振替先が複数ある場合は各行の備考を「, 」（カンマと半角スペース）で結合した文字列を返します。備考が未設定の場合はnullを返します。将来廃止予定。振替先の複数指定に対応していないため、to_walletablesの各行descriptionを利用してください。 例: `備考`
+  - to_walletables (必須): array[object] - 振替先口座行（複数）。各行に振替先口座・金額・備考を持つ。
 
 ### GET /api/1/transfers/{id}
 
 操作: 取引（振替）の取得
 
-説明: 概要 指定した事業所の取引（振替）を取得する 定義 amount : 振替金額 from_walletable_type, to_walletable_type bank_account : 銀行口座 credit_card : クレジットカード wallet : その他の決済口座
+説明: 概要 指定した事業所の取引（振替）を取得する 注意点 振替先口座はレスポンスの to_walletables（複数行）で返します。amount / to_walletable_type / to_walletable_id / description は振替先の複数指定に対応していない旧形式のフィールド（廃止予定）で、振替先が複数ある場合、amount は全行の合計金額（支払手数料が設定されている場合は手数料分を加算した金額）、to_walletable_type / to_walletable_id は金額が最大の行の値、description は各行の備考を結合した文字列を返します。 指定したIDの取引（振替）が存在しない場合や、削除済み・権限がない場合は404を返します。
 
 ### パラメータ
 
@@ -84,19 +153,39 @@
 - transfer (必須): object
   - id (必須): integer(int64) - 取引(振替)ID 例: `1` (最小: 1)
   - company_id (必須): integer(int64) - 事業所ID 例: `1` (最小: 1)
-  - amount (必須): integer(int64) - 金額 例: `5000` (最小: -9223372036854776000, 最大: 9223372036854776000)
+  - amount (必須): integer(int64) - 振替金額（円）。振替先が複数ある場合は全行の合計金額を返します。支払手数料が設定されている場合は、支払手数料分を加算した金額を返します。将来廃止予定。振替先の複数指定に対応していないため、to_walletablesの各行amountを利用してください。 例: `5000` (最小: -9223372036854776000, 最大: 9223372036854776000)
   - date (必須): string - 振替日 (yyyy-mm-dd) 例: `2019-12-17`
-  - from_walletable_type (必須): string - 振替元口座区分 (銀行口座: bank_account, クレジットカード: credit_card, 現金: wallet) (選択肢: bank_account, wallet, credit_card) 例: `credit_card`
-  - from_walletable_id (必須): integer(int64) - 振替元口座ID 例: `101` (最小: 1)
-  - to_walletable_type (必須): string - 振替先口座区分 (銀行口座: bank_account, クレジットカード: credit_card, 現金: wallet) (選択肢: bank_account, wallet, credit_card) 例: `bank_account`
-  - to_walletable_id (必須): integer(int64) - 振替先口座ID 例: `201` (最小: 1)
-  - description (必須): string - 備考 例: `備考`
+  - from_walletable_type (必須): string - 振替元口座の口座区分
+* `bank_account` - 銀行口座
+* `credit_card` - クレジットカード
+* `wallet` - その他の決済口座（現金・電子マネー・売掛/買掛など） (選択肢: bank_account, wallet, credit_card) 例: `credit_card`
+  - from_walletable_id (必須): integer(int64) - 振替元口座ID。口座一覧の取得（GET /api/1/walletables）で取得できるIDです。 例: `101` (最小: 1)
+  - from_partner_id (必須): integer(int64) - 振替元口座行の取引先ID。取引先が設定されていない場合は0を返します。 例: `201`
+  - from_partner_code (必須): string - 振替元口座行の取引先コード。事業所の設定で取引先コードの利用が無効の場合、または取引先が設定されていない場合はnullを返します。 例: `code001`
+  - from_section_id (必須): integer(int64) - 振替元口座行の部門ID。部門が設定されていない場合はnullを返します。 例: `1`
+  - from_section_code (必須): string - 振替元口座行の部門コード。事業所の設定で部門コードの利用が無効の場合、または部門が設定されていない場合はnullを返します。 例: `code001`
+  - from_item_id (必須): integer(int64) - 振替元口座行の品目ID。品目が設定されていない場合はnullを返します。 例: `501`
+  - from_item_code (必須): string - 振替元口座行の品目コード。事業所の設定で品目コードの利用が無効の場合、または品目が設定されていない場合はnullを返します。 例: `code001`
+  - from_tag_ids (必須): array[integer] - 振替元口座行のメモタグID 例: `[1,2,3]`
+  - from_segment_1_tag_id (任意): integer(int64) - 振替元口座行のセグメント１タグID。セグメントタグが利用できないプランの場合、キー自体がレスポンスに含まれません。セグメント１タグが設定されていない場合はnullを返します。 例: `1`
+  - from_segment_1_tag_code (任意): string - 振替元口座行のセグメント１タグコード。セグメントタグが利用できないプランの場合、キー自体がレスポンスに含まれません。事業所の設定でセグメントタグコードの利用が無効の場合、またはセグメント１タグが設定されていない場合はnullを返します。 例: `code001`
+  - from_segment_2_tag_id (任意): integer(int64) - 振替元口座行のセグメント２タグID。セグメントタグが利用できないプランの場合、キー自体がレスポンスに含まれません。セグメント２タグが設定されていない場合はnullを返します。 例: `1`
+  - from_segment_2_tag_code (任意): string - 振替元口座行のセグメント２タグコード。セグメントタグが利用できないプランの場合、キー自体がレスポンスに含まれません。事業所の設定でセグメントタグコードの利用が無効の場合、またはセグメント２タグが設定されていない場合はnullを返します。 例: `code001`
+  - from_segment_3_tag_id (任意): integer(int64) - 振替元口座行のセグメント３タグID。セグメントタグが利用できないプランの場合、キー自体がレスポンスに含まれません。セグメント３タグが設定されていない場合はnullを返します。 例: `1`
+  - from_segment_3_tag_code (任意): string - 振替元口座行のセグメント３タグコード。セグメントタグが利用できないプランの場合、キー自体がレスポンスに含まれません。事業所の設定でセグメントタグコードの利用が無効の場合、またはセグメント３タグが設定されていない場合はnullを返します。 例: `code001`
+  - to_walletable_type (必須): string - 振替先口座の口座区分。振替先が複数ある場合は金額が最大の行の値を返します。将来廃止予定。振替先の複数指定に対応していないため、to_walletablesを利用してください。
+* `bank_account` - 銀行口座
+* `credit_card` - クレジットカード
+* `wallet` - その他の決済口座（現金・電子マネー・売掛/買掛など） (選択肢: bank_account, wallet, credit_card) 例: `bank_account`
+  - to_walletable_id (必須): integer(int64) - 振替先口座ID。振替先が複数ある場合は金額が最大の行の値を返します。将来廃止予定。振替先の複数指定に対応していないため、to_walletablesを利用してください。 例: `201` (最小: 1)
+  - description (必須): string - 備考。振替先が複数ある場合は各行の備考を「, 」（カンマと半角スペース）で結合した文字列を返します。備考が未設定の場合はnullを返します。将来廃止予定。振替先の複数指定に対応していないため、to_walletablesの各行descriptionを利用してください。 例: `備考`
+  - to_walletables (必須): array[object] - 振替先口座行（複数）。各行に振替先口座・金額・備考を持つ。
 
 ### PUT /api/1/transfers/{id}
 
 操作: 取引（振替）の更新
 
-説明: 概要 指定した事業所の取引（振替）を更新する 定義 amount : 振替金額 from_walletable_type, to_walletable_type bank_account : 銀行口座 credit_card : クレジットカード wallet : その他の決済口座
+説明: 概要 指定した事業所の取引（振替）を更新する 注意点 部分更新ではありません。作成時と同様に、更新後の取引（振替）の内容全体をリクエストで指定します。 振替先が複数ある取引（振替）を更新する場合は to_walletables の指定が必要です。to_walletables を指定せず旧形式の単一フィールド（to_walletable_type / to_walletable_id / amount）のみで更新しようとするとエラーになります（複数の振替先を意図せず1件に置き換えることを防ぐためです）。 受取利息や振込手数料が設定された取引（振替）は本APIでは更新できません。 承認済みの取引（振替）は、事業所の設定や実行ユーザーの権限によっては更新できません。
 
 ### パラメータ
 
@@ -108,33 +197,82 @@
 
 (必須)
 
-- to_walletable_id (必須): integer(int64) - 振替先口座ID 例: `1` (最小: 1)
-- to_walletable_type (必須): string - 振替先口座区分 (銀行口座: bank_account, クレジットカード: credit_card, 現金: wallet) (選択肢: bank_account, credit_card, wallet) 例: `bank_account`
-- from_walletable_id (必須): integer(int64) - 振替元口座ID 例: `1` (最小: 1)
-- from_walletable_type (必須): string - 振替元口座区分 (銀行口座: bank_account, クレジットカード: credit_card, 現金: wallet) (選択肢: bank_account, credit_card, wallet) 例: `credit_card`
-- amount (必須): integer(int64) - 金額 例: `5000` (最小: -9223372036854776000, 最大: 9223372036854776000)
+- to_walletable_id (任意): integer(int64) - 振替先口座ID（単一振替先の場合に指定）。口座一覧の取得（GET /api/1/walletables）で取得できるIDを指定します。to_walletablesと同時に指定することはできません。将来廃止予定。振替先の複数指定に対応していないため、to_walletablesを利用してください。 例: `1` (最小: 1)
+- to_walletable_type (任意): string - 振替先口座の口座区分（単一振替先の場合に指定）。to_walletablesと同時に指定することはできません。将来廃止予定。振替先の複数指定に対応していないため、to_walletablesを利用してください。
+* `bank_account` - 銀行口座
+* `credit_card` - クレジットカード
+* `wallet` - その他の決済口座（現金・電子マネー・売掛/買掛など） (選択肢: bank_account, credit_card, wallet) 例: `bank_account`
+- from_walletable_id (必須): integer(int64) - 振替元口座ID。口座一覧の取得（GET /api/1/walletables）で取得できるIDを指定します。 例: `1` (最小: 1)
+- from_walletable_type (必須): string - 振替元口座の口座区分
+* `bank_account` - 銀行口座
+* `credit_card` - クレジットカード
+* `wallet` - その他の決済口座（現金・電子マネー・売掛/買掛など） (選択肢: bank_account, credit_card, wallet) 例: `credit_card`
+- amount (任意): integer(int64) - 振替金額（円・単一振替先の場合に指定）。to_walletablesと同時に指定することはできません。将来廃止予定。振替先の複数指定に対応していないため、to_walletablesの各行amountを利用してください。 例: `5000` (最小: -9223372036854776000, 最大: 9223372036854776000)
+- from_partner_id (任意): integer(int64) - 振替元口座行の取引先ID。更新時にキーを省略すると既存値を引き継ぎます。0またはnullは取引先を外す指定です。作成時にキーを省略するか、0またはnullを指定すると取引先なしになります。「口座振替（口座間移動）での取引先タグ付与ルール」が未設定の場合、既存値と同じIDの指定を除き、取引先の追加・変更・削除はできません。 例: `201` (最小: 0)
+- from_section_id (任意): integer(int64) - 振替元口座行の部門ID。更新時にキーを省略すると既存値を引き継ぎます。0またはnullは部門を外す指定です。作成時にキーを省略すると口座タグ設定に従います。口座タグ設定が固定の場合は設定タグを優先し、未設定の場合は有効なIDを指定できません。部門の入力が必須（全ての科目）の事業所では、部門なしになる保存はエラーです。 例: `1` (最小: 0)
+- from_item_id (任意): integer(int64) - 振替元口座行の品目ID。更新時にキーを省略すると既存値を引き継ぎます。0またはnullは品目を外す指定です。作成時にキーを省略すると口座タグ設定に従います。口座タグ設定が固定の場合は設定タグを優先し、未設定の場合は有効なIDを指定できません。 例: `501` (最小: 0)
+- from_tag_ids (任意): array[integer] - 振替元口座行のメモタグID。更新時にキーを省略すると既存値を引き継ぎます。空配列またはnullはメモタグをすべて外す指定です。作成時にキーを省略すると口座タグ設定に従います。口座タグ設定が固定の場合は設定タグを優先し、未設定の場合は有効なIDを指定できません。 例: `[1,2]`
+- from_segment_1_tag_id (任意): integer(int64) - 振替元口座行のセグメント１タグID。更新時にキーを省略すると既存値を引き継ぎます。0またはnullはタグを外す指定です。作成時にキーを省略すると口座タグ設定に従います。口座タグ設定が固定の場合は設定タグを優先し、未設定の場合は有効なIDを指定できません。セグメントタグを利用できないプランでは指定を無視します。 例: `1` (最小: 0)
+- from_segment_2_tag_id (任意): integer(int64) - 振替元口座行のセグメント２タグID。更新時にキーを省略すると既存値を引き継ぎます。0またはnullはタグを外す指定です。作成時にキーを省略すると口座タグ設定に従います。口座タグ設定が固定の場合は設定タグを優先し、未設定の場合は有効なIDを指定できません。セグメントタグを利用できないプランでは指定を無視します。 例: `1` (最小: 0)
+- from_segment_3_tag_id (任意): integer(int64) - 振替元口座行のセグメント３タグID。更新時にキーを省略すると既存値を引き継ぎます。0またはnullはタグを外す指定です。作成時にキーを省略すると口座タグ設定に従います。口座タグ設定が固定の場合は設定タグを優先し、未設定の場合は有効なIDを指定できません。セグメントタグを利用できないプランでは指定を無視します。 例: `1` (最小: 0)
 - date (必須): string - 振替日 (yyyy-mm-dd) 例: `2019-12-17`
 - company_id (必須): integer(int64) - 事業所ID 例: `1` (最小: 1)
-- description (任意): string - 備考 例: `備考`
+- description (任意): string - 備考（単一振替先の場合に指定）。to_walletablesと同時に指定することはできません。将来廃止予定。振替先の複数指定に対応していないため、to_walletablesの各行descriptionを利用してください。 例: `備考`
+- to_walletables (任意): array[object] - 振替先口座行（振替先が複数の場合に指定・最大50行）。単一のto_walletable_id / to_walletable_type / amount / descriptionと同時に指定することはできません。振替元はfrom_walletable_id / from_walletable_typeで共通指定。
+  配列の要素:
+    - type (必須): string - 振替先口座の口座区分
+* `bank_account` - 銀行口座
+* `credit_card` - クレジットカード
+* `wallet` - その他の決済口座（現金・電子マネー・売掛/買掛など） (選択肢: bank_account, credit_card, wallet) 例: `bank_account`
+    - id (必須): integer(int64) - 振替先口座ID。口座一覧の取得（GET /api/1/walletables）で取得できるIDを指定します。 例: `1` (最小: 1)
+    - amount (必須): integer(int64) - 振替先口座への振替金額（円）。0円より大きい金額を指定します。 例: `3000` (最小: -9223372036854776000, 最大: 9223372036854776000)
+    - description (任意): string - 備考 例: `備考`
+    - partner_id (任意): integer(int64) - 振替先口座行の取引先ID。更新時にキーを省略すると同一口座の既存行から引き継ぎます。0またはnullは取引先を外す指定です。作成時にキーを省略するか、0またはnullを指定すると取引先なしになります。「口座振替（口座間移動）での取引先タグ付与ルール」が未設定の場合、既存値と同じIDの指定を除き、取引先の追加・変更・削除はできません。 例: `201` (最小: 0)
+    - section_id (任意): integer(int64) - 振替先口座行の部門ID。更新時にキーを省略すると同一口座の既存行から引き継ぎます。0またはnullは部門を外す指定です。作成時にキーを省略すると口座タグ設定に従います。口座タグ設定が固定の場合は設定タグを優先し、未設定の場合は有効なIDを指定できません。部門の入力が必須（全ての科目）の事業所では、部門なしになる保存はエラーです。 例: `2` (最小: 0)
+    - item_id (任意): integer(int64) - 振替先口座行の品目ID。更新時にキーを省略すると同一口座の既存行から引き継ぎます。0またはnullは品目を外す指定です。作成時にキーを省略すると口座タグ設定に従います。口座タグ設定が固定の場合は設定タグを優先し、未設定の場合は有効なIDを指定できません。 例: `501` (最小: 0)
+    - tag_ids (任意): array[integer] - 振替先口座行のメモタグID。更新時にキーを省略すると同一口座の既存行から引き継ぎます。空配列またはnullはメモタグをすべて外す指定です。作成時にキーを省略すると口座タグ設定に従います。口座タグ設定が固定の場合は設定タグを優先し、未設定の場合は有効なIDを指定できません。 例: `[1,2]`
+    - segment_1_tag_id (任意): integer(int64) - 振替先口座行のセグメント１タグID。更新時にキーを省略すると同一口座の既存行から引き継ぎます。0またはnullはタグを外す指定です。作成時にキーを省略すると口座タグ設定に従います。口座タグ設定が固定の場合は設定タグを優先し、未設定の場合は有効なIDを指定できません。セグメントタグを利用できないプランでは指定を無視します。 例: `1` (最小: 0)
+    - segment_2_tag_id (任意): integer(int64) - 振替先口座行のセグメント２タグID。更新時にキーを省略すると同一口座の既存行から引き継ぎます。0またはnullはタグを外す指定です。作成時にキーを省略すると口座タグ設定に従います。口座タグ設定が固定の場合は設定タグを優先し、未設定の場合は有効なIDを指定できません。セグメントタグを利用できないプランでは指定を無視します。 例: `1` (最小: 0)
+    - segment_3_tag_id (任意): integer(int64) - 振替先口座行のセグメント３タグID。更新時にキーを省略すると同一口座の既存行から引き継ぎます。0またはnullはタグを外す指定です。作成時にキーを省略すると口座タグ設定に従います。口座タグ設定が固定の場合は設定タグを優先し、未設定の場合は有効なIDを指定できません。セグメントタグを利用できないプランでは指定を無視します。 例: `1` (最小: 0)
 
 ### レスポンス (200)
 
 - transfer (必須): object
   - id (必須): integer(int64) - 取引(振替)ID 例: `1` (最小: 1)
   - company_id (必須): integer(int64) - 事業所ID 例: `1` (最小: 1)
-  - amount (必須): integer(int64) - 金額 例: `5000` (最小: -9223372036854776000, 最大: 9223372036854776000)
+  - amount (必須): integer(int64) - 振替金額（円）。振替先が複数ある場合は全行の合計金額を返します。支払手数料が設定されている場合は、支払手数料分を加算した金額を返します。将来廃止予定。振替先の複数指定に対応していないため、to_walletablesの各行amountを利用してください。 例: `5000` (最小: -9223372036854776000, 最大: 9223372036854776000)
   - date (必須): string - 振替日 (yyyy-mm-dd) 例: `2019-12-17`
-  - from_walletable_type (必須): string - 振替元口座区分 (銀行口座: bank_account, クレジットカード: credit_card, 現金: wallet) (選択肢: bank_account, wallet, credit_card) 例: `credit_card`
-  - from_walletable_id (必須): integer(int64) - 振替元口座ID 例: `101` (最小: 1)
-  - to_walletable_type (必須): string - 振替先口座区分 (銀行口座: bank_account, クレジットカード: credit_card, 現金: wallet) (選択肢: bank_account, wallet, credit_card) 例: `bank_account`
-  - to_walletable_id (必須): integer(int64) - 振替先口座ID 例: `201` (最小: 1)
-  - description (必須): string - 備考 例: `備考`
+  - from_walletable_type (必須): string - 振替元口座の口座区分
+* `bank_account` - 銀行口座
+* `credit_card` - クレジットカード
+* `wallet` - その他の決済口座（現金・電子マネー・売掛/買掛など） (選択肢: bank_account, wallet, credit_card) 例: `credit_card`
+  - from_walletable_id (必須): integer(int64) - 振替元口座ID。口座一覧の取得（GET /api/1/walletables）で取得できるIDです。 例: `101` (最小: 1)
+  - from_partner_id (必須): integer(int64) - 振替元口座行の取引先ID。取引先が設定されていない場合は0を返します。 例: `201`
+  - from_partner_code (必須): string - 振替元口座行の取引先コード。事業所の設定で取引先コードの利用が無効の場合、または取引先が設定されていない場合はnullを返します。 例: `code001`
+  - from_section_id (必須): integer(int64) - 振替元口座行の部門ID。部門が設定されていない場合はnullを返します。 例: `1`
+  - from_section_code (必須): string - 振替元口座行の部門コード。事業所の設定で部門コードの利用が無効の場合、または部門が設定されていない場合はnullを返します。 例: `code001`
+  - from_item_id (必須): integer(int64) - 振替元口座行の品目ID。品目が設定されていない場合はnullを返します。 例: `501`
+  - from_item_code (必須): string - 振替元口座行の品目コード。事業所の設定で品目コードの利用が無効の場合、または品目が設定されていない場合はnullを返します。 例: `code001`
+  - from_tag_ids (必須): array[integer] - 振替元口座行のメモタグID 例: `[1,2,3]`
+  - from_segment_1_tag_id (任意): integer(int64) - 振替元口座行のセグメント１タグID。セグメントタグが利用できないプランの場合、キー自体がレスポンスに含まれません。セグメント１タグが設定されていない場合はnullを返します。 例: `1`
+  - from_segment_1_tag_code (任意): string - 振替元口座行のセグメント１タグコード。セグメントタグが利用できないプランの場合、キー自体がレスポンスに含まれません。事業所の設定でセグメントタグコードの利用が無効の場合、またはセグメント１タグが設定されていない場合はnullを返します。 例: `code001`
+  - from_segment_2_tag_id (任意): integer(int64) - 振替元口座行のセグメント２タグID。セグメントタグが利用できないプランの場合、キー自体がレスポンスに含まれません。セグメント２タグが設定されていない場合はnullを返します。 例: `1`
+  - from_segment_2_tag_code (任意): string - 振替元口座行のセグメント２タグコード。セグメントタグが利用できないプランの場合、キー自体がレスポンスに含まれません。事業所の設定でセグメントタグコードの利用が無効の場合、またはセグメント２タグが設定されていない場合はnullを返します。 例: `code001`
+  - from_segment_3_tag_id (任意): integer(int64) - 振替元口座行のセグメント３タグID。セグメントタグが利用できないプランの場合、キー自体がレスポンスに含まれません。セグメント３タグが設定されていない場合はnullを返します。 例: `1`
+  - from_segment_3_tag_code (任意): string - 振替元口座行のセグメント３タグコード。セグメントタグが利用できないプランの場合、キー自体がレスポンスに含まれません。事業所の設定でセグメントタグコードの利用が無効の場合、またはセグメント３タグが設定されていない場合はnullを返します。 例: `code001`
+  - to_walletable_type (必須): string - 振替先口座の口座区分。振替先が複数ある場合は金額が最大の行の値を返します。将来廃止予定。振替先の複数指定に対応していないため、to_walletablesを利用してください。
+* `bank_account` - 銀行口座
+* `credit_card` - クレジットカード
+* `wallet` - その他の決済口座（現金・電子マネー・売掛/買掛など） (選択肢: bank_account, wallet, credit_card) 例: `bank_account`
+  - to_walletable_id (必須): integer(int64) - 振替先口座ID。振替先が複数ある場合は金額が最大の行の値を返します。将来廃止予定。振替先の複数指定に対応していないため、to_walletablesを利用してください。 例: `201` (最小: 1)
+  - description (必須): string - 備考。振替先が複数ある場合は各行の備考を「, 」（カンマと半角スペース）で結合した文字列を返します。備考が未設定の場合はnullを返します。将来廃止予定。振替先の複数指定に対応していないため、to_walletablesの各行descriptionを利用してください。 例: `備考`
+  - to_walletables (必須): array[object] - 振替先口座行（複数）。各行に振替先口座・金額・備考を持つ。
 
 ### DELETE /api/1/transfers/{id}
 
 操作: 取引（振替）の削除
 
-説明: 概要 指定した事業所の取引（振替）を削除する
+説明: 概要 指定した事業所の取引（振替）を削除する 注意点 指定したIDの取引（振替）が存在しない場合や、削除済み・権限がない場合は404を返します。 取引（振替）の状態により削除できない場合は400を返します。エラーメッセージに削除できない理由を含みます。
 
 ### パラメータ
 

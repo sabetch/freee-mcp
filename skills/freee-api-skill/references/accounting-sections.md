@@ -10,281 +10,263 @@
 
 操作: 部門一覧の取得
 
-説明: 概要 指定した事業所の部門一覧を取得する 事業所の設定で部門コードを使用する設定にしている場合、レスポンスで部門コード(code)を返します レスポンスの例 GET https://api.freee.co.jp/api/1/sections?company_id=1 // プレミアムプラン、法人スタンダードプラン（および旧法人ベーシックプラン）以上 { &quot;sections&quot; : [ { &quot;id&quot; : 101, &quot;company_id&quot; : 1, &quot;name&quot; : &quot;開発部門&quot;, &quot;long_name&quot;: &quot;開発部門&quot;, &quot;shortcut1&quot; : &quot;DEVELOPER&quot;, &quot;shortcut2&quot; : &quot;123&quot;, &quot;indent_count&quot;: 1, &quot;parent_id&quot;: 11 }, ... ] } // それ以外のプラン ...
+説明: 概要 指定した事業所に登録されている部門の一覧を取得します。取引や振替伝票の明細に付与する部門マスタを参照する用途を想定しています。 注意点 start_update_date / end_update_date で部門の更新日を範囲指定して絞り込めます。JST の日付を yyyy-mm-dd で指定してください（どちらも指定日を含みます）。部門階層を利用している場合、階層構造を維持するため、更新日が範囲外の親部門を含むことがあります。 部門階層を利用できるプランでは indent_count と parent_id を返します。利用できないプランでは、これらのキー自体が返りません。 部門コード（code）は、事業所の設定で部門コードを使用する設定にしている場合のみレスポンスに含まれます。設定が無効の場合は code キー自体が返りません。
 
 ### パラメータ
 
 | 名前 | 位置 | 必須 | 型 | 説明 |
 |------|------|------|-----|------|
-| company_id | query | はい | integer(int64) | 事業所ID |
-| start_update_date | query | いいえ | string | 更新日で絞込：開始日(yyyy-mm-dd) |
-| end_update_date | query | いいえ | string | 更新日で絞込：終了日(yyyy-mm-dd) |
+| company_id | query | はい | integer(int64) | 事業所ID。取得対象の事業所を指定します。 |
+| start_update_date | query | いいえ | string | 更新日で絞り込む開始日 (yyyy-mm-dd, JST)。指定日を含む、それ以降に更新された部門を対象にします。 |
+| end_update_date | query | いいえ | string | 更新日で絞り込む終了日 (yyyy-mm-dd, JST)。指定日を含む、それ以前に更新された部門を対象にします。 |
 
 ### レスポンス (200)
 
-- sections (必須): array[object]
+部門一覧の取得に成功しました。
+
+- sections (必須): array[object] - 部門の一覧
   配列の要素:
-    - id (必須): integer(int64) - 部門ID 例: `1` (最小: 1)
-    - name (必須): string - 部門名 (30文字以内) 例: `開発部門`
-    - available (必須): boolean - 部門の使用設定（true: 使用する、false: 使用しない）
+    - id (必須): integer(int64) - 部門ID。部門の取得・更新・削除APIのパスパラメータや、取引作成時の明細（details）の section_id に指定します。 例: `101` (最小: 1)
+    - name (必須): string - 部門名 (30文字以内)。事業所内で重複しません。 例: `開発部門`
+    - available (必須): boolean - 部門の使用設定（true: 使用する、false: 使用しない）。
 <br>
 <ul>
   <li>
-    本APIでsectionを作成した場合はtrueになります。
+    本APIで部門を作成した場合は true になります。
   </li>
   <li>
-    falseにする場合はWeb画面から変更できます。
+    false にする場合はWeb画面から変更できます。
   </li>
   <li>
-    trueの場合、Web画面での取引登録時などに入力候補として表示されます。
+    true の場合、Web画面での取引登録時などに入力候補として表示されます。
   </li>
   <li>
-    falseの場合、部門自体は削除せず、Web画面での取引登録時などに入力候補として表示されません。ただし取引（収入・支出）の作成APIなどでfalseの部門をパラメータに指定すれば、取引などにfalseの部門を設定できます。
+    false の場合、部門自体は削除せず、Web画面での取引登録時などに入力候補として表示されません。ただし取引（収入・支出）の作成APIなどでは、false の部門もパラメータに指定できます。
   </li>
 </ul> 例: `true`
-    - long_name (任意): string - 正式名称（255文字以内） 例: `開発部門`
-    - company_id (必須): integer(int64) - 事業所ID 例: `1` (最小: 1)
-    - shortcut1 (任意): string - ショートカット１ (20文字以内) 例: `DEVELOPER`
-    - shortcut2 (任意): string - ショートカット２ (20文字以内) 例: `123`
-    - code (任意): string - 部門コード 例: `code001` (パターン: ^[0-9a-zA-Z_-]+$)
-    - indent_count (任意): integer(int64) - <a target="_blank" href="https://support.freee.co.jp/hc/ja/articles/209093566">部門階層</a>
-<br>
-※ indent_count が 0 のときは第一階層の親部門です。
- 例: `0` (最小: 0)
-    - parent_id (任意): integer(int64) - <a target="_blank" href="https://support.freee.co.jp/hc/ja/articles/209093566">親部門ID</a>
-<br>
-※ parent_id が null のときは第一階層の親部門です。
- 例: `1` (最小: 1)
-    - update_date (任意): string - 更新日(yyyy-mm-dd) 例: `2020-06-15`
+    - long_name (必須): string - 部門の正式名称 (255文字以内)。未設定の場合は null が返ります。 例: `開発部門`
+    - company_id (必須): integer(int64) - 部門が属する事業所ID 例: `1` (最小: 1)
+    - shortcut1 (必須): string - ショートカット1 (20文字以内)。Web画面などで部門を検索する際のキーワードとして使用します。未設定の場合は null が返ります。 例: `DEVELOPER`
+    - shortcut2 (必須): string - ショートカット2 (20文字以内)。Web画面などで部門を検索する際のキーワードとして使用します。未設定の場合は null が返ります。 例: `123`
+    - code (任意): string - 部門コード (20文字以内)。事業所の設定で部門コードを使用する設定にしている場合のみレスポンスに含まれます（設定が無効の場合は code キー自体が返りません）。部門コードが未設定の場合は null が返ります。 例: `code001` (パターン: ^[0-9a-zA-Z_-]+$)
+    - indent_count (任意): integer(int64) - <a target="_blank" href="https://support.freee.co.jp/hc/ja/articles/209093566">部門階層</a>の深さ。最上位の部門は 0 です。部門階層を利用できるプランの場合のみレスポンスに含まれます。 例: `0` (最小: 0)
+    - parent_id (任意): integer(int64) - <a target="_blank" href="https://support.freee.co.jp/hc/ja/articles/209093566">親部門ID</a>。最上位の部門では null が返ります。部門階層を利用できるプランの場合のみレスポンスに含まれます。 例: `100` (最小: 1)
+    - update_date (任意): string - 部門の最終更新日 (yyyy-mm-dd, JST)。部門一覧の取得APIでのみレスポンスに含まれ、start_update_date / end_update_date による絞り込みの対象です。 例: `2024-01-15`
 
 ### POST /api/1/sections
 
 操作: 部門の作成
 
-説明: 概要 指定した事業所の部門を作成する codeを利用するには、事業所の設定で部門コードを使用する設定にする必要があります。 レスポンスの例 // プレミアムプラン、法人スタンダードプラン（および旧法人ベーシックプラン）以上 { &quot;section&quot; : { &quot;id&quot; : 102, &quot;company_id&quot; : 1, &quot;name&quot; : &quot;開発部門&quot;, &quot;shortcut1&quot; : &quot;DEVELOPER&quot;, &quot;shortcut2&quot; : &quot;123&quot;, &quot;indent_count&quot;: 1, &quot;parent_id&quot;: 101 } } // それ以外のプラン { &quot;section&quot; : { &quot;id&quot; : 102, &quot;company_id&quot; : 1, &quot;name&quot; : &quot;開発部門&quot;, &q...
+説明: 概要 指定した事業所に新しい部門を作成します。作成された部門は使用設定（available）が true の状態で登録され、取引作成時などに指定できるようになります。 注意点 部門名（name）は事業所内で重複できません。既に同名の部門が存在する場合は 400 エラーになります。 部門コード（code）を利用するには、事業所の設定で部門コードを使用する設定にする必要があります。設定が無効の場合、code を指定しても無視され保存されません。 親部門ID（parent_id）は部門階層を利用できるプランでのみ反映されます。利用できないプランでは指定しても親子関係は作成されません。
 
 ### リクエストボディ
 
-- company_id (必須): integer(int64) - 事業所ID 例: `1` (最小: 1)
-- name (必須): string - 部門名 (30文字以内) 例: `開発部門`
-- long_name (任意): string - 正式名称 (255文字以内) 例: `xxxx開発部門`
-- shortcut1 (任意): string - ショートカット１ (20文字以内) 例: `DEVELOPER`
-- shortcut2 (任意): string - ショートカット２ (20文字以内) 例: `123`
-- code (任意): string - 部門コード 例: `code001` (パターン: ^[0-9a-zA-Z_-]+$)
-- parent_id (任意): integer(int64) - 親部門ID (プレミアムプラン、法人スタンダードプラン（および旧法人ベーシックプラン）以上) 例: `101` (最小: 1)
+- company_id (必須): integer(int64) - 事業所ID。部門を作成・更新する対象の事業所を指定します。 例: `1` (最小: 1)
+- name (必須): string - 部門名 (30文字以内)。事業所内で重複できません。既に同名の部門が存在する場合は 400 エラーになります。 例: `開発部門`
+- long_name (任意): string - 部門の正式名称 (255文字以内)。作成時に省略した場合は未設定（null）になります。更新時に省略した場合は現在の値を維持し、null を指定した場合は未設定に更新します。 例: `開発本部`
+- shortcut1 (任意): string - ショートカット1 (20文字以内)。Web画面などで部門を検索する際のキーワードとして使用します。更新時に省略または null を指定した場合は未設定（null）に更新されます。 例: `DEVELOPER`
+- shortcut2 (任意): string - ショートカット2 (20文字以内)。Web画面などで部門を検索する際のキーワードとして使用します。更新時に省略または null を指定した場合は未設定（null）に更新されます。 例: `123`
+- code (任意): string - 部門コード (20文字以内、半角英数字・ハイフン・アンダースコアのみ)。事業所内で重複できません。事業所の設定で部門コードを使用する設定にしている場合のみ保存され、設定が無効の場合は指定しても無視されます。更新時に省略または null を指定した場合は未設定（null）に更新されます。 例: `code001` (パターン: ^[0-9a-zA-Z_-]+$)
+- parent_id (任意): integer(int64) - 親部門ID。部門階層を利用できるプランでのみ反映されます。更新時に省略した場合は現在の親子関係を維持し、null を指定した場合は親部門との関係を解除します。 例: `101` (最小: 1)
 
 ### レスポンス (201)
 
+部門の作成に成功しました。作成された部門を返します。
+
 - section (必須): object
-  - id (必須): integer(int64) - 部門ID 例: `1` (最小: 1)
-  - name (必須): string - 部門名 (30文字以内) 例: `開発部門`
-  - available (必須): boolean - 部門の使用設定（true: 使用する、false: 使用しない）
+  - id (必須): integer(int64) - 部門ID。部門の取得・更新・削除APIのパスパラメータや、取引作成時の明細（details）の section_id に指定します。 例: `101` (最小: 1)
+  - name (必須): string - 部門名 (30文字以内)。事業所内で重複しません。 例: `開発部門`
+  - available (必須): boolean - 部門の使用設定（true: 使用する、false: 使用しない）。
 <br>
 <ul>
   <li>
-    本APIでsectionを作成した場合はtrueになります。
+    本APIで部門を作成した場合は true になります。
   </li>
   <li>
-    falseにする場合はWeb画面から変更できます。
+    false にする場合はWeb画面から変更できます。
   </li>
   <li>
-    trueの場合、Web画面での取引登録時などに入力候補として表示されます。
+    true の場合、Web画面での取引登録時などに入力候補として表示されます。
   </li>
   <li>
-    falseの場合、部門自体は削除せず、Web画面での取引登録時などに入力候補として表示されません。ただし取引（収入・支出）の作成APIなどでfalseの部門をパラメータに指定すれば、取引などにfalseの部門を設定できます。
+    false の場合、部門自体は削除せず、Web画面での取引登録時などに入力候補として表示されません。ただし取引（収入・支出）の作成APIなどでは、false の部門もパラメータに指定できます。
   </li>
 </ul> 例: `true`
-  - long_name (任意): string - 正式名称（255文字以内） 例: `開発部門`
-  - company_id (必須): integer(int64) - 事業所ID 例: `1` (最小: 1)
-  - shortcut1 (任意): string - ショートカット１ (20文字以内) 例: `DEVELOPER`
-  - shortcut2 (任意): string - ショートカット２ (20文字以内) 例: `123`
-  - code (任意): string - 部門コード 例: `code001` (パターン: ^[0-9a-zA-Z_-]+$)
-  - indent_count (任意): integer(int64) - <a target="_blank" href="https://support.freee.co.jp/hc/ja/articles/209093566">部門階層</a>
-<br>
-※ indent_count が 0 のときは第一階層の親部門です。
- 例: `0` (最小: 0)
-  - parent_id (任意): integer(int64) - <a target="_blank" href="https://support.freee.co.jp/hc/ja/articles/209093566">親部門ID</a>
-<br>
-※ parent_id が null のときは第一階層の親部門です。
- 例: `1` (最小: 1)
-  - update_date (任意): string - 更新日(yyyy-mm-dd) 例: `2020-06-15`
+  - long_name (必須): string - 部門の正式名称 (255文字以内)。未設定の場合は null が返ります。 例: `開発部門`
+  - company_id (必須): integer(int64) - 部門が属する事業所ID 例: `1` (最小: 1)
+  - shortcut1 (必須): string - ショートカット1 (20文字以内)。Web画面などで部門を検索する際のキーワードとして使用します。未設定の場合は null が返ります。 例: `DEVELOPER`
+  - shortcut2 (必須): string - ショートカット2 (20文字以内)。Web画面などで部門を検索する際のキーワードとして使用します。未設定の場合は null が返ります。 例: `123`
+  - code (任意): string - 部門コード (20文字以内)。事業所の設定で部門コードを使用する設定にしている場合のみレスポンスに含まれます（設定が無効の場合は code キー自体が返りません）。部門コードが未設定の場合は null が返ります。 例: `code001` (パターン: ^[0-9a-zA-Z_-]+$)
+  - indent_count (任意): integer(int64) - <a target="_blank" href="https://support.freee.co.jp/hc/ja/articles/209093566">部門階層</a>の深さ。最上位の部門は 0 です。部門階層を利用できるプランの場合のみレスポンスに含まれます。 例: `0` (最小: 0)
+  - parent_id (任意): integer(int64) - <a target="_blank" href="https://support.freee.co.jp/hc/ja/articles/209093566">親部門ID</a>。最上位の部門では null が返ります。部門階層を利用できるプランの場合のみレスポンスに含まれます。 例: `100` (最小: 1)
+  - update_date (任意): string - 部門の最終更新日 (yyyy-mm-dd, JST)。部門一覧の取得APIでのみレスポンスに含まれ、start_update_date / end_update_date による絞り込みの対象です。 例: `2024-01-15`
 
 ### GET /api/1/sections/{id}
 
 操作: 部門の取得
 
-説明: 概要 指定した事業所の部門を取得する 事業所の設定で部門コードを使用する設定にしている場合、レスポンスで部門コード(code)を返します レスポンスの例 // プレミアムプラン、法人スタンダードプラン（および旧法人ベーシックプラン）以上 { &quot;section&quot; : { &quot;id&quot; : 102, &quot;company_id&quot; : 1, &quot;name&quot; : &quot;開発部門&quot;, &quot;long_name&quot;: &quot;開発部門&quot;, &quot;shortcut1&quot; : &quot;DEVELOPER&quot;, &quot;shortcut2&quot; : &quot;123&quot;, &quot;indent_count&quot;: 1, &quot;parent_id&quot;: 101 } } // それ以外のプラン { &quot;section&quot; : { &quot;id&quot; : 102, &quot;company_id&qu...
+説明: 概要 指定した事業所の部門を 1 件取得します。部門ID（id）は部門一覧の取得APIで確認できます。 注意点 部門階層を利用できるプランでは indent_count と parent_id を返します。利用できないプランでは、これらのキー自体が返りません。 部門コード（code）は、事業所の設定で部門コードを使用する設定にしている場合のみレスポンスに含まれます。設定が無効の場合は code キー自体が返りません。 存在しないか既に削除された部門IDを指定した場合は 404 を返します。
 
 ### パラメータ
 
 | 名前 | 位置 | 必須 | 型 | 説明 |
 |------|------|------|-----|------|
-| id | path | はい | integer(int64) | 部門ID |
-| company_id | query | はい | integer(int64) | 事業所ID |
+| id | path | はい | integer(int64) | 部門ID。部門一覧の取得APIのレスポンスに含まれる id を指定します。 |
+| company_id | query | はい | integer(int64) | 事業所ID。取得対象の事業所を指定します。 |
 
 ### レスポンス (200)
 
+部門の取得に成功しました。
+
 - section (必須): object
-  - id (必須): integer(int64) - 部門ID 例: `1` (最小: 1)
-  - name (必須): string - 部門名 (30文字以内) 例: `開発部門`
-  - available (必須): boolean - 部門の使用設定（true: 使用する、false: 使用しない）
+  - id (必須): integer(int64) - 部門ID。部門の取得・更新・削除APIのパスパラメータや、取引作成時の明細（details）の section_id に指定します。 例: `101` (最小: 1)
+  - name (必須): string - 部門名 (30文字以内)。事業所内で重複しません。 例: `開発部門`
+  - available (必須): boolean - 部門の使用設定（true: 使用する、false: 使用しない）。
 <br>
 <ul>
   <li>
-    本APIでsectionを作成した場合はtrueになります。
+    本APIで部門を作成した場合は true になります。
   </li>
   <li>
-    falseにする場合はWeb画面から変更できます。
+    false にする場合はWeb画面から変更できます。
   </li>
   <li>
-    trueの場合、Web画面での取引登録時などに入力候補として表示されます。
+    true の場合、Web画面での取引登録時などに入力候補として表示されます。
   </li>
   <li>
-    falseの場合、部門自体は削除せず、Web画面での取引登録時などに入力候補として表示されません。ただし取引（収入・支出）の作成APIなどでfalseの部門をパラメータに指定すれば、取引などにfalseの部門を設定できます。
+    false の場合、部門自体は削除せず、Web画面での取引登録時などに入力候補として表示されません。ただし取引（収入・支出）の作成APIなどでは、false の部門もパラメータに指定できます。
   </li>
 </ul> 例: `true`
-  - long_name (任意): string - 正式名称（255文字以内） 例: `開発部門`
-  - company_id (必須): integer(int64) - 事業所ID 例: `1` (最小: 1)
-  - shortcut1 (任意): string - ショートカット１ (20文字以内) 例: `DEVELOPER`
-  - shortcut2 (任意): string - ショートカット２ (20文字以内) 例: `123`
-  - code (任意): string - 部門コード 例: `code001` (パターン: ^[0-9a-zA-Z_-]+$)
-  - indent_count (任意): integer(int64) - <a target="_blank" href="https://support.freee.co.jp/hc/ja/articles/209093566">部門階層</a>
-<br>
-※ indent_count が 0 のときは第一階層の親部門です。
- 例: `0` (最小: 0)
-  - parent_id (任意): integer(int64) - <a target="_blank" href="https://support.freee.co.jp/hc/ja/articles/209093566">親部門ID</a>
-<br>
-※ parent_id が null のときは第一階層の親部門です。
- 例: `1` (最小: 1)
-  - update_date (任意): string - 更新日(yyyy-mm-dd) 例: `2020-06-15`
+  - long_name (必須): string - 部門の正式名称 (255文字以内)。未設定の場合は null が返ります。 例: `開発部門`
+  - company_id (必須): integer(int64) - 部門が属する事業所ID 例: `1` (最小: 1)
+  - shortcut1 (必須): string - ショートカット1 (20文字以内)。Web画面などで部門を検索する際のキーワードとして使用します。未設定の場合は null が返ります。 例: `DEVELOPER`
+  - shortcut2 (必須): string - ショートカット2 (20文字以内)。Web画面などで部門を検索する際のキーワードとして使用します。未設定の場合は null が返ります。 例: `123`
+  - code (任意): string - 部門コード (20文字以内)。事業所の設定で部門コードを使用する設定にしている場合のみレスポンスに含まれます（設定が無効の場合は code キー自体が返りません）。部門コードが未設定の場合は null が返ります。 例: `code001` (パターン: ^[0-9a-zA-Z_-]+$)
+  - indent_count (任意): integer(int64) - <a target="_blank" href="https://support.freee.co.jp/hc/ja/articles/209093566">部門階層</a>の深さ。最上位の部門は 0 です。部門階層を利用できるプランの場合のみレスポンスに含まれます。 例: `0` (最小: 0)
+  - parent_id (任意): integer(int64) - <a target="_blank" href="https://support.freee.co.jp/hc/ja/articles/209093566">親部門ID</a>。最上位の部門では null が返ります。部門階層を利用できるプランの場合のみレスポンスに含まれます。 例: `100` (最小: 1)
+  - update_date (任意): string - 部門の最終更新日 (yyyy-mm-dd, JST)。部門一覧の取得APIでのみレスポンスに含まれ、start_update_date / end_update_date による絞り込みの対象です。 例: `2024-01-15`
 
 ### PUT /api/1/sections/{id}
 
 操作: 部門の更新
 
-説明: 概要 指定した事業所の部門を更新する codeを利用するには、事業所の設定で部門コードを使用する設定にする必要があります。 レスポンスの例 // プレミアムプラン、法人スタンダードプラン（および旧法人ベーシックプラン）以上 { &quot;section&quot; : { &quot;id&quot; : 102, &quot;company_id&quot; : 1, &quot;name&quot; : &quot;開発部門&quot;, &quot;long_name&quot;: &quot;開発部門&quot;, &quot;shortcut1&quot; : &quot;DEVELOPER&quot;, &quot;shortcut2&quot; : &quot;123&quot;, &quot;indent_count&quot;: 1, &quot;parent_id&quot;: 101 } } // それ以外のプラン { &quot;section&quot; : { &quot;id&quot; : 102, &quot;company_id&quot; : 1...
+説明: 概要 指定した事業所の部門を更新します。このAPIは部門の作成は行いません。部門コードをキーに更新（存在しない場合は作成）したい場合は PUT /api/1/sections/code/upsert を利用してください。 注意点 部門名（name）は事業所内で重複できません。別の部門と同名になる更新は 400 エラーになります。 long_name と parent_id は、省略した場合に現在の値・親子関係を維持します。null を指定すると未設定・親部門なしに更新します。 shortcut1 / shortcut2 / code は、省略または null を指定した場合に未設定（null）へ更新されます。値を維持したい場合は現在の値を指定してください。 部門コード（code）は、事業所の設定で部門コードを使用する設定にしている場合のみ更新されます。設定が無効の場合、code を指定しても無視されます。 親部門ID（parent_id）は部門階層を利用できるプランでのみ反映されます。
 
 ### パラメータ
 
 | 名前 | 位置 | 必須 | 型 | 説明 |
 |------|------|------|-----|------|
-| id | path | はい | integer(int64) |  |
+| id | path | はい | integer(int64) | 部門ID。部門一覧の取得APIのレスポンスに含まれる id を指定します。 |
 
 ### リクエストボディ
 
-- company_id (必須): integer(int64) - 事業所ID 例: `1` (最小: 1)
-- name (必須): string - 部門名 (30文字以内) 例: `開発部門`
-- long_name (任意): string - 正式名称 (255文字以内) 例: `xxxx開発部門`
-- shortcut1 (任意): string - ショートカット１ (20文字以内) 例: `DEVELOPER`
-- shortcut2 (任意): string - ショートカット２ (20文字以内) 例: `123`
-- code (任意): string - 部門コード 例: `code001` (パターン: ^[0-9a-zA-Z_-]+$)
-- parent_id (任意): integer(int64) - 親部門ID (プレミアムプラン、法人スタンダードプラン（および旧法人ベーシックプラン）以上) 例: `101` (最小: 1)
+- company_id (必須): integer(int64) - 事業所ID。部門を作成・更新する対象の事業所を指定します。 例: `1` (最小: 1)
+- name (必須): string - 部門名 (30文字以内)。事業所内で重複できません。既に同名の部門が存在する場合は 400 エラーになります。 例: `開発部門`
+- long_name (任意): string - 部門の正式名称 (255文字以内)。作成時に省略した場合は未設定（null）になります。更新時に省略した場合は現在の値を維持し、null を指定した場合は未設定に更新します。 例: `開発本部`
+- shortcut1 (任意): string - ショートカット1 (20文字以内)。Web画面などで部門を検索する際のキーワードとして使用します。更新時に省略または null を指定した場合は未設定（null）に更新されます。 例: `DEVELOPER`
+- shortcut2 (任意): string - ショートカット2 (20文字以内)。Web画面などで部門を検索する際のキーワードとして使用します。更新時に省略または null を指定した場合は未設定（null）に更新されます。 例: `123`
+- code (任意): string - 部門コード (20文字以内、半角英数字・ハイフン・アンダースコアのみ)。事業所内で重複できません。事業所の設定で部門コードを使用する設定にしている場合のみ保存され、設定が無効の場合は指定しても無視されます。更新時に省略または null を指定した場合は未設定（null）に更新されます。 例: `code001` (パターン: ^[0-9a-zA-Z_-]+$)
+- parent_id (任意): integer(int64) - 親部門ID。部門階層を利用できるプランでのみ反映されます。更新時に省略した場合は現在の親子関係を維持し、null を指定した場合は親部門との関係を解除します。 例: `101` (最小: 1)
 
 ### レスポンス (200)
 
+部門の更新に成功しました。更新後の部門を返します。
+
 - section (必須): object
-  - id (必須): integer(int64) - 部門ID 例: `1` (最小: 1)
-  - name (必須): string - 部門名 (30文字以内) 例: `開発部門`
-  - available (必須): boolean - 部門の使用設定（true: 使用する、false: 使用しない）
+  - id (必須): integer(int64) - 部門ID。部門の取得・更新・削除APIのパスパラメータや、取引作成時の明細（details）の section_id に指定します。 例: `101` (最小: 1)
+  - name (必須): string - 部門名 (30文字以内)。事業所内で重複しません。 例: `開発部門`
+  - available (必須): boolean - 部門の使用設定（true: 使用する、false: 使用しない）。
 <br>
 <ul>
   <li>
-    本APIでsectionを作成した場合はtrueになります。
+    本APIで部門を作成した場合は true になります。
   </li>
   <li>
-    falseにする場合はWeb画面から変更できます。
+    false にする場合はWeb画面から変更できます。
   </li>
   <li>
-    trueの場合、Web画面での取引登録時などに入力候補として表示されます。
+    true の場合、Web画面での取引登録時などに入力候補として表示されます。
   </li>
   <li>
-    falseの場合、部門自体は削除せず、Web画面での取引登録時などに入力候補として表示されません。ただし取引（収入・支出）の作成APIなどでfalseの部門をパラメータに指定すれば、取引などにfalseの部門を設定できます。
+    false の場合、部門自体は削除せず、Web画面での取引登録時などに入力候補として表示されません。ただし取引（収入・支出）の作成APIなどでは、false の部門もパラメータに指定できます。
   </li>
 </ul> 例: `true`
-  - long_name (任意): string - 正式名称（255文字以内） 例: `開発部門`
-  - company_id (必須): integer(int64) - 事業所ID 例: `1` (最小: 1)
-  - shortcut1 (任意): string - ショートカット１ (20文字以内) 例: `DEVELOPER`
-  - shortcut2 (任意): string - ショートカット２ (20文字以内) 例: `123`
-  - code (任意): string - 部門コード 例: `code001` (パターン: ^[0-9a-zA-Z_-]+$)
-  - indent_count (任意): integer(int64) - <a target="_blank" href="https://support.freee.co.jp/hc/ja/articles/209093566">部門階層</a>
-<br>
-※ indent_count が 0 のときは第一階層の親部門です。
- 例: `0` (最小: 0)
-  - parent_id (任意): integer(int64) - <a target="_blank" href="https://support.freee.co.jp/hc/ja/articles/209093566">親部門ID</a>
-<br>
-※ parent_id が null のときは第一階層の親部門です。
- 例: `1` (最小: 1)
-  - update_date (任意): string - 更新日(yyyy-mm-dd) 例: `2020-06-15`
+  - long_name (必須): string - 部門の正式名称 (255文字以内)。未設定の場合は null が返ります。 例: `開発部門`
+  - company_id (必須): integer(int64) - 部門が属する事業所ID 例: `1` (最小: 1)
+  - shortcut1 (必須): string - ショートカット1 (20文字以内)。Web画面などで部門を検索する際のキーワードとして使用します。未設定の場合は null が返ります。 例: `DEVELOPER`
+  - shortcut2 (必須): string - ショートカット2 (20文字以内)。Web画面などで部門を検索する際のキーワードとして使用します。未設定の場合は null が返ります。 例: `123`
+  - code (任意): string - 部門コード (20文字以内)。事業所の設定で部門コードを使用する設定にしている場合のみレスポンスに含まれます（設定が無効の場合は code キー自体が返りません）。部門コードが未設定の場合は null が返ります。 例: `code001` (パターン: ^[0-9a-zA-Z_-]+$)
+  - indent_count (任意): integer(int64) - <a target="_blank" href="https://support.freee.co.jp/hc/ja/articles/209093566">部門階層</a>の深さ。最上位の部門は 0 です。部門階層を利用できるプランの場合のみレスポンスに含まれます。 例: `0` (最小: 0)
+  - parent_id (任意): integer(int64) - <a target="_blank" href="https://support.freee.co.jp/hc/ja/articles/209093566">親部門ID</a>。最上位の部門では null が返ります。部門階層を利用できるプランの場合のみレスポンスに含まれます。 例: `100` (最小: 1)
+  - update_date (任意): string - 部門の最終更新日 (yyyy-mm-dd, JST)。部門一覧の取得APIでのみレスポンスに含まれ、start_update_date / end_update_date による絞り込みの対象です。 例: `2024-01-15`
 
 ### DELETE /api/1/sections/{id}
 
 操作: 部門の削除
 
-説明: 概要 指定した事業所の部門を削除する
+説明: 概要 指定した事業所の部門を削除します。 注意点 取引明細・申請・配賦設定などで使用されている部門は削除できず、400 エラーになります。部門を入力候補から外したい場合は、Web画面から使用設定（available）を「使用しない」に変更してください。 存在しないか既に削除された部門IDを指定した場合は 404 を返します。
 
 ### パラメータ
 
 | 名前 | 位置 | 必須 | 型 | 説明 |
 |------|------|------|-----|------|
-| id | path | はい | integer(int64) |  |
-| company_id | query | はい | integer(int64) | 事業所ID |
+| id | path | はい | integer(int64) | 部門ID。部門一覧の取得APIのレスポンスに含まれる id を指定します。 |
+| company_id | query | はい | integer(int64) | 事業所ID。削除対象の部門が属する事業所を指定します。 |
 
 ### レスポンス (204)
+
+部門の削除に成功しました。レスポンスボディはありません。
 
 ### PUT /api/1/sections/code/upsert
 
 操作: 部門の更新（存在しない場合は作成）
 
-説明: 概要 部門コードをキーに、指定した部門の情報を更新（存在しない場合は作成）する 注意点 codeを利用するには、事業所の設定で部門コードを使用する設定にする必要があります。
+説明: 概要 部門コード（code）をキーに、指定した部門の情報を更新します。該当する部門が存在しない場合は新規作成します（upsert）。外部システムとの連携で、部門マスタを一括で登録・更新する用途を想定しています。 注意点 本APIを利用するには、事業所の設定で部門コードを使用する設定にする必要があります。設定が無効な事業所への呼び出しは 400 エラーになります。 section オブジェクト内で code を指定することはできません（部門コードは変更不可）。指定した場合は 400 エラーになります。リクエストボディ直下の code のみが有効です。 更新レスポンスは 200 OK、新規作成レスポンスは 201 Created で返ります。作成・更新のどちらが行われたかは HTTP ステータスコードで判別してください。 long_name と parent_code は、省略した場合に現在の値・親子関係を維持します。null を指定すると未設定・親部門なしに更新します。 shortcut1 / shortcut2 は、省略または null を指定した場合に未設定（null）へ更新されます...
 
 ### リクエストボディ
 
 (必須)
 
-- company_id (必須): integer(int64) - 事業所ID 例: `1` (最小: 1)
-- code (必須): string - 部門コード 例: `code001` (パターン: ^[0-9a-zA-Z_-]+$)
-- section (必須): object
-  - name (必須): string - 部門名 (30文字以内) 例: `開発部門`
-  - long_name (任意): string - 正式名称 (255文字以内) 例: `xxxx開発部門`
-  - shortcut1 (任意): string - ショートカット１ (20文字以内) 例: `DEVELOPER`
-  - shortcut2 (任意): string - ショートカット２ (20文字以内) 例: `123`
-  - parent_code (任意): string - 親部門コード。親部門コードの値が空の場合は、codeで指定した部門が親部門になる。 例: `code001` (パターン: ^[0-9a-zA-Z_-]+$)
+- company_id (必須): integer(int64) - 事業所ID。部門を更新・作成する対象の事業所を指定します。 例: `1` (最小: 1)
+- code (必須): string - 部門コード (20文字以内、半角英数字・ハイフン・アンダースコアのみ)。更新・作成対象の部門を特定するキーです。このコードを持つ部門が存在する場合は更新し、存在しない場合は新規作成します。 例: `code001` (パターン: ^[0-9a-zA-Z_-]+$)
+- section (必須): object - 部門に設定する内容。code（部門コード）はこのオブジェクト内には指定できません（部門コードは変更不可のため、指定すると 400 エラーになります）。
+  - name (必須): string - 部門名 (30文字以内)。事業所内で重複できません。既に同名の部門が存在する場合は 400 エラーになります。 例: `開発部門`
+  - long_name (任意): string - 部門の正式名称 (255文字以内)。更新時に省略した場合は現在の値を維持し、null を指定した場合は未設定に更新します。 例: `開発本部`
+  - shortcut1 (任意): string - ショートカット1 (20文字以内)。Web画面などで部門を検索する際のキーワードとして使用します。更新時に省略または null を指定した場合は未設定（null）に更新されます。 例: `DEVELOPER`
+  - shortcut2 (任意): string - ショートカット2 (20文字以内)。Web画面などで部門を検索する際のキーワードとして使用します。更新時に省略または null を指定した場合は未設定（null）に更新されます。 例: `123`
+  - parent_code (任意): string - 親部門コード。部門階層を利用できるプランでのみ反映されます。更新時に省略した場合は現在の親子関係を維持し、null を指定した場合は親部門との関係を解除します。 例: `parent001` (パターン: ^[0-9a-zA-Z_-]+$)
 
 ### レスポンス (200)
 
+部門の更新に成功しました。更新後の部門を返します。
+
 - section (必須): object
-  - id (必須): integer(int64) - 部門ID 例: `1` (最小: 1)
-  - name (必須): string - 部門名 (30文字以内) 例: `開発部門`
-  - available (必須): boolean - 部門の使用設定（true: 使用する、false: 使用しない）
+  - id (必須): integer(int64) - 部門ID。部門の取得・更新・削除APIのパスパラメータや、取引作成時の明細（details）の section_id に指定します。 例: `101` (最小: 1)
+  - name (必須): string - 部門名 (30文字以内)。事業所内で重複しません。 例: `開発部門`
+  - available (必須): boolean - 部門の使用設定（true: 使用する、false: 使用しない）。
 <br>
 <ul>
   <li>
-    本APIでsectionを作成した場合はtrueになります。
+    本APIで部門を作成した場合は true になります。
   </li>
   <li>
-    falseにする場合はWeb画面から変更できます。
+    false にする場合はWeb画面から変更できます。
   </li>
   <li>
-    trueの場合、Web画面での取引登録時などに入力候補として表示されます。
+    true の場合、Web画面での取引登録時などに入力候補として表示されます。
   </li>
   <li>
-    falseの場合、部門自体は削除せず、Web画面での取引登録時などに入力候補として表示されません。ただし取引（収入・支出）の作成APIなどでfalseの部門をパラメータに指定すれば、取引などにfalseの部門を設定できます。
+    false の場合、部門自体は削除せず、Web画面での取引登録時などに入力候補として表示されません。ただし取引（収入・支出）の作成APIなどでは、false の部門もパラメータに指定できます。
   </li>
 </ul> 例: `true`
-  - long_name (任意): string - 正式名称（255文字以内） 例: `開発部門`
-  - company_id (必須): integer(int64) - 事業所ID 例: `1` (最小: 1)
-  - shortcut1 (任意): string - ショートカット１ (20文字以内) 例: `DEVELOPER`
-  - shortcut2 (任意): string - ショートカット２ (20文字以内) 例: `123`
-  - code (任意): string - 部門コード 例: `code001` (パターン: ^[0-9a-zA-Z_-]+$)
-  - indent_count (任意): integer(int64) - <a target="_blank" href="https://support.freee.co.jp/hc/ja/articles/209093566">部門階層</a>
-<br>
-※ indent_count が 0 のときは第一階層の親部門です。
- 例: `0` (最小: 0)
-  - parent_id (任意): integer(int64) - <a target="_blank" href="https://support.freee.co.jp/hc/ja/articles/209093566">親部門ID</a>
-<br>
-※ parent_id が null のときは第一階層の親部門です。
- 例: `1` (最小: 1)
-  - update_date (任意): string - 更新日(yyyy-mm-dd) 例: `2020-06-15`
+  - long_name (必須): string - 部門の正式名称 (255文字以内)。未設定の場合は null が返ります。 例: `開発部門`
+  - company_id (必須): integer(int64) - 部門が属する事業所ID 例: `1` (最小: 1)
+  - shortcut1 (必須): string - ショートカット1 (20文字以内)。Web画面などで部門を検索する際のキーワードとして使用します。未設定の場合は null が返ります。 例: `DEVELOPER`
+  - shortcut2 (必須): string - ショートカット2 (20文字以内)。Web画面などで部門を検索する際のキーワードとして使用します。未設定の場合は null が返ります。 例: `123`
+  - code (任意): string - 部門コード (20文字以内)。事業所の設定で部門コードを使用する設定にしている場合のみレスポンスに含まれます（設定が無効の場合は code キー自体が返りません）。部門コードが未設定の場合は null が返ります。 例: `code001` (パターン: ^[0-9a-zA-Z_-]+$)
+  - indent_count (任意): integer(int64) - <a target="_blank" href="https://support.freee.co.jp/hc/ja/articles/209093566">部門階層</a>の深さ。最上位の部門は 0 です。部門階層を利用できるプランの場合のみレスポンスに含まれます。 例: `0` (最小: 0)
+  - parent_id (任意): integer(int64) - <a target="_blank" href="https://support.freee.co.jp/hc/ja/articles/209093566">親部門ID</a>。最上位の部門では null が返ります。部門階層を利用できるプランの場合のみレスポンスに含まれます。 例: `100` (最小: 1)
+  - update_date (任意): string - 部門の最終更新日 (yyyy-mm-dd, JST)。部門一覧の取得APIでのみレスポンスに含まれ、start_update_date / end_update_date による絞り込みの対象です。 例: `2024-01-15`
 
 
 
